@@ -285,3 +285,19 @@ The team is one person + AI assistants. We orchestrate existing external models/
 - **Validation shifts:** we can run a REAL feasibility spike with existing tools now (does today's off-the-shelf stack produce good-enough guided output?), not only a human-faked Wizard-of-Oz.
 - **Distribution/CAC remains the primary business risk** — unchanged by this decision.
 - A trained "Taste Critic" as a moat drops from ambition to a far-future BACKLOG idea.
+
+---
+
+# D-021
+## Title
+Mixtiles-style: compose from the catalog on a neutral/sample wall. Customer room photo is optional & best-effort, not the core. Room-aware compositing drops from v1.
+### Status
+LOCKED
+### Reason
+~80% of customers won't upload a room photo, and photo-based compositing (perspective/scale/light on often-poor photos) is hard to do well — when it fails it looks bad and destroys trust, which is the whole product. So "Design my wall" = the assistant composes a great wall (single / pair / gallery) from available catalog art, dynamically sized and proportioned, shown on a clean or sample-room wall (the Mixtiles pattern), driven by a few light parameters (room type, vibe, wall size/shape, number of pieces). Simpler, reliable, solo-buildable on existing tools; no CV/perspective/relighting.
+### Implications
+- **Downgrades "photo-first" (was LOCKED):** default is a neutral/sample wall; optional "preview on your wall" becomes a best-effort v2 nice-to-have, not the foundation.
+- **Room Diagnosis Schema shrinks** from photo analysis to a few light parameters.
+- `ai/DESIGN_INTELLIGENCE.md` and `docs/PRODUCT-BLUEPRINT-single-session.md` need simplification to match (their photo-centric parts) — flagged, not yet rewritten.
+- Differentiation narrows to composition-intelligence + curation + art selection; **distribution/CAC remains the primary risk** (unchanged).
+- **Room-aware compositing → BACKLOG.**

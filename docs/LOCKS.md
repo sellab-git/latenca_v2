@@ -8,7 +8,7 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | Item | Where it lives | Locked because |
 |---|---|---|
 | **Single-session product** (~90% use once; value must land in one 10–15 min session; no dependence on long-term personalization) | `ai/exploration/RETHINK-the-primitive-v4-single-session.md`, `docs/PRODUCT-BLUEPRINT-single-session.md` | Defines the whole optimization target |
-| **Photo-first** (a wall photo is the entry and the taste seed; ~80% inferred from it) | PRODUCT-BLUEPRINT | Removes the questionnaire; enables the wow + the close |
+| **Neutral/sample-wall-first, Mixtiles-style** (D-021) — compose from the catalog on a clean or sample-room wall; customer room photo is **optional & best-effort**, not the core. *(Supersedes the earlier "photo-first".)* | `docs/DECISIONS.md` D-021 | ~80% won't upload; room compositing is unreliable and breaks trust when it fails |
 | **Opinion-first** (AI leads with a bold, complete design; understanding emerges from reactions; no interrogation, no unsolicited explanation) | `ai/exploration/RETHINK-the-primitive-v5-opinion-first.md`, `ai/AI_SYSTEM.md` | The core interaction stance |
 | **React-don't-specify** (user reacts to complete proposals; taste is recognized, not described) | RETHINK-primitive series | The primitive |
 | **Sequential interaction** (one bold proposal at a time; NOT spatial navigation) | `ai/exploration/RETHINK-sequential-vs-spatial.md` | Forced by "taste is recognized, not described" + single-session |
@@ -45,6 +45,7 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | Point-at-inspiration input | RETHINK-primitive-v2 | Companion input, post-core |
 | Multiplayer / shared design | RETHINK-primitive-v2 | Post-core |
 | Mirror / shelf / moulding / lighting as **sellable** (close the design-vs-sell gap) | DESIGN_INTELLIGENCE-operational | Supply expansion decision |
+| Room-aware compositing (upload wall → analyze → composite art in perspective/light) | D-021 | Hard to do reliably; best-effort v2 only |
 | AR real-room preview | PRODUCT-BLUEPRINT | Beyond v1 |
 
 ---
