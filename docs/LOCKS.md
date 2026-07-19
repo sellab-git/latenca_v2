@@ -13,7 +13,8 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | **React-don't-specify** (user reacts to complete proposals; taste is recognized, not described) | RETHINK-primitive series | The primitive |
 | **Sequential interaction** (one bold proposal at a time; NOT spatial navigation) | `ai/exploration/RETHINK-sequential-vs-spatial.md` | Forced by "taste is recognized, not described" + single-session |
 | **Closing overview** ("the range I explored" collapsing to the chosen wall, at the landing) | RETHINK-sequential-vs-spatial | The one borrowed spatial benefit (no-regret) |
-| **Design Intelligence is the moat — as a direction** (evaluate the room-*after* not the object; diagnose → thesis → intervention → compose → products) | `ai/DESIGN_INTELLIGENCE.md` | The thing that makes one AI exceptional vs average |
+| **Latenca = an intelligent FRONT orchestrating external AI; models are rented behind a swap-able vendor-abstraction layer** (D-020) — we do NOT build our own model | `docs/DECISIONS.md` D-020 | Solo team; keeps us able to plug in a better backend later |
+| **Design Intelligence = our orchestration + curation + guided-experience logic** (the conductor: evaluate the room-*after* not the object; diagnose → thesis → intervention → compose → products) — NOT a trained model | `ai/DESIGN_INTELLIGENCE.md` | Makes the guided experience feel coherent & "intelligent" |
 | **Surprising-yet-inevitable** as the quality/delight target | DESIGN_INTELLIGENCE, RETHINK-v5 | Reconciles delight + confidence |
 
 ## 🟡 ACTIVE (evolving now — improve freely this milestone)

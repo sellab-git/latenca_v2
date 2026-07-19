@@ -269,3 +269,19 @@ LOCKED
 Mature-org model: one author (Claude), independent reviewer (ChatGPT, not a second author), decider (Artur). Extends D-018 with: 5 review types incl. periodic **Product Audit** (whole-system, not commit-tied; run by ChatGPT on a Claude-prepared baseline; triggered at milestones / ~2wk / ~10 commits / on-demand), severity 🟢🟡🔴, hypothesis discipline (HYPOTHESIS must never silently become a decision; LOCKED must never silently become optional), and the Architectural-Conflict escalation rule (reviewer reports, never invents). See `docs/REVIEW_WORKFLOW.md` + `docs/PRODUCT_AUDIT.md`.
 ### Implications
 Audits report, they do not redesign — findings resolve explicitly into DECISIONS / LOCKS / BACKLOG / fix. Supersedes nothing; extends D-018.
+
+---
+
+# D-020
+## Title
+Latenca is an intelligent FRONT that orchestrates external AI — we do not build our own model.
+### Status
+LOCKED
+### Reason
+The team is one person + AI assistants. We orchestrate existing external models/generators (vision, image generation, LLM) kept **behind a vendor-abstraction layer** so any backend can be swapped for a better/newer one later ("wypiąć i wpiąć coś mądrzejszego"). The product IS the customer-facing experience: an "intelligent" designer/assistant that coherently guides the user through choosing and buying — one graphic, several, a composition, or a whole wall. Our "Design Intelligence" = the orchestration + curation + guided-experience logic (the conductor), NOT a trained model (the orchestra is rented).
+### Implications
+- **Moat is honestly relocated:** NOT a proprietary model. It is execution / experience quality / curation / brand / being genuinely good first. (Corrects the earlier "Design Intelligence as *the* moat" — the model is a commodity we rent.)
+- **Vendor-abstraction is architectural:** every external model is a replaceable component behind our own interface (extends the Gelato/AI-model/CDN vendor-boundary principle).
+- **Validation shifts:** we can run a REAL feasibility spike with existing tools now (does today's off-the-shelf stack produce good-enough guided output?), not only a human-faked Wizard-of-Oz.
+- **Distribution/CAC remains the primary business risk** — unchanged by this decision.
+- A trained "Taste Critic" as a moat drops from ambition to a far-future BACKLOG idea.
