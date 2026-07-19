@@ -33,6 +33,8 @@ Instead of "what do you think?", the loop becomes **"review commit <hash>"** / *
 - **ChatGPT** reviews the current version in the repo (not summaries) and flags: consistent / breaks an earlier assumption / contradicts `AI_SYSTEM` / experiment doesn't falsify the hypothesis / this commit changes the moat.
 - **Artur** decides accept / revise / pivot.
 
+Full rules: **`docs/REVIEW_WORKFLOW.md`** (roles, review output format, what the reviewer checks). Every doc/decision is **LOCKED / ACTIVE / BACKLOG** — authoritative registry in **`docs/LOCKS.md`**; the registry moves only through a `docs/DECISIONS.md` entry.
+
 ## Reading order (for a new reviewer)
 1. `docs/PRODUCT_BIBLE.md` → 2. `docs/PRODUCT-BLUEPRINT-single-session.md` → 3. `ai/DESIGN_INTELLIGENCE.md` → 4. `ai/DESIGN_INTELLIGENCE-operational.md` → 5. `ai/RESEARCH_PACKAGE.md` → 6. `experiments/pilot/`. Background: `ai/exploration/` (how the model got here).
 

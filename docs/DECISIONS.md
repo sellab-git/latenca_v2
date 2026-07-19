@@ -245,3 +245,15 @@ Why this option over the others.
 What else was considered and why it was rejected. (optional)
 ## Implications
 What this changes for product / architecture / UX.
+
+---
+
+# D-018
+## Title
+Repo `sellab-git/latenca_v2` is the single source of truth; adopt the review workflow + Architectural Lock Levels.
+### Status
+LOCKED
+### Reason
+Public repo (private/ excluded) so reviews run against current files, not chat summaries. Roles: Claude = author/editor, ChatGPT = senior reviewer, Artur = decider. Every doc/decision is LOCKED / ACTIVE / BACKLOG per `docs/LOCKS.md`; the registry moves only through a DECISIONS entry. See `docs/REVIEW_WORKFLOW.md`.
+### Implications
+LOCKED items change only via an explicit decision (+ ideally a PR). Promoting BACKLOG→ACTIVE/LOCKED or unlocking is itself a decision. R×R objective and "Taste Critic = whole moat" remain HYPOTHESES (not locked), per earlier corrections.
