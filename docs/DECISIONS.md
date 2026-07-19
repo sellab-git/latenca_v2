@@ -257,3 +257,15 @@ LOCKED
 Public repo (private/ excluded) so reviews run against current files, not chat summaries. Roles: Claude = author/editor, ChatGPT = senior reviewer, Artur = decider. Every doc/decision is LOCKED / ACTIVE / BACKLOG per `docs/LOCKS.md`; the registry moves only through a DECISIONS entry. See `docs/REVIEW_WORKFLOW.md`.
 ### Implications
 LOCKED items change only via an explicit decision (+ ideally a PR). Promoting BACKLOG→ACTIVE/LOCKED or unlocking is itself a decision. R×R objective and "Taste Critic = whole moat" remain HYPOTHESES (not locked), per earlier corrections.
+
+---
+
+# D-019
+## Title
+Finalize the collaboration workflow (adds Product Audits + severity levels + escalation rule).
+### Status
+LOCKED
+### Reason
+Mature-org model: one author (Claude), independent reviewer (ChatGPT, not a second author), decider (Artur). Extends D-018 with: 5 review types incl. periodic **Product Audit** (whole-system, not commit-tied; run by ChatGPT on a Claude-prepared baseline; triggered at milestones / ~2wk / ~10 commits / on-demand), severity 🟢🟡🔴, hypothesis discipline (HYPOTHESIS must never silently become a decision; LOCKED must never silently become optional), and the Architectural-Conflict escalation rule (reviewer reports, never invents). See `docs/REVIEW_WORKFLOW.md` + `docs/PRODUCT_AUDIT.md`.
+### Implications
+Audits report, they do not redesign — findings resolve explicitly into DECISIONS / LOCKS / BACKLOG / fix. Supersedes nothing; extends D-018.

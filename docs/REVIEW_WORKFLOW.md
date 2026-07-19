@@ -1,52 +1,68 @@
-# Review Workflow (Claude ↔ ChatGPT ↔ Artur)
+# Collaboration Workflow (Claude ↔ ChatGPT ↔ Artur) — FINAL
 
-Adopted 2026-07-19. This governs how changes are made and reviewed. It works like senior engineering code review, not two AIs designing in parallel.
+Adopted D-018, finalized D-019 (2026-07-19). Works like a mature engineering org: **one author, one source of truth, independent review, explicit architectural decisions.** Not two AIs designing in parallel.
 
 ## Roles
-- **Claude — Author/Editor.** Writes, integrates, documents, evolves the product. Owns the repo and the `docs/LOCKS.md` registry.
-- **ChatGPT — Senior Reviewer.** Product / Architecture / Decision / Design-Intelligence reviewer. Reviews changes; does **not** rewrite the project or introduce new frameworks unrequested.
-- **Artur — Decider.** Accepts / revises / pivots. Only Artur (via an explicit decision) changes a LOCKED item.
+- **Claude — Product Author.** Owns product evolution: product thinking, documentation, architecture, integration, repository consistency, the LOCK registry, the DECISIONS log, implementation planning. **Proposes changes.**
+- **ChatGPT — Senior Reviewer.** Independent review of: product consistency, architectural integrity, Design-Intelligence quality, moat protection, hypothesis quality, experiment validity, long-term coherence. **Reviews changes. Does NOT become a second author.**
+- **Artur — Product Owner.** Makes product decisions. **Only Artur** can: accept · reject · request revisions · unlock a LOCKED decision · promote BACKLOG→ACTIVE · promote ACTIVE→LOCKED.
 
 ## Source of truth
-`sellab-git/latenca_v2` (public) is the **only** source of truth. Repository state always wins over any pasted summary. Reviews are against the current repo, not chat history.
+Only `sellab-git/latenca_v2`. **Repository state always wins.** No review relies on pasted summaries when the repo has the current version. The repo is kept **continuously up to date** (auto-push) so the reviewer always sees the latest.
 
-## Review philosophy
-Review changes, don't rewrite. **Existing decisions remain valid unless the current change explicitly replaces them.** New ideas are BACKLOG candidates unless required to resolve a contradiction. No restarting closed discussions.
+## Development workflow
+```
+Claude → commit → push → ChatGPT review → Artur decision → merge
+```
+Default: straight to `main` (keeps GitHub always-latest). Use **branch + PR** for significant / LOCKED-touching / moat-affecting changes so they can be reviewed as "PR #n" before merge.
 
-## Making a change (author flow)
-- **Trivial / ACTIVE-doc edits** → straight to `main`, commit with a clear message.
-- **Significant change** (touches a LOCKED item, changes the moat, or an architectural decision) → **branch + PR** (`gh pr create`) so it can be reviewed as "PR #n" before merge.
-- Any change to a **LOCKED** item must add an entry to `docs/DECISIONS.md` stating what changed and why.
+## Review types
+1. **Commit Review** — `Review commit <hash>` → correctness · consistency · unintended consequences.
+2. **PR Review** — `Review PR #<n>` → architectural impact · moat impact · merge recommendation.
+3. **Document Review** — `Review DESIGN_INTELLIGENCE.md` → internal consistency · quality · contradictions.
+4. **Cross-document Audit** — `Review PRODUCT_BIBLE consistency` · `Does this contradict AI_SYSTEM?` · `Compare PRODUCT_BIBLE and DESIGN_INTELLIGENCE` · `Review LOCKS consistency` → system integrity.
+5. **Product Audit** — `Run Product Audit #<n>` → whole-system review, **not tied to a commit.** See `docs/PRODUCT_AUDIT.md`.
 
-## Review request types (Artur → ChatGPT)
-`Review commit <hash>` · `Review PR #<n>` · `Review <FILE>.md` · `Review PRODUCT_BIBLE consistency` · `Does this contradict AI_SYSTEM?` · `Does this change the moat?` · `Is this experiment actually falsifying the hypothesis?`
-
-## Review output format (ChatGPT) — concise, structured, no essays unless asked
+## Review output format (concise, structured — no essays unless asked)
 ```
 Verdict: APPROVE / APPROVE WITH CHANGES / REQUEST CHANGES
 Consistency: ✔ consistent / ⚠ breaks previous assumption / ❌ contradicts existing decision
-Architecture: <preserves single-session / photo-first / opinion-first / sequential / closing-overview? or intentional change?>
-Moat: <strengthens / weakens / neutral — which of: Design Intelligence, taste, diagnosis, thesis generation, evaluation quality>
+Architecture: preserves single-session / photo-first / opinion-first / sequential / closing-overview? (or intentional change?)
+Moat: strengthens / weakens / neutral — which of: Design Intelligence, taste, diagnosis, thesis generation, evaluation quality
 Risks:
 Questions:
 Recommendation:
 ```
 
-## What the reviewer actively checks
-1. **Consistency** with PRODUCT_BIBLE · AI_SYSTEM · DESIGN_INTELLIGENCE · DECISIONS · PRODUCT-BLUEPRINT.
-2. **Architectural integrity** — preserves single-session · photo-first · opinion-first · sequential · closing overview. If not: is the change *intentionally* architectural (LOCKED → needs a decision)?
-3. **Moat** — does it strengthen or weaken Design Intelligence / taste / diagnosis / thesis generation / evaluation quality?
-4. **Experimental validity** — does a research change actually test the intended hypothesis, or accidentally measure something else?
-5. **Scope creep** — flag unnecessary complexity, a second system, duplicated concepts, or unmotivated terminology changes.
+## Severity classification (every finding)
+- 🟢 **Minor** — editorial; no architectural impact.
+- 🟡 **Significant** — product impact; probably revise before merge.
+- 🔴 **Architectural** — touches LOCKED architecture; requires an explicit decision + a `DECISIONS.md` entry + usually a PR + Artur approval.
 
-## What the reviewer will NOT do
-Redesign accepted architecture · introduce alternative frameworks unrequested · replace decisions with preferences · restart closed discussions.
+## Review philosophy
+Default assumption: **existing decisions remain valid.** The reviewer never restarts solved discussions and never replaces accepted architecture with personal preferences. New ideas become **BACKLOG** unless they (a) resolve a contradiction or (b) Artur explicitly requests exploration.
 
-## Architectural Lock Levels (the deterministic layer)
-Every document/decision is **LOCKED**, **ACTIVE**, or **BACKLOG** — the authoritative registry is **`docs/LOCKS.md`**.
-- **LOCKED** — changing requires an explicit architectural decision (+ a `DECISIONS.md` entry). A reviewer treats a LOCKED-violating change as REQUEST CHANGES unless it's flagged as an intentional architecture change.
-- **ACTIVE** — currently evolving in this milestone; improve freely.
-- **BACKLOG** — interesting ideas that must **not** modify current architecture.
-This lets a reviewer instantly tell apart a **bug**, an **architectural change**, and a **future idea** — reducing design churn.
+## What the reviewer protects
+`PRODUCT_BIBLE` · `LOCKS` registry · `AI_SYSTEM` · `DESIGN_INTELLIGENCE` · `PRODUCT-BLUEPRINT` · `DECISIONS` consistency.
 
-**Author refinement to the rule:** a change that *promotes* a BACKLOG idea into ACTIVE/LOCKED, or *unlocks* a LOCKED item, is itself an architectural decision — it requires a `DECISIONS.md` entry and (ideally) a PR. The registry moves only through decisions, never silently.
+## What the reviewer detects
+Contradictions · hidden architectural changes · silent assumption shifts · terminology drift · duplicate concepts · scope creep · experiments measuring the wrong thing · weakening of the moat.
+
+## Hypothesis discipline
+The reviewer continuously distinguishes **LOCKED · ACTIVE · BACKLOG · HYPOTHESIS** (registry: `docs/LOCKS.md`). Two hard rules:
+- A **HYPOTHESIS must never silently become a decision** (e.g. `Resolution × Revelation`, "Taste Critic = whole moat" — flag if treated as settled).
+- A **LOCKED decision must never silently become "optional."**
+Any status change happens only via a `DECISIONS.md` entry.
+
+## Escalation rule — Architectural Conflict
+If a review finds a contradiction **between two LOCKED decisions**, the reviewer does **not** invent a solution. It reports:
+```
+Architectural Conflict
+Documents involved:
+Reason:
+Possible resolutions:
+Requires Artur decision.
+```
+
+## Success criteria
+Claude evolves the product rapidly · ChatGPT **reduces architectural risk rather than generating more ideas** · Artur spends less time reconstructing context and more time deciding.
