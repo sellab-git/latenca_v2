@@ -1,0 +1,239 @@
+/* ============================================================
+   Latenca — komponenty (PRZENIESIONE 1:1 z projektu 15)
+   Wewnętrzny wygląd komponentów = wierny 15. Kontenery/siatki = mobile-first
+   (baza = jedna kolumna / karuzela; desktop dokładany przez min-width).
+   Wymaga tokens.css. Fonty Lora + Inter dołącz w <head>.
+   Klasy: .hero .whyband/.why .shead/.eyebrow/.viewall .subjrow/.scat
+          .howband/.hstep .walls/.room .sets/.set .artistrow/.acard .tabbar/.tab
+          + NOWE (koncept 17, na idiomie 15): .doors/.door
+   ============================================================ */
+
+svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+
+/* ── Buttons (15) ── */
+.btn{height:var(--btn-lg);padding:0 22px;border-radius:var(--r-ui);font-size:var(--fs-base);font-weight:var(--w-semibold);
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);line-height:1}
+.btn.p{background:var(--on-dark);color:var(--ink-strong)}
+.btn.g{border:1px solid rgba(255,255,255,.5);color:var(--on-dark)}
+.btn svg{width:17px;height:17px}
+.signin{height:var(--btn-md);padding:0 16px;background:var(--ink);color:var(--bg);border-radius:var(--r-ui);
+  font-size:var(--fs-sm);font-weight:var(--w-semibold);display:inline-flex;align-items:center}
+.viewall{font-size:var(--fs-xs);white-space:nowrap;color:var(--muted)}
+
+/* ── Top bar + search (15, mobile) ── */
+.topbar{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:var(--sp-3);
+  padding:12px var(--sp-4);background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line)}
+.brand-m{font-family:var(--serif);font-size:22px;font-weight:var(--w-semibold);letter-spacing:.01em}
+.searchwrap{position:relative;flex:1;min-width:0}
+.search{width:100%;min-width:0;display:flex;align-items:center;gap:var(--sp-3);background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--r-ui);height:var(--btn-md);padding:0 14px;color:var(--muted);
+  font-size:var(--fs-sm);text-align:left}
+.search span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search svg{width:17px;height:17px;stroke:var(--faint)}
+.icobtn{width:var(--iconbtn);height:var(--iconbtn);border-radius:var(--r-ui);display:flex;align-items:center;
+  justify-content:center;color:var(--muted);position:relative;flex:none}
+.icobtn:hover{background:var(--panel2);color:var(--ink)}
+.icobtn svg{width:var(--icon);height:var(--icon)}
+.cart .badge{position:absolute;top:5px;right:5px;min-width:18px;height:18px;padding:0 5px;border-radius:var(--r-full);
+  background:var(--accent);color:var(--on-dark);font-size:var(--fs-2xs);font-weight:var(--w-semibold);
+  display:flex;align-items:center;justify-content:center;line-height:1}
+
+/* ── Hero (15) — mobile: full-bleed, krótszy (3 drzwi above the fold) ── */
+.hero{position:relative;overflow:hidden;height:clamp(300px,42vh,380px);margin:0}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,14,.9) 0%,rgba(8,6,14,.4) 55%,rgba(8,6,14,.1) 100%)}
+.hero .c{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:var(--sp-3);
+  padding:0 24px 26px;color:var(--on-dark)}
+.hero .eye{font-size:var(--fs-2xs);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.72);font-weight:var(--w-semibold)}
+.hero h1{font-family:var(--serif);font-weight:var(--w-medium);font-size:clamp(30px,8vw,40px);line-height:var(--lh-tight);margin:0}
+.hero p{margin:0;font-size:var(--fs-base);opacity:.9;line-height:var(--lh-base)}
+.hero .btns{display:flex;gap:var(--sp-3);margin-top:6px;flex-wrap:wrap}
+
+/* ── Section heading (15) ── */
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);margin:32px 0 14px}
+.eyebrow{font-size:var(--fs-2xs);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:var(--w-semibold)}
+.shead h2{font-family:var(--serif);font-weight:var(--w-medium);font-size:clamp(20px,5.5vw,23px);margin:5px 0 0}
+.shead .sub{color:var(--muted);font-size:var(--fs-sm);margin-top:3px;max-width:40ch}
+
+/* ── THREE DOORS (NOWE — koncept 17, zbudowane na idiomie 15: karta .panel + ikonka .hi + serif) ── */
+.doors{display:flex;flex-direction:column;gap:var(--sp-3);padding:6px 0 0}
+.door{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4);border:1px solid var(--line);
+  border-radius:var(--r-ui);background:var(--panel);transition:border-color var(--dur-fast),transform var(--dur-fast) var(--ease)}
+.door:active{transform:translateY(1px)}
+.door .hi{width:44px;height:44px;border-radius:var(--r-ui);background:var(--bg);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;color:var(--accent-ink);flex:none}
+.door .hi svg{width:22px;height:22px}
+.door .dt{flex:1;min-width:0}
+.door .dt b{display:block;font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);color:var(--ink)}
+.door .dt span{display:block;font-size:var(--fs-sm);color:var(--muted);margin-top:2px}
+.door .go{width:32px;height:32px;border-radius:var(--r-full);border:1px solid var(--line);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;flex:none}
+.door .go svg{width:16px;height:16px}
+.door.sec:hover{border-color:var(--accent)}
+.door.ai{background:var(--accent-soft);border-color:transparent}   /* AI = selected-state idiom z 15 (accent-soft) */
+.door.ai .hi{background:var(--accent);border-color:transparent;color:var(--on-dark)}
+.door.ai .dt b{color:var(--accent-ink)}
+.door.ai .go{background:var(--accent);border-color:transparent;color:var(--on-dark)}
+
+/* ── Trust (15 .whyband/.why — stacked, jedno pod drugim: ikona + tytuł + opis) ── */
+.whyband{display:grid;grid-template-columns:1fr;gap:var(--sp-5);padding:22px 0;margin:0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.why{display:flex;gap:var(--sp-3);align-items:flex-start}
+.why svg{width:22px;height:22px;stroke:var(--accent);flex:none;margin-top:1px}
+.why b{font-size:var(--fs-base);font-weight:var(--w-semibold);display:block}
+.why span{font-size:var(--fs-xs);color:var(--muted);line-height:var(--lh-base);display:block;margin-top:3px}
+
+/* ── Browse by style (15 .subjrow/.scat — mobile-first: 2 kolumny) ── */
+.subjrow{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);padding:0}
+.scat{position:relative;border-radius:var(--r-ui);overflow:hidden;aspect-ratio:1/1;background:var(--media);display:flex;align-items:flex-end;color:var(--on-dark)}
+.scat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform var(--dur-slow)}
+.scat:hover img{transform:scale(1.05)}
+.scat .sv{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent 62%)}
+.scat b{position:relative;z-index:1;padding:var(--sp-3);font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* ── How it works (15 .howband/.hstep — mobile-first: 1 kolumna) ── */
+.howband{display:grid;grid-template-columns:1fr;gap:20px;padding:24px;margin:var(--sp-6) var(--sp-4) 0;background:var(--panel2);border-radius:var(--r-ui)}
+.hstep{display:flex;flex-direction:column;gap:var(--sp-1)}
+.hstep .hi{width:48px;height:48px;border-radius:var(--r-ui);background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--accent-ink);margin-bottom:var(--sp-2)}
+.hstep .hi svg{width:24px;height:24px}
+.hstep .hnum{font-size:var(--fs-2xs);font-weight:var(--w-semibold);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.hstep b{font-family:var(--serif);font-size:var(--fs-lg);font-weight:var(--w-medium);margin-top:var(--sp-1)}
+.hstep p{font-size:var(--fs-sm);color:var(--muted);line-height:var(--lh-base);margin:var(--sp-1) 0 0}
+
+/* ── Real homes (15 .walls/.room — mobile-first: karuzela) ── */
+.walls{display:flex;gap:var(--sp-3);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0}
+.walls::-webkit-scrollbar{display:none}
+.room{position:relative;border-radius:var(--r-ui);overflow:hidden;aspect-ratio:4/3;background:var(--media);flex:0 0 82%;scroll-snap-align:start}
+.room img{width:100%;height:100%;object-fit:cover;transition:transform var(--dur-slow)}
+.room:hover img{transform:scale(1.05)}
+.room .cap{position:absolute;inset:auto 0 0 0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.66),rgba(0,0,0,0));color:var(--on-dark);display:flex;align-items:flex-end;justify-content:space-between}
+.room .cap h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md);margin:0}
+.room .cap p{margin:2px 0 0;font-size:var(--fs-2xs);opacity:.85;letter-spacing:.05em;text-transform:uppercase}
+.room .cap .go{font-size:var(--fs-xs);font-weight:var(--w-semibold);background:rgba(255,255,255,.16);border-radius:var(--r-ui);padding:6px 12px;white-space:nowrap}
+
+/* ── Curated sets / gallery walls (15 .sets/.set — mobile-first: karuzela) ── */
+.sets{display:flex;gap:var(--sp-3);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0}
+.sets::-webkit-scrollbar{display:none}
+.set{display:block;flex:0 0 86%;scroll-snap-align:start}
+.set .wall{position:relative;background:var(--media);border-radius:var(--r-ui);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;gap:min(3.5%,16px);padding:0 6%;overflow:hidden}
+.set .frame{flex:1 1 0;min-width:0;height:74%;display:flex;align-items:center;justify-content:center}
+.set .frame img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;border:5px solid var(--on-dark);box-shadow:var(--shadow-1)}
+.set .save{position:absolute;top:10px;left:10px;background:var(--glass);backdrop-filter:blur(4px);color:var(--on-dark);font-size:var(--fs-2xs);font-weight:var(--w-semibold);padding:4px 9px;border-radius:var(--r-sm);letter-spacing:.02em;z-index:2}
+.set .cap{padding:12px 2px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-3)}
+.set .cap h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md);margin:0}
+.set .cap .s{font-size:var(--fs-2xs);color:var(--muted);margin-top:3px}
+.set .cap .price{text-align:right;white-space:nowrap}
+.set .cap .was{font-size:var(--fs-2xs);color:var(--faint);text-decoration:line-through;margin-right:5px}
+.set .cap .now{font-weight:var(--w-semibold);font-size:var(--fs-base);font-variant-numeric:tabular-nums}
+
+/* ── Gallery-wall set — mobile showcase (full-bleed, kontekst pokoju; idiom 15: .room obraz+veil+podpis + .save + .btn) ── */
+.setshow{position:relative;margin:0;height:clamp(320px,56vh,440px);overflow:hidden}
+.setshow img{width:100%;height:100%;object-fit:cover;display:block}
+.setshow .veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,14,.85) 0%,rgba(8,6,14,.2) 52%,rgba(8,6,14,.02) 100%)}
+.setshow .cap{position:absolute;inset:auto 0 0 0;padding:22px var(--sp-4) 24px;color:var(--on-dark)}
+.setshow .cap .eyebrow{color:rgba(255,255,255,.72)}
+.setshow .cap h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-xl);margin:6px 0 3px}
+.setshow .cap .meta{font-size:var(--fs-sm);opacity:.9}
+.setshow .cap .price{margin-top:6px;font-weight:var(--w-semibold);font-size:var(--fs-lg)}
+.setshow .cap .price .was{opacity:.7;text-decoration:line-through;font-weight:var(--w-normal);font-size:var(--fs-sm);margin-left:7px}
+.setshow .cap .btn{margin-top:14px}
+.setshow .save{position:absolute;top:14px;left:14px;background:var(--glass);backdrop-filter:blur(4px);color:var(--on-dark);
+  font-size:var(--fs-2xs);font-weight:var(--w-semibold);padding:5px 10px;border-radius:var(--r-sm);z-index:2}
+
+/* ── Featured artists / curated makers (15 .artistrow/.acard — mobile-first: 1 kolumna) ── */
+.artistrow{display:grid;grid-template-columns:1fr;gap:var(--sp-3);padding:0}
+.acard{border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;background:var(--panel);display:block}
+.acard .cover{display:block;aspect-ratio:16/10;background:var(--media);overflow:hidden}
+.acard .cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--dur-slow)}
+.acard:hover .cover img{transform:scale(1.05)}
+.acard .abody{display:flex;align-items:center;gap:var(--sp-2);padding:var(--card-pad)}
+.acard .aav{width:40px;height:40px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none;display:flex;align-items:center;justify-content:center;color:var(--on-dark);font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md)}
+.acard .ainfo{min-width:0}
+.acard .an{font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acard .am{font-size:var(--fs-xs);color:var(--muted)}
+
+/* ── Continue your project — karta powracającego użytkownika (idiom 15: panel + serif + accent) ── */
+.contproj{display:flex;align-items:center;gap:var(--sp-3);margin:16px var(--sp-4) 0;padding:var(--sp-3);
+  border:1px solid var(--line);border-radius:var(--r-ui);background:var(--panel)}
+.contproj .thumb{width:60px;height:60px;border-radius:var(--r-sm);overflow:hidden;background:var(--media);flex:none}
+.contproj .thumb img{width:100%;height:100%;object-fit:cover}
+.contproj .ci{flex:1;min-width:0}
+.contproj .cl{font-size:var(--fs-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold)}
+.contproj .ci b{font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);display:block;margin:1px 0 7px}
+.contproj .bar{height:4px;border-radius:var(--r-full);background:var(--line);overflow:hidden}
+.contproj .bar i{display:block;height:100%;background:var(--accent);border-radius:var(--r-full)}
+.contproj .open{flex:none;width:36px;height:36px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+.contproj .open svg{width:16px;height:16px}
+
+/* ── Social proof — pasek ocen (idiom 15: serif + accent gwiazdki) ── */
+.social{display:flex;flex-direction:column;align-items:center;gap:5px;padding:24px 0 8px;text-align:center}
+.social .stars{display:flex;gap:3px}
+.social .stars svg{width:18px;height:18px;fill:var(--accent);stroke:var(--accent);stroke-width:1}
+.social .rt{font-family:var(--serif);font-size:var(--fs-lg);font-weight:var(--w-medium);margin-top:2px}
+.social .rc{font-size:var(--fs-xs);color:var(--muted)}
+
+/* ── Testimonial — cytat klienta (idiom 15: panel2 + serif quote + avatar) ── */
+.testi{margin:12px 0 0;padding:var(--card-pad-lg);border:1px solid var(--line);border-radius:var(--r-ui);background:var(--panel2)}
+.testi .stars{display:flex;gap:2px;margin-bottom:var(--sp-3)}
+.testi .stars svg{width:15px;height:15px;fill:var(--accent);stroke:var(--accent);stroke-width:1}
+.testi .q{font-family:var(--serif);font-size:var(--fs-lg);font-weight:var(--w-medium);line-height:1.4;color:var(--ink);margin:0}
+.testi .by{display:flex;align-items:center;gap:var(--sp-2);margin-top:var(--sp-4)}
+.testi .by .av{width:34px;height:34px;border-radius:var(--r-full);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+.testi .by .n{font-size:var(--fs-sm);font-weight:var(--w-semibold);line-height:var(--lh-tight)}
+.testi .by .n small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-2xs)}
+
+/* .room może nieść badge .save (dla zestawów w kontekście pokoju) */
+.room .save{position:absolute;top:10px;left:10px;background:var(--glass);backdrop-filter:blur(4px);color:var(--on-dark);
+  font-size:var(--fs-2xs);font-weight:var(--w-semibold);padding:4px 9px;border-radius:var(--r-sm);z-index:2}
+
+/* ── Discover: tabs + masonry grid (15 .gtabs/.gtab + .grid/.tile — mobile-first: 2 kolumny) ── */
+.gtabs{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin:0 0 14px;flex-wrap:wrap}
+.gtabs .tabs{display:flex;gap:var(--sp-2);min-width:0}
+.gtab{height:var(--btn-sm);padding:0 15px;border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-medium);color:var(--muted);display:inline-flex;align-items:center;white-space:nowrap}
+.gtab:hover{color:var(--ink)}
+.gtab.on{background:var(--accent-soft);color:var(--accent-ink)}
+.grid{column-count:2;column-gap:8px;padding:0}
+.tile{break-inside:avoid;margin-bottom:8px;position:relative;border-radius:var(--r-tile);overflow:hidden;background:var(--media);display:block}
+.tile img{width:100%;display:block;transition:transform var(--dur-slow) ease}
+.tile:hover img{transform:scale(1.04)}
+.tile .tgrad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 42%);opacity:0;transition:opacity var(--dur-fast)}
+.tile:hover .tgrad{opacity:1}
+.tile .fav{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.42);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;z-index:3}
+.tile .fav svg{width:16px;height:16px}
+.tile .info{position:absolute;left:10px;right:44px;bottom:10px;color:var(--on-dark);opacity:0;transform:translateY(3px);transition:var(--dur-fast);z-index:3}
+.tile:hover .info{opacity:1;transform:none}
+.tile .info .t{font-family:var(--serif);font-size:var(--fs-sm);font-weight:var(--w-medium);line-height:var(--lh-tight);text-shadow:0 1px 3px rgba(0,0,0,.55);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.tile .info .a{font-size:var(--fs-2xs);opacity:.92;text-shadow:0 1px 3px rgba(0,0,0,.55);margin-top:2px}
+@media (hover:none){.tile .info{opacity:1;transform:none}}
+.loadmore{display:flex;justify-content:center;margin:22px 0 0}
+.loadmore .more{height:var(--btn-md);padding:0 24px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);display:inline-flex;align-items:center}
+.loadmore .more:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ── Bottom tab bar (15 .tabbar/.tab) ── */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:var(--appw,430px);
+  z-index:var(--z-tabbar);background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;
+  padding:6px 4px;padding-bottom:calc(6px + env(safe-area-inset-bottom));box-shadow:var(--shadow-bar)}
+.tab{flex:1;min-width:0;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:var(--sp-1);
+  font-size:var(--fs-2xs);font-weight:var(--w-medium);color:var(--muted);padding:6px 4px}
+.tab svg{width:22px;height:22px}
+.tab.active{color:var(--accent-ink)}
+.tab.aitab .aidot{width:34px;height:34px;margin-top:-2px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+.tab.aitab .aidot svg{width:18px;height:18px}
+
+/* ── Desktop enhancement (min-width) — wracamy do siatek 15 ── */
+@media(min-width:640px){
+  .doors{flex-direction:row}.door{flex:1}
+  .subjrow{grid-template-columns:repeat(3,1fr)}
+  .walls,.sets{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
+  .room,.set{flex:none}
+  .whyband{grid-template-columns:repeat(2,1fr)}
+  .grid{column-count:3}
+}
+@media(min-width:1024px){
+  .subjrow{grid-template-columns:repeat(6,1fr)}
+  .whyband{grid-template-columns:repeat(4,1fr)}
+  .howband,.artistrow{grid-template-columns:repeat(4,1fr)}
+  .grid{column-count:4}
+}
+@media(min-width:1440px){.grid{column-count:5}}

@@ -1,0 +1,27 @@
+# Sekrety — NIGDY nie commituj
+.env
+.env.*
+*.key
+*secret*
+*api-key*
+
+# OS / edytory
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.vscode/
+.idea/
+
+# Zależności / build (na przyszłość — Faza 4, Next.js)
+node_modules/
+.next/
+dist/
+build/
+
+# Śmieci narzędzi
+.playwright-mcp/
+*.log
+
+# commercially sensitive — never public
+private/

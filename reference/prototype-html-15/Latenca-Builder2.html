@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Build your wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     LATENCA — same design tokens as Explore (v29)
+     ============================================================ */
+  :root{
+    /* Palette */
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#6E695F; --faint:#8C8578; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA; --accent-ink:#5F4DE0;
+    --media:#E7E0D3;                      /* image-placeholder & set-wall surface */
+    --on-dark:#fff;                       /* text/marks over imagery */
+    --ink-strong:#141018;                 /* solid near-black on white */
+    --glass:rgba(20,16,26,.75);           /* dark glass pills over imagery */
+    --grad-a:#c9bff2; --grad-b:#8f7fe0;   /* avatar gradient */
+    --ok:#3f9d6d; --err:#c0553f;          /* status: success / error */ --ok-soft:#e4f0e9; --err-soft:#f7e6e0;
+    /* Radius — by role */
+    --r-tile:2px;   /* image tiles (print-sharp) */
+    --r-sm:4px;     /* chips & badges */
+    --r-ui:6px;     /* controls, inputs, buttons */
+    --r-full:999px; /* pills & circles */
+    /* Elevation */
+    --shadow-1:0 6px 16px rgba(20,16,10,.20);    /* resting media */
+    --shadow-2:0 12px 28px rgba(20,16,10,.30);   /* lifted media (hover) */
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --shadow-drawer:-14px 0 40px rgba(15,12,20,.18); /* side drawers/panels (directional) */
+    --shadow-bar:0 -8px 24px rgba(15,12,20,.08);      /* sticky bottom bars */ /* overlays: dropdown / panel */
+    --ring:0 0 0 3px var(--accent-soft);         /* focus ring */
+    /* Fonts */
+    --icon:20px; --iconbtn:40px;   /* icon system — touch-first; Ideogram = 18/36 */
+    /* Type scale — brand logo & hero use display sizes off this scale */
+    --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-base:14px; --fs-md:16px; --fs-lg:20px; --fs-xl:24px; --fs-2xl:32px;
+    /* Weight — 3 only (Ideogram-calm, no 700) */
+    --w-normal:400; --w-medium:500; --w-semibold:600;
+    /* Line-height */
+    --lh-tight:1.2; --lh-base:1.5;
+    /* Spacing — 4pt grid */
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-12:48px;
+    /* Buttons — 3 fixed heights: sm compact / md default (== --iconbtn) / lg primary CTA */
+    --btn-sm:36px; --btn-md:40px; --btn-lg:48px;
+    /* Card/surface internal padding */
+    --card-pad:16px; --card-pad-lg:20px;
+    /* Motion — 3 durations + 2 easings */
+    --dur-fast:.15s; --dur-base:.25s; --dur-slow:.4s;
+    --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1);
+    /* Z-index — layer scale (tile-internal z2/3/4 stay local) */
+    --z-sticky:100; --z-header:200; --z-dropdown:300; --z-tabbar:400; --z-scrim:500; --z-panel:600; --z-toast:700;
+    /* Focus ring — single source (WCAG 2.2) */
+    --focus-ring:2px solid var(--accent);
+    --serif:'Lora',Georgia,"Times New Roman",serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33; --accent-ink:#8E7DF3;
+    --media:#1b1826; --err:#e0715c; --ok-soft:#17281f; --err-soft:#2c1a16;
+  }
+
+  /* ── Base ── */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  html{overflow-x:clip}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);-webkit-font-smoothing:antialiased;overflow-x:clip;transition:background var(--dur-base),color var(--dur-base)}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  :focus-visible{outline:var(--focus-ring);outline-offset:2px}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+
+  /* ── Reusable buttons ── */
+  .signin{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold)}
+  .sell{display:flex;align-items:center;gap:var(--sp-2);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink)}
+  .sell:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .btn,.signin,.sell,.follow,.crumb,.addcart,.mat,.optrow button{white-space:nowrap}
+
+  /* collapsible sidebar → icon rail */
+  .brand .mark{display:none}
+  .sidehead{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);position:relative;height:40px}
+  /* menu toggle — always visible in the top bar (getimg-style), outside the sidebar */
+  .railtoggle{width:40px;height:40px;flex:none;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background var(--dur-fast),color var(--dur-fast)}
+  .railtoggle:hover{background:var(--panel2);color:var(--ink)}
+  .railtoggle svg{width:19px;height:19px}
+  @media(max-width:820px){.railtoggle{display:none}}
+  .app.rail{grid-template-columns:64px minmax(0,1fr)}
+  .app.rail .side{padding:14px 8px 24px}
+  .app.rail .sidehead{justify-content:center}
+  .app.rail .brand{text-align:center;font-size:var(--fs-lg);padding:2px 0}
+  .app.rail .brand .full{display:none}
+  .app.rail .brand .mark{display:inline}
+  /* (menu toggle now lives in the top bar) */
+  .app.rail .nav,.app.rail .sell,.app.rail .account{justify-content:center;gap:0;width:37px;height:37px;padding:0;align-self:center}
+  .app.rail .nav>span,.app.rail .sell>span,.app.rail .account .who{display:none}
+  /* rail buttons are square 40×40 (set in the combined rule above) */
+
+  .app{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}
+
+  /* ── Sidebar ── */
+  .side{border-right:1px solid var(--line);padding:var(--card-pad) 24px;display:flex;flex-direction:column;gap:var(--sp-6);position:sticky;top:0;height:100vh;background:var(--bg)}
+  .brand{font-family:var(--serif);font-size:23px;line-height:var(--lh-tight);padding:2px 8px;font-weight:var(--w-semibold)}
+  .navgroup{display:flex;flex-direction:column;gap:2px}
+  .nav{display:flex;align-items:center;gap:var(--sp-3);padding:9px 10px;border-radius:var(--r-ui);color:var(--muted);font-size:var(--fs-base);font-weight:var(--w-medium)}
+  .nav svg{width:19px;height:19px}
+  .nav:hover{background:var(--panel2);color:var(--ink)}
+  .nav.active{background:var(--accent-soft);color:var(--accent-ink)}
+  .side .spacer{flex:1}
+  .sell{justify-content:center;padding:11px}
+  .sell svg{width:16px;height:16px}
+  .account{display:flex;align-items:center;gap:var(--sp-3);padding:7px 8px;border-radius:var(--r-ui)}
+  .account:hover{background:var(--panel2)}
+  .avatar{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .account .who{font-size:var(--fs-sm);font-weight:var(--w-semibold);line-height:var(--lh-tight)}
+  .account .who small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-2xs)}
+
+  .main{--mainpad:clamp(20px,3.2vw,44px);padding:0 var(--mainpad) 70px;min-width:0}
+
+  /* ── Top bar + search ── */
+  .topbar{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:var(--sp-2);margin:0 calc(var(--mainpad) * -1);padding:14px 18px 12px 12px;background:var(--bg);border-bottom:1px solid transparent;transition:border-color var(--dur-base)}
+  .topbar.stuck{border-color:var(--line)}
+  .searchwrap{position:relative;flex:0 1 640px;margin-inline:auto;min-width:0}
+  .search{width:100%;min-width:0;display:flex;align-items:center;gap:var(--sp-3);background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:11px 16px;color:var(--muted);font-size:var(--fs-base);text-align:left}
+  .search span:not(.kbd){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .search svg{width:17px;height:17px;stroke:var(--faint)}
+  .search .kbd{margin-left:auto;font-size:var(--fs-2xs);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 7px;color:var(--faint)}
+  /* search dropdown — same component as Explore */
+  .search.act{border-color:var(--accent);box-shadow:var(--ring)}
+  .sdrop{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-ui);box-shadow:var(--shadow-pop);padding:8px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:var(--dur-fast);z-index:var(--z-dropdown)}
+  .sdrop.open{opacity:1;transform:none;pointer-events:auto}
+  .shint{display:flex;align-items:center;gap:var(--sp-2);padding:9px 11px;margin:2px 2px 6px;background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--r-ui);font-size:var(--fs-xs);font-weight:var(--w-semibold)}
+  .shint svg{width:15px;height:15px}
+  .sgroup{padding:4px 2px}
+  .slabel{font-size:var(--fs-2xs);letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);padding:6px 10px 4px}
+  .sitem{display:flex;align-items:center;gap:var(--sp-3);padding:8px 10px;border-radius:var(--r-ui);font-size:var(--fs-sm);color:var(--ink)}
+  .sitem:hover{background:var(--panel2)}
+  .sitem svg{width:15px;height:15px;stroke:var(--muted)}
+  .sitem .av{width:20px;height:20px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .sitem .tag{margin-left:auto;font-size:var(--fs-2xs);color:var(--faint)}
+  .topbar .right{display:flex;align-items:center;gap:var(--sp-2)}
+  .icobtn{width:40px;height:40px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);position:relative}
+  .icobtn:hover{background:var(--panel2);color:var(--ink)}
+  .icobtn svg{width:19px;height:19px}
+  .cart .badge{position:absolute;top:5px;right:5px;padding:0 4px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);font-size:var(--fs-2xs);font-weight:var(--w-semibold);display:flex;align-items:center;justify-content:center}
+  .signin{margin-left:6px;padding:9px 16px}
+
+  /* ── Breadcrumb ── */
+  .crumb{display:inline-flex;align-items:center;gap:var(--sp-2);color:var(--muted);font-size:var(--fs-sm);margin:16px 0 0}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--faint)}
+  .crumb b{color:var(--ink);font-weight:var(--w-medium)}
+
+  /* ── Product layout ── */
+  .pdp{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:clamp(22px,3vw,44px);align-items:start;margin-top:14px}
+
+  /* left: thumbnail rail + image stage */
+  .stagewrap{display:flex;gap:var(--sp-3);align-items:flex-start;position:sticky;top:78px}
+  .thumbs{display:flex;flex-direction:column;gap:var(--sp-3);flex:none;width:62px}
+  .thumb{width:62px;height:62px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--line);background:var(--media);position:relative;padding:0}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+
+  .stage{flex:1;min-width:0;position:relative;background:var(--media);border-radius:var(--r-ui);overflow:hidden;height:clamp(430px,calc(100vh - 128px),720px);display:flex;align-items:center;justify-content:center;padding:min(6%,40px)}
+  .stageArt{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+  /* single-element frame preview: border = frame colour, padding = mat (passe-partout), bg = mat white */
+  .stageArt img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;box-sizing:border-box;background:#fff;border:var(--fw,0px) solid var(--fc,transparent);padding:var(--mw,0px);box-shadow:var(--shadow-2);cursor:zoom-in;transition:border-color var(--dur-base),border-width var(--dur-base),padding var(--dur-base)}
+  .stageRoom{position:absolute;inset:0;display:none}
+  .stageRoom img.bg{width:100%;height:100%;object-fit:cover;object-position:var(--rx,50%) var(--ry,50%);display:block}
+  .frameOnWall{position:absolute;background:#fff;padding:1.1%;box-shadow:0 14px 30px rgba(0,0,0,.4);transform:translate(-50%,-50%);width:calc(var(--fbw,20%) * var(--sf,1));transition:width var(--dur-base)}
+  .frameOnWall img{width:100%;display:block}
+  /* room views use a landscape stage (these are wide interior scenes) */
+  /* all views share the same TALL artwork stage; rooms just fill it edge-to-edge */
+  .stage.roomon{padding:0}
+  .stage.roomon .stageArt{display:none}
+  /* zoom INTO the art: scale the whole room scene (bg + frame together) around the frame centre → artwork is BIG, stays proportional to the room, nothing desyncs */
+  .stage.roomon .stageRoom{display:block;transform:scale(var(--zoom,1.5));transform-origin:50% var(--zoy,38%);animation:roomZoomIn var(--dur-slow) var(--ease-out)}
+  @keyframes roomZoomIn{from{transform:scale(calc(var(--zoom,1.5)*1.05))}to{transform:scale(var(--zoom,1.5))}}
+  /* per-room: cover-crop focus (--rx/--ry) · art size (--fbw ×--sf) · room closeness (--zoom) · art anchor (--zoy = frame top) */
+  .stage.posc{--rx:26%;--ry:50%;--fbw:26%;--zoom:1.5;--zoy:38%} .stage.posc .frameOnWall{left:50%;top:38%}
+  .stage.posd{--rx:46%;--ry:49%;--fbw:27%;--zoom:1.5;--zoy:35%} .stage.posd .frameOnWall{left:50%;top:35%}
+  .stage.pose{--rx:33%;--ry:47%;--fbw:22%;--zoom:1.6;--zoy:33%} .stage.pose .frameOnWall{left:50%;top:33%}
+  /* action icons live ON the image (top-right stack): Save · Share · Zoom — same logic as gallery tiles + Printly/Displate */
+  .stageacts{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:var(--sp-2);z-index:4}
+  .sact{width:38px;height:38px;border-radius:var(--r-ui);background:var(--glass);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;transition:background var(--dur-fast)}
+  .sact:hover{background:rgba(20,16,26,.92)}
+  .sact svg{width:18px;height:18px}
+  .sact.on svg{fill:var(--on-dark)}
+  .stagehint{position:absolute;left:12px;bottom:12px;z-index:4;display:flex;align-items:center;gap:var(--sp-2);background:var(--glass);backdrop-filter:blur(6px);color:var(--on-dark);font-size:var(--fs-2xs);font-weight:var(--w-semibold);padding:6px 11px;border-radius:var(--r-ui)}
+  .stagehint svg{width:13px;height:13px}
+
+  /* right: buy panel */
+  .buy{min-width:0}
+  /* bottom-sheet wrappers — invisible on desktop (children flow normally), become the sheet on mobile */
+  .sheetgrip{display:none}
+  .sheetscroll,.sheetcta{display:contents}
+  .mctl{display:none}   /* mobile control bar — shown only ≤820px */
+  .creatorline{display:flex;align-items:center;gap:var(--sp-3)}
+  .creatorline .av{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .creatorline .nm{font-size:var(--fs-xs);font-weight:var(--w-semibold)}
+  .creatorline .nm small{color:var(--muted);font-weight:var(--w-normal)}
+  .follow{margin-left:auto;display:flex;align-items:center;gap:var(--sp-2);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:7px 13px;font-size:var(--fs-xs);font-weight:var(--w-semibold);color:var(--ink)}
+  .follow:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .follow svg{width:13px;height:13px}
+  .ptitle{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-xl);line-height:var(--lh-tight);margin:14px 0 0}
+  .pmeta{display:flex;align-items:center;gap:var(--sp-4);margin-top:8px;color:var(--muted);font-size:var(--fs-xs)}
+  .pmeta span{display:flex;align-items:center;gap:var(--sp-1)}
+  .pmeta svg{width:14px;height:14px}
+
+  .pmeta .star{stroke:none;fill:var(--accent)}
+  .pmeta .rev small{color:var(--faint)}
+
+  .priceblock{display:flex;align-items:baseline;gap:var(--sp-2);margin:16px 0 2px}
+  .priceblock .now{font-size:var(--fs-xl);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .priceblock .from{font-size:var(--fs-xs);color:var(--muted)}
+  .deliver{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-xs);color:var(--muted);margin-bottom:2px}
+  .deliver svg{width:15px;height:15px;stroke:var(--faint)}
+  .deliver b{color:var(--ink);font-weight:var(--w-semibold)}
+
+  /* section label with live value on the right */
+  .blabel{font-size:var(--fs-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);margin:20px 0 10px;display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3)}
+
+  /* format toggle */
+  .fmt{display:flex;gap:var(--sp-2)}
+  .fmt button{flex:1;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:11px 13px;text-align:left;transition:var(--dur-fast)}
+  .fmt button:hover{border-color:var(--faint)}
+  .fmt button.on{border-color:var(--accent);background:var(--accent-soft)}
+  .fmt .ft{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-sm);font-weight:var(--w-semibold)}
+  .fmt .ft svg{width:15px;height:15px}
+  .fmt button.on .ft{color:var(--accent-ink)}
+  .fmt .fs{font-size:var(--fs-2xs);color:var(--muted)}
+
+  /* material pills */
+  .mats{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+  .mat{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:9px 15px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--muted);transition:var(--dur-fast)}
+  .mat:hover{color:var(--ink);border-color:var(--faint)}
+  .mat.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+
+  /* segmented boxes (size, mat) */
+  .optrow{display:flex;gap:var(--sp-2)}
+  .optrow button{flex:1;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:11px 6px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px;transition:var(--dur-fast)}
+  .optrow button small{font-weight:var(--w-normal);color:var(--muted);font-size:var(--fs-2xs)}
+  .optrow button .sp{font-weight:var(--w-semibold);font-size:var(--fs-xs);font-variant-numeric:tabular-nums;margin-top:2px}
+  .optrow button.on .sp{color:var(--accent-ink)}
+  .optrow button:hover{border-color:var(--faint)}
+  .optrow button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .optrow button.on small{color:var(--accent-ink)}
+
+  /* frame swatches */
+  .frames{display:flex;gap:var(--sp-3)}
+  .frm{display:flex;flex-direction:column;align-items:center;gap:var(--sp-1);color:var(--muted);font-size:var(--fs-2xs);font-weight:var(--w-semibold)}
+  .frm .box{width:40px;height:40px;border-radius:var(--r-ui);border:1px solid var(--line);background:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;transition:var(--dur-fast)}
+  .frm .box .sq{width:26px;height:26px;border-radius:var(--r-sm);background:var(--fc);border:1px solid rgba(0,0,0,.12)}
+  .frm.none .box .sq{background:var(--panel);border-color:var(--line)}
+  .frm.none .box::after{content:"";position:absolute;left:9px;right:9px;top:50%;height:1.5px;background:var(--faint);transform:rotate(-45deg)}
+  .frm:hover .box{border-color:var(--faint)}
+  .frm.on{color:var(--accent-ink)}
+  .frm.on .box{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+  /* cm / inch unit toggle (in the SIZE label row) */
+  .unit{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;text-transform:none;letter-spacing:0}
+  .unit button{padding:3px 10px;font-size:var(--fs-2xs);font-weight:var(--w-semibold);color:var(--muted);text-transform:none;letter-spacing:0}
+  .unit button.on{background:var(--accent-soft);color:var(--accent-ink)}
+  .unit button+button{border-left:1px solid var(--line)}
+
+  /* "Add a frame" optional expander (frame + mat live inside, collapsed by default) */
+  .frameToggle{display:flex;align-items:center;gap:var(--sp-2);width:100%;margin-top:22px;padding:12px 14px;border:1px dashed var(--line);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--muted);background:var(--panel);transition:var(--dur-fast)}
+  .frameToggle:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .frameToggle svg{width:15px;height:15px;transition:transform var(--dur-base)}
+  .frameToggle small{margin-left:auto;font-weight:var(--w-normal);color:var(--faint)}
+  .frameToggle.open{border-style:solid;border-color:var(--accent);color:var(--accent-ink)}
+  .frameToggle.open svg{transform:rotate(45deg)}
+  .framebody{margin-top:2px}
+
+  /* small inline "compare" link + expandable material explainer */
+  .minilink{font-size:var(--fs-2xs);font-weight:var(--w-semibold);color:var(--accent-ink);display:inline-flex;align-items:center;gap:var(--sp-1);letter-spacing:0;text-transform:none}
+
+  /* selected-configuration summary chip */
+  .summ{display:flex;align-items:center;gap:var(--sp-2);margin-top:20px;padding:10px 13px;background:var(--panel2);border-radius:var(--r-ui);font-size:var(--fs-xs);color:var(--ink);font-weight:var(--w-medium)}
+  .summ svg{width:15px;height:15px;stroke:var(--muted)}
+
+  .hidden{display:none}
+
+  /* CTA */
+  .buyrow{display:flex;gap:var(--sp-3);margin-top:22px}
+  .addcart{flex:1;background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:14px;font-weight:var(--w-semibold);font-size:var(--fs-base);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);transition:filter var(--dur-fast)}
+  .addcart:hover{filter:brightness(1.14)}
+  .addcart svg{width:17px;height:17px}
+  .addcart .cp{font-variant-numeric:tabular-nums;opacity:.72;font-weight:var(--w-medium)}
+
+  /* certificate trust line */
+  .certline{display:flex;align-items:center;gap:var(--sp-2);margin-top:16px;font-size:var(--fs-xs);color:var(--muted)}
+  .certline svg{width:16px;height:16px;stroke:var(--accent)}
+  .certline b{color:var(--ink);font-weight:var(--w-semibold)}
+
+  /* progressive-disclosure accordions */
+  .accs{margin-top:14px}
+  .acc{border-top:1px solid var(--line)}
+  .acc:last-child{border-bottom:1px solid var(--line)}
+  .acc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);padding:13px 0;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);text-align:left}
+  .acc>button .chev{width:16px;height:16px;color:var(--muted);transition:transform var(--dur-base);flex:none}
+  .acc.open>button .chev{transform:rotate(45deg)}
+  .acc .body{display:none;padding:0 0 14px;font-size:var(--fs-xs);color:var(--muted);line-height:var(--lh-base)}
+  .acc.open .body{display:block}
+  .acc .body .r{display:flex;align-items:center;gap:var(--sp-2);margin-top:6px}
+  .acc .body .r svg{width:14px;height:14px;stroke:var(--faint);flex:none}
+
+  /* digital card */
+  .digital{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:var(--card-pad)}
+  .digital ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-2)}
+  .digital li{display:flex;align-items:flex-start;gap:var(--sp-2);font-size:var(--fs-xs);color:var(--ink)}
+  .digital li small{display:block;color:var(--muted);font-size:var(--fs-2xs);margin-top:1px}
+  .digital li svg{width:15px;height:15px;stroke:var(--accent);margin-top:1px}
+
+  /* ── Details live in the RIGHT column, below the CTA (image stays sticky) — Displate pattern ── */
+  .moreinfo{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+  .desc{color:var(--muted);font-size:var(--fs-sm);line-height:var(--lh-base);margin:0}
+  .tags{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-top:16px}
+  .tag{padding:6px 12px;border:1px solid var(--line);border-radius:var(--r-ui);font-size:var(--fs-xs);color:var(--muted);font-weight:var(--w-medium)}
+  .tag:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .moreinfo .accs{margin-top:12px}
+  .acc .body p{margin:10px 0 0;line-height:var(--lh-base)}
+  .specrow{display:flex;justify-content:space-between;gap:var(--sp-3);padding:8px 0;font-size:var(--fs-xs)}
+  .specrow+.specrow{border-top:1px solid var(--line)}
+  .specrow span{color:var(--muted)}
+  .specrow b{font-weight:var(--w-semibold);text-align:right}
+
+  /* ── "Why Latenca" benefit band (4 benefits, shared with Explore) ── */
+  .whyband{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.5vw,32px);margin-top:clamp(40px,5vw,60px);padding-top:clamp(30px,4vw,44px);border-top:1px solid var(--line)}
+  @media(max-width:1100px){.whyband{grid-template-columns:1fr 1fr;gap:var(--sp-6)}}
+  .why{display:flex;gap:var(--sp-3);align-items:flex-start}
+  .why svg{width:22px;height:22px;stroke:var(--accent);flex:none;margin-top:1px}
+  .why b{font-size:var(--fs-base);font-weight:var(--w-semibold);display:block}
+  .why span{font-size:var(--fs-xs);color:var(--muted);line-height:var(--lh-base);display:block;margin-top:3px}
+
+  @media(max-width:820px){.whyband{grid-template-columns:1fr;gap:var(--sp-5)}}
+
+  /* ── More like this ── */
+  /* gallery tabs (Similar / Popular / Bestselling) */
+  /* gallery tabs = our standard filter pills (accent-soft active), centred like Displate */
+  /* sort toolbar — left-aligned like Explore/Creator (tabs left, count right) */
+  .gtabs{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin:clamp(30px,4vw,44px) 0 16px}
+  .gtabs .tabs{display:flex;gap:var(--sp-2);min-width:0;flex-wrap:wrap}
+  .gcount{font-size:var(--fs-xs);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .gtab{padding:8px 16px;border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-medium);color:var(--muted);white-space:nowrap;transition:background var(--dur-fast),color var(--dur-fast)}
+  .gtab:hover{background:var(--panel2);color:var(--ink)}
+  .gtab.on{background:var(--accent-soft);color:var(--accent-ink)}
+  /* load more (matches Explore) */
+  .loadmore{display:flex;flex-direction:column;align-items:center;gap:var(--sp-3);margin:34px 0 0}
+  .loadmore .txt{font-size:var(--fs-xs);color:var(--muted);font-variant-numeric:tabular-nums}
+  .loadmore .more{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);padding:11px 28px;transition:border-color var(--dur-fast),color var(--dur-fast);white-space:nowrap}
+  .loadmore .more:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+  /* ── Slide-in drawers (cart + size guide) — same right-panel pattern as Explore filters ── */
+  .scrim{position:fixed;inset:0;background:rgba(15,12,20,.44);opacity:0;pointer-events:none;transition:opacity var(--dur-base);z-index:var(--z-scrim)}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:400px;max-width:92vw;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform var(--dur-base) var(--ease);z-index:var(--z-panel);display:flex;flex-direction:column}
+  .drawer.open{transform:none;box-shadow:var(--shadow-drawer)}
+  .dhead{display:flex;align-items:center;gap:var(--sp-3);padding:17px 20px;border-bottom:1px solid var(--line)}
+  .dhead h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-lg);margin:0;flex:1}
+  .dhead .ok{width:22px;height:22px;border-radius:var(--r-sm);background:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
+  .dhead .ok svg{width:14px;height:14px;stroke:var(--on-dark)}
+  .dclose{width:34px;height:34px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);flex:none}
+  .dclose:hover{background:var(--panel2);color:var(--ink)}
+  .dclose svg{width:18px;height:18px}
+  .dbody{flex:1;overflow-y:auto;padding:18px 20px}
+  .dfoot{padding:16px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:var(--sp-2)}
+  /* cart item */
+  .citem{display:flex;gap:var(--sp-3)}
+  .citem .th{width:62px;height:80px;border-radius:var(--r-sm);object-fit:cover;background:var(--media);flex:none}
+  .citem .ct{font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);line-height:var(--lh-tight)}
+  .citem .cc{font-size:var(--fs-xs);color:var(--muted);margin-top:4px}
+  .citem .cp{font-weight:var(--w-semibold);margin-top:8px;font-variant-numeric:tabular-nums}
+  .csub{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:var(--fs-sm);color:var(--muted)}
+  .csub b{font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums;color:var(--ink)}
+  .cxsell{margin-top:22px}
+  .cxsell .lbl{font-size:var(--fs-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);margin-bottom:8px}
+  .cxrow{display:flex;gap:var(--sp-3);align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+  .cxrow img{width:44px;height:44px;border-radius:var(--r-sm);object-fit:cover;flex:none;background:var(--media)}
+  .cxrow .n{flex:1;min-width:0;font-size:var(--fs-xs);font-weight:var(--w-semibold)}
+  .cxrow .n small{display:block;color:var(--muted);font-weight:var(--w-normal);font-variant-numeric:tabular-nums}
+  .cxrow .addx{border:1px solid var(--line);border-radius:var(--r-ui);padding:7px 12px;font-size:var(--fs-xs);font-weight:var(--w-semibold);white-space:nowrap}
+  .cxrow .addx:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .dfoot .checkout{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:14px;font-weight:var(--w-semibold);font-size:var(--fs-base);text-align:center}
+  .dfoot .checkout:hover{filter:brightness(1.14)}
+  .dfoot .cont{padding:11px;font-weight:var(--w-semibold);font-size:var(--fs-sm);color:var(--muted);text-align:center}
+  .dfoot .cont:hover{color:var(--ink)}
+  /* size guide */
+  .sgintro{font-size:var(--fs-sm);color:var(--muted);line-height:var(--lh-base);margin:0 0 6px}
+  .sgrow{display:grid;grid-template-columns:76px 1fr auto;gap:var(--sp-4);align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+  .sgrow:first-of-type{border-top:0}
+  .sgscale{display:flex;align-items:flex-end;justify-content:center;height:72px}
+  .sgscale i{display:block;width:var(--w);height:var(--h);background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:var(--r-tile)}
+  .sgrow .sz{font-weight:var(--w-semibold);font-size:var(--fs-base)}
+  .sgrow .sz small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-2xs);margin-top:2px}
+  .sgrow .bf{font-size:var(--fs-2xs);color:var(--muted);text-align:right;line-height:var(--lh-base)}
+  /* material compare + picker drawer */
+  .mgrow{display:grid;grid-template-columns:46px 1fr auto;gap:var(--sp-4);align-items:center;padding:14px 0;border-top:1px solid var(--line);cursor:pointer;text-align:left;width:100%;background:none}
+  .mgrow:first-of-type{border-top:0}
+  .mgrow .sw{width:46px;height:46px;border-radius:var(--r-sm);border:1px solid rgba(0,0,0,.1);background:var(--mg);flex:none;transition:box-shadow var(--dur-fast)}
+  .mgrow .mn{font-weight:var(--w-semibold);font-size:var(--fs-base);color:var(--ink)}
+  .mgrow .mn small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-xs);margin-top:2px;line-height:var(--lh-base)}
+  .mgrow .mp{font-size:var(--fs-xs);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;align-self:start;padding-top:2px}
+  .mgrow:hover .sw{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--faint)}
+  .mgrow.on .mn{color:var(--accent-ink)}
+  .mgrow.on .sw{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+  /* frame guide: mat (passe-partout) explainer under the frame rows */
+  .fgmat{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+  .fgmat b{font-size:var(--fs-sm);font-weight:var(--w-semibold)}
+  .fgmat p{margin:6px 0 0;font-size:var(--fs-xs);color:var(--muted);line-height:var(--lh-base)}
+
+  /* lightbox (click artwork / zoom → full-screen detail view) */
+  .lightbox{position:fixed;inset:0;z-index:var(--z-toast);background:rgba(15,12,20,.93);display:none;align-items:center;justify-content:center;padding:4vh 4vw}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:100%;max-height:92vh;width:auto;height:auto;object-fit:contain;box-shadow:0 24px 70px rgba(0,0,0,.55);cursor:zoom-out}
+  .lbclose{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:var(--r-ui);background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center}
+  .lbclose:hover{background:rgba(255,255,255,.26)}
+  .lbclose svg{width:20px;height:20px}
+  .grid{column-count:5;column-gap:10px}
+  @media(min-width:2100px){.grid{column-count:6}}
+  @media(max-width:1440px){.grid{column-count:4}}
+  @media(max-width:1024px){.grid{column-count:3}}
+  .tile{break-inside:avoid;margin-bottom:10px;position:relative;border-radius:var(--r-tile);overflow:hidden;background:var(--media);display:block}
+  .tile img{width:100%;display:block;transition:transform var(--dur-slow) ease}
+  .tile:hover img{transform:scale(1.04)}
+  .tgrad{position:absolute;inset:0;opacity:0;transition:opacity var(--dur-fast);pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.32),transparent 26%),linear-gradient(to top,rgba(0,0,0,.44),transparent 36%)}
+  .tile:hover .tgrad{opacity:1}
+  .fav{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.42);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;z-index:3;transition:background var(--dur-fast)}
+  .fav:hover{background:rgba(20,16,26,.8)}
+  .fav svg{width:16px;height:16px}
+  .acts{position:absolute;top:8px;right:8px;display:flex;gap:var(--sp-2);opacity:0;transform:translateY(-3px);transition:var(--dur-fast);z-index:3}
+  .tile:hover .acts{opacity:1;transform:none}
+  .tbtn{width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.5);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+  .tbtn:hover{background:rgba(20,16,26,.82)}
+  .tbtn svg{width:16px;height:16px}
+  .tbtn .dots circle{fill:currentColor}
+  .info{position:absolute;left:10px;right:48px;bottom:10px;color:var(--on-dark);opacity:0;transform:translateY(3px);transition:var(--dur-fast);z-index:3}
+  .tile:hover .info{opacity:1;transform:none}
+  .info .t{font-family:var(--serif);font-size:var(--fs-sm);font-weight:var(--w-medium);line-height:var(--lh-tight);text-shadow:0 1px 3px rgba(0,0,0,.55);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+  .info .a{display:flex;align-items:center;gap:var(--sp-2);margin-top:3px;font-size:var(--fs-2xs);opacity:.92;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+  .info .a .dot{width:32px;height:32px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .info .a span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* ── Responsive ── */
+  .brand-m{display:none}
+  @media(max-width:640px){.grid{column-count:2}}
+  @media(max-width:1024px){
+    .pdp{grid-template-columns:1fr}
+    .stagewrap{position:static}
+    .stage{height:clamp(360px,56vh,520px)}
+  }
+  @media(max-width:820px){
+    .app,.app.rail{grid-template-columns:minmax(0,1fr)}
+    .side{display:none}
+    .main{--mainpad:clamp(14px,4vw,26px);padding:0 var(--mainpad) 90px}
+    .topbar{gap:var(--sp-3)}
+    .searchwrap{flex:1;margin-inline:0}
+    .brand-m{display:block;font-family:var(--serif);font-size:22px;font-weight:var(--w-semibold)}
+    #themeBtn,.topbar [title="Saved"],.signin{display:none}
+    .search .kbd{display:none}
+    .stagewrap{flex-direction:column-reverse;align-items:stretch}
+    .thumbs{flex-direction:row;width:auto}
+    .stage{flex:none;width:100%}
+    .specs{grid-template-columns:1fr 1fr}
+    .buyrow{margin-bottom:8px}
+  }
+  /* mobile sticky buy bar */
+  .buybar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:var(--z-tabbar);background:var(--bg);border-top:1px solid var(--line);padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom));align-items:center;gap:var(--sp-3);box-shadow:var(--shadow-bar)}
+  .buybar .bp{font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .buybar .addcart{flex:1;padding:13px;margin-top:0}
+  @media(max-width:820px){.buybar{display:flex}}
+
+  @media (hover:none){.tile .acts{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+  /* ── ICON SYSTEM — single source of truth. Switch to Ideogram = set --icon:18px; --iconbtn:36px in :root ── */
+  .nav svg,.icobtn svg,.railtoggle svg,.fav svg,.tbtn svg{width:var(--icon);height:var(--icon)}
+  .icobtn,.railtoggle,.fav,.tbtn{width:var(--iconbtn);height:var(--iconbtn)}
+  .nav{min-height:var(--iconbtn)}
+  .app.rail .nav,.app.rail .sell,.app.rail .account{width:var(--iconbtn);height:var(--iconbtn)}
+  .info .a .dot{width:24px;height:24px}
+
+  /* == BUTTON SYSTEM — one fixed height per tier, every button of a tier is pixel-identical. Retune feel = change --btn-sm/md/lg only. ==
+     lg = primary CTA (buy / pay / hero)  ·  md = default  ·  sm = compact toggle */
+  .addcart,.paymain,.xpay,.btn{height:var(--btn-lg)}
+  .signin,.sell,.more,.loadmore .more,.frameToggle,.cont,.checkout,.papply,.pfollow{height:var(--btn-md)}
+  .pill,.cbtn,.gtab,.mat,.seg button,.addx,.follow,.allf,.drop{height:var(--btn-sm)}
+  .addcart,.paymain,.xpay,.btn,.signin,.sell,.more,.loadmore .more,.frameToggle,.cont,.checkout,.papply,.pfollow,.pill,.cbtn,.gtab,.mat,.seg button,.addx,.follow,.allf,.drop{padding-top:0;padding-bottom:0;line-height:1}
+  /* centering for buttons that were block/inline (already-flex buttons keep their layout; .frameToggle keeps its space-between) */
+  .signin,.btn,.papply,.pill,.cbtn,.gtab,.mat,.addx,.pfollow,.checkout{display:inline-flex;align-items:center;justify-content:center}
+  .cont{display:flex;align-items:center;justify-content:center}
+  /* icon buttons that slipped the icon system -> square 40 like the rest */
+  .dclose,.pclose,.sact{width:var(--iconbtn);height:var(--iconbtn)}
+
+  /* == FORM SYSTEM — text fields share the button height (40) + one padding/focus. bg stays contextual (panel on bg / bg on panel = keeps contrast). == */
+  .field input,.field select,.promobody input,.search,.fsearch{height:var(--btn-md);padding-top:0;padding-bottom:0}
+  .field input,.field select,.promobody input{padding-left:14px;padding-right:14px;font-size:var(--fs-base)}
+  .field input::placeholder,.promobody input::placeholder{color:var(--faint)}
+  .field input:focus,.field select:focus,.promobody input:focus{outline:0;border-color:var(--accent);box-shadow:var(--ring)}
+
+  /* == FOCUS SYSTEM — one visible ring on everything keyboard-reachable (WCAG 2.2). Global :focus-visible covers buttons/links/tiles/nav; borderless-input wrappers use :focus-within. == */
+  .fsearch:focus-within{border-color:var(--accent);box-shadow:var(--ring)}
+
+  /* == BADGE / CHIP SYSTEM — count bubbles round & uniform (18); small labels (fs-2xs) use --r-sm; medium chips (fs-xs: .tag/.fchip) keep --r-ui. colours/bg stay contextual. == */
+  .cart .badge,.allf .n{min-width:18px;height:18px;padding:0 5px;border-radius:var(--r-full)}
+  .vbadge,.lchip,.set .save{padding:4px 9px;border-radius:var(--r-sm)}
+
+  /* == STATE SYSTEM — hover (--panel2 on light / darker glass over image) and selected (accent-soft + accent) are already consistent app-wide. Disabled was the one undefined state; defined here (shadcn-style: dim + no interaction) for buttons/inputs. == */
+  button:disabled,button[disabled],input:disabled,select:disabled,.is-disabled{opacity:.5;pointer-events:none}
+
+  /* == STATE PATTERNS — loading / error / alert share one consistent look (empty-state already defined per page) == */
+  /* loading skeleton */
+  .skeleton{background:linear-gradient(90deg,var(--panel2) 25%,var(--media) 50%,var(--panel2) 75%);background-size:200% 100%;animation:shimmer 1.3s ease-in-out infinite;border-radius:var(--r-sm);color:transparent!important;pointer-events:none}
+  @keyframes shimmer{to{background-position:-200% 0}}
+  @media(prefers-reduced-motion:reduce){.skeleton{animation:none}}
+  /* inline alert (ok / err) */
+  .alert{display:flex;align-items:flex-start;gap:var(--sp-2);padding:var(--sp-3);border-radius:var(--r-ui);font-size:var(--fs-sm);line-height:var(--lh-base)}
+  .alert svg{width:18px;height:18px;flex:none;margin-top:1px}
+  .alert.ok{background:var(--ok-soft);color:var(--ink)}
+  .alert.ok svg{stroke:var(--ok)}
+  .alert.err{background:var(--err-soft);color:var(--ink)}
+  .alert.err svg{stroke:var(--err)}
+  /* form field error */
+  .field.err input,.field.err select{border-color:var(--err)}
+  .field.err input:focus,.field.err select:focus{box-shadow:0 0 0 3px var(--err-soft)}
+  .field .msg{display:flex;align-items:center;gap:var(--sp-1);font-size:var(--fs-xs);color:var(--err);margin-top:var(--sp-1)}
+  .field .msg svg{width:13px;height:13px;stroke:var(--err)}
+
+  /* ══ BUILDER — the wall, composed on the product foundation (w-prefixed to avoid clashes) ══ */
+  .wallstage{position:sticky;top:80px;align-self:start;min-width:0}
+  .wallwrap{position:relative;width:100%}
+  .wruler{position:absolute;bottom:11px;right:11px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--muted);white-space:nowrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:4px 11px;box-shadow:var(--shadow-1)}
+  .wruler svg{width:13px;height:13px;stroke:var(--faint)} .wruler b{color:var(--ink);font-weight:var(--w-semibold)}
+  .wroom{position:relative;width:100%;aspect-ratio:240/168;border-radius:var(--r-ui);overflow:hidden;box-shadow:var(--shadow-pop);background:linear-gradient(178deg,#efe9df,#e4dccd)}
+  html[data-theme="dark"] .wroom{background:linear-gradient(178deg,#2a2734,#211e2b)}
+  .wlight{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 70% at 22% 6%,rgba(255,252,245,.7),transparent 60%)}
+  .wfloor{position:absolute;left:0;right:0;bottom:0;height:15%;background:linear-gradient(180deg,#cbb493,#b89c76)}
+  .wfloor::before{content:"";position:absolute;inset:0;opacity:.35;background:repeating-linear-gradient(90deg,rgba(120,92,58,0) 0 46px,rgba(120,92,58,.18) 46px 47px)}
+  .wskirt{position:absolute;left:0;right:0;bottom:15%;height:2.4%;background:linear-gradient(180deg,#f2ece1,#e4dccd);box-shadow:0 2px 4px rgba(30,22,12,.1)}
+  .wconsole{position:absolute;bottom:14.4%;left:50%;transform:translateX(-50%);width:52%;height:8%}
+  .wconsole .wctop{position:absolute;top:0;left:0;right:0;height:26%;border-radius:3px;background:linear-gradient(180deg,#d7c4a4,#c3ab86);box-shadow:0 6px 14px -4px rgba(30,22,12,.28)}
+  .wconsole .wcbody{position:absolute;top:26%;left:6%;right:6%;bottom:0;background:linear-gradient(180deg,#cdb994,#bda175)}
+  .wtile{position:absolute;cursor:pointer;transition:box-shadow var(--dur-base) var(--ease)}
+  .wframe{position:relative;width:100%;height:100%;padding:2.6%;border-radius:var(--r-tile);box-shadow:0 1px 2px rgba(20,16,22,.28),0 4px 6px -2px rgba(20,16,22,.2),0 22px 34px -14px rgba(20,16,22,.36)}
+  .wframe.black{background:linear-gradient(135deg,#2b2825,#141210 60%,#000)}
+  .wframe.white{background:linear-gradient(135deg,#fff,#ece6db);box-shadow:0 1px 2px rgba(20,16,22,.28),0 22px 34px -14px rgba(20,16,22,.36),inset 0 0 0 1px rgba(20,16,10,.06)}
+  .wframe.oak{background-image:repeating-linear-gradient(90deg,rgba(120,86,40,0) 0 5px,rgba(120,86,40,.1) 5px 6px),linear-gradient(135deg,#dcb884,#b48a4d)}
+  .wframe.walnut{background-image:repeating-linear-gradient(90deg,rgba(20,10,4,0) 0 5px,rgba(20,10,4,.16) 5px 6px),linear-gradient(135deg,#71503a,#3c2517)}
+  .wframe.none{padding:0;background:none;box-shadow:0 10px 24px -10px rgba(20,16,22,.42)}
+  .wbar{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-3);flex-wrap:wrap}
+  .wblab{font-size:var(--fs-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);margin-right:2px}
+  .laychip{height:var(--btn-sm);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:0 14px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--muted);transition:var(--dur-fast)}
+  .laychip:hover{color:var(--ink);border-color:var(--faint)}
+  .laychip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .tileacts{display:flex;gap:var(--sp-2);margin-top:var(--sp-3)}
+  .tileacts button{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--sp-2);height:var(--btn-md);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast)}
+  .tileacts button:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .tileacts button svg{width:16px;height:16px}
+  .wmatte{position:relative;width:100%;height:100%;padding:7%;background:linear-gradient(160deg,#f8f5ef,#efeadf)}
+  .wartbox{position:relative;width:100%;height:100%;overflow:hidden;box-shadow:0 0 0 1px rgba(20,16,10,.1),inset 0 2px 5px rgba(20,16,10,.16)}
+  .wartbox img{width:100%;height:100%;object-fit:cover;display:block}
+  .wglass{position:absolute;inset:2.6%;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.16),rgba(255,255,255,0) 22%,rgba(255,255,255,0) 68%,rgba(255,255,255,.06))}
+  .wtile.sel .wframe{box-shadow:0 1px 2px rgba(20,16,22,.28),0 6px 10px -2px rgba(20,16,22,.26),0 30px 46px -14px rgba(20,16,22,.44)}
+  .wtile.sel::after{content:"";position:absolute;inset:-7px;border:var(--focus-ring);border-radius:6px;pointer-events:none}
+  .wpin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:var(--r-full);background:#b6ab97;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .wblab.gsep{margin-left:var(--sp-2)}
+  /* wall-size stepper (segmented − value + ) */
+  .wsize{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);height:var(--btn-sm);overflow:hidden}
+  .wstep{width:30px;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:var(--dur-fast)}
+  .wstep svg{width:14px;height:14px}
+  .wstep:hover{background:var(--panel2);color:var(--ink)}
+  .wstep:disabled{opacity:.4;pointer-events:none}
+  .wval{min-width:60px;padding:0 8px;height:100%;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);border-right:1px solid var(--line);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);font-variant-numeric:tabular-nums}
+  /* scaled tile layer — wall width changes how much wall the art fills */
+  .wtilelayer{position:absolute;inset:0;transform:scale(var(--wscale,1));transform-origin:50% 42%;transition:transform var(--dur-base) var(--ease)}
+  /* floating wall actions (save / share) — same glass pills as the product image */
+  .wallacts{position:absolute;top:11px;right:11px;z-index:3;display:flex;gap:var(--sp-2)}
+  /* zoom: scale the SCENE inside the room (room keeps its size + shadow, clips the overflow) */
+  .wscene{position:absolute;inset:0;transition:transform var(--dur-base) var(--ease)}
+  .wroom.zoomed{cursor:grab}
+  .wroom.grabbing{cursor:grabbing}
+  .wroom.grabbing .wscene{transition:none}
+  .wzoom{position:absolute;right:11px;bottom:11px;z-index:3;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;box-shadow:var(--shadow-1)}
+  .wzoom button{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--ink);transition:background var(--dur-fast)}
+  .wzoom button:hover{background:var(--panel2)}
+  .wzoom button:disabled{opacity:.4;pointer-events:none}
+  .wzoom button+button{border-top:1px solid var(--line)}
+  .wzoom svg{width:16px;height:16px}
+  /* toast (confirmation) */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);display:flex;align-items:center;gap:var(--sp-2);background:var(--ink);color:var(--bg);font-size:var(--fs-sm);font-weight:var(--w-semibold);padding:11px 18px;border-radius:var(--r-ui);box-shadow:var(--shadow-pop);z-index:var(--z-toast);opacity:0;pointer-events:none;transition:opacity var(--dur-base),transform var(--dur-base)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast svg{width:16px;height:16px;stroke:var(--bg)}
+  @media(max-width:820px){.toast{bottom:84px}}
+  /* add-piece chip (right of the layout chips) */
+  .wadd{margin-left:auto;height:var(--btn-sm);display:inline-flex;align-items:center;gap:var(--sp-2);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:0 14px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast)}
+  .wadd:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .wadd svg{width:15px;height:15px}
+  /* change-artwork = full-width secondary action above the per-tile actions */
+  .changeart{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;height:var(--btn-md);margin-top:20px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast)}
+  .changeart:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .changeart svg{width:16px;height:16px}
+  /* catalog picker grid (inside the artwork drawer) */
+  .artgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)}
+  .artpick{position:relative;border-radius:var(--r-tile);overflow:hidden;background:var(--media);aspect-ratio:4/5;padding:0;border:1px solid var(--line);transition:box-shadow var(--dur-fast)}
+  .artpick img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--dur-slow) ease}
+  .artpick:hover img{transform:scale(1.05)}
+  .artpick.on{border-color:transparent;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+  @media(max-width:1024px){.wallstage{position:static}}
+
+  /* ══ ARTWORK PICKER — full-screen, catalog-style (search + filters + grid). In prod = Explore reused in "pick mode". ══ */
+  .apick{position:fixed;inset:0;z-index:var(--z-toast);background:var(--bg);display:none;flex-direction:column}
+  .apick.open{display:flex}
+  .apickhead{display:flex;align-items:center;gap:var(--sp-3);padding:15px 20px;border-bottom:1px solid var(--line);flex:none}
+  .apickhead h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-lg);margin:0}
+  .apickhead .apcount{color:var(--muted);font-size:var(--fs-xs);font-variant-numeric:tabular-nums}
+  .apickhead .dclose{margin-left:auto}
+  .apsearch{display:flex;align-items:center;gap:var(--sp-3);margin:14px 20px 0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:0 14px;height:var(--btn-md);flex:none}
+  .apsearch svg{width:17px;height:17px;stroke:var(--faint);flex:none}
+  .apsearch input{flex:1;min-width:0;border:0;background:none;outline:none;font-family:inherit;font-size:var(--fs-base);color:var(--ink);height:100%}
+  .apsearch input::placeholder{color:var(--faint)}
+  .apsearch:focus-within{border-color:var(--accent);box-shadow:var(--ring)}
+  .apickfilters{display:flex;gap:var(--sp-2);overflow-x:auto;padding:14px 20px 2px;scrollbar-width:none;flex:none}
+  .apickfilters::-webkit-scrollbar{display:none}
+  .apchip{flex:none;height:var(--btn-sm);padding:0 15px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--muted);display:inline-flex;align-items:center;transition:var(--dur-fast);white-space:nowrap}
+  .apchip:hover{color:var(--ink);border-color:var(--faint)}
+  .apchip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .aphint{margin:12px 20px 0;font-size:var(--fs-xs);color:var(--muted)}
+  .apickbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 20px 28px}
+  .apickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .apempty{grid-column:1/-1;text-align:center;color:var(--muted);padding:44px 0;font-size:var(--fs-sm)}
+  @media(max-width:820px){
+    .apickhead,.apsearch,.apickfilters,.aphint,.apickbody{padding-left:16px;padding-right:16px}
+    .apsearch{margin-left:16px;margin-right:16px}
+    .apickgrid{grid-template-columns:repeat(3,1fr);gap:9px}
+  }
+
+  /* ══ TWO-SCOPE BUY PANEL — WALL header + SELECTED PIECE ══ */
+  /* wall provenance (adapts: 1 artist + Follow / N artists) */
+  .wallprov{display:flex;align-items:center;gap:var(--sp-3);margin-top:10px;font-size:var(--fs-xs);color:var(--muted)}
+  .wallprov .av{width:26px;height:26px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .wallprov b{color:var(--ink);font-weight:var(--w-semibold)}
+  .wallprov .follow{margin-left:auto;padding:6px 12px}
+  /* pieces summary (collapsible) */
+  .pieceshead{display:flex;align-items:center;gap:var(--sp-2);width:100%;margin-top:20px;padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast);font-variant-numeric:tabular-nums}
+  .pieceshead:hover{border-color:var(--faint)}
+  .pieceshead .chev{width:16px;height:16px;color:var(--muted);transition:transform var(--dur-base);flex:none}
+  .pieceshead.open .chev{transform:rotate(90deg)}
+  .pieceshead .phspace{flex:1}
+  .pieceslist{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+  .pieceslist.hidden{display:none}
+  .piecerow{display:flex;align-items:center;gap:var(--sp-3);width:100%;padding:8px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);text-align:left;transition:var(--dur-fast)}
+  .piecerow:hover{border-color:var(--faint)}
+  .piecerow.on{border-color:var(--accent);background:var(--accent-soft)}
+  .piecerow img{width:38px;height:48px;object-fit:cover;border-radius:var(--r-sm);background:var(--media);flex:none}
+  .piecerow .prm{flex:1;min-width:0}
+  .piecerow .prm b{display:block;font-size:var(--fs-xs);font-weight:var(--w-semibold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .piecerow .prm small{display:block;color:var(--muted);font-size:var(--fs-2xs);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .piecerow .prp{font-size:var(--fs-xs);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums;flex:none}
+  /* selected-piece box (grouped, bordered) */
+  .piecebox{margin-top:20px;border:1px solid var(--line);border-radius:var(--r-ui);padding:var(--card-pad)}
+  .pbhead{display:flex;align-items:center;gap:var(--sp-3);margin-bottom:2px}
+  .pbthumb{width:44px;height:56px;object-fit:cover;border-radius:var(--r-sm);background:var(--media);flex:none}
+  .pbmeta{min-width:0}
+  .pbtitle{font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);line-height:var(--lh-tight)}
+  .pbby{font-size:var(--fs-xs);color:var(--muted);margin-top:2px}
+  .pbby b{color:var(--ink);font-weight:var(--w-semibold)}
+  .piecebox .changeart{margin-top:14px}
+  .allrow{display:flex;align-items:center;gap:var(--sp-2);margin-top:10px;font-size:var(--fs-xs);color:var(--muted);cursor:pointer}
+  .allrow input{width:16px;height:16px;accent-color:var(--accent);flex:none;cursor:pointer}
+  /* config accordion — 3 sections, one open at a time */
+  .sec{margin-top:8px}
+  .sec:first-of-type{margin-top:20px}
+  .sechead{display:flex;align-items:center;gap:var(--sp-2);width:100%;padding:13px 14px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast)}
+  .sechead:hover{border-color:var(--faint)}
+  .sec.open .sechead{border-color:var(--accent)}
+  .sechead .chev{width:16px;height:16px;color:var(--muted);transition:transform var(--dur-base);flex:none}
+  .sec.open .sechead .chev{transform:rotate(90deg);color:var(--accent-ink)}
+  .sechead .sub{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-size:var(--fs-xs);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58%;text-align:right}
+  .secbody{padding:2px 2px 6px}
+  .sec:not(.open) .secbody{display:none}
+  .secbody .changeart{margin-top:8px}
+  .secbody .pieceslist{margin-top:0}
+  .secbody .blabel:first-child{margin-top:14px}
+
+  /* ══════════════════════════════════════════════════════════════════
+     MOBILE BUILDER — wall always visible + compact control bar (Mixtiles).
+     ≤820px: fixed wall hero on top; the desktop panel is hidden and
+     replaced by a slim bottom bar with attribute chips that open SHORT
+     pickers — the wall is never covered, so every change stays visible.
+     ══════════════════════════════════════════════════════════════════ */
+  @media(max-width:820px){
+    html,body{height:100%;overflow:hidden}
+    .topbar{position:fixed;top:0;left:0;right:0;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+    .topbar .searchwrap{display:none}
+    .brand-m{flex:1}
+    .crumb{display:none}
+    .buybar{display:none!important}
+    .buy{display:none!important}          /* desktop config panel → replaced by .mctl on mobile */
+
+    .pdp{display:block;margin:0}
+
+    /* ── WALL HERO — fills the space above the control bar ── */
+    .wallstage{position:fixed;top:52px;left:0;right:0;height:calc(100dvh - 52px);padding:8px 12px 176px;margin:0;display:flex;flex-direction:column;z-index:1}
+    .wbar{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:var(--sp-2);margin:0 0 8px;padding-bottom:4px;scrollbar-width:none;flex:none}
+    .wbar::-webkit-scrollbar{display:none}
+    .wbar .wblab{display:none}
+    .wadd{margin-left:0;flex:none}
+    .laychip,.wsize{flex:none}
+    .wallwrap{flex:1;min-height:0;display:flex}
+    .wroom{aspect-ratio:auto;height:100%;width:100%;margin:auto;touch-action:none}
+
+    /* ── MOBILE CONTROL BAR — compact, always visible; grows upward when a picker opens ── */
+    .mctl{display:flex;flex-direction:column;gap:9px;position:fixed;left:0;right:0;bottom:0;z-index:var(--z-panel);background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -10px 30px rgba(15,12,20,.14);padding:11px 14px;padding-bottom:calc(11px + env(safe-area-inset-bottom))}
+    /* picker — options for the ONE active attribute; grows the bar up, wall stays visible above */
+    .mpick{max-height:0;overflow:hidden;transition:max-height var(--dur-base) var(--ease);margin:-11px -14px 0;background:var(--panel)}
+    .mpick.open{max-height:44vh;overflow-y:auto;border-bottom:1px solid var(--line)}
+    .mpickin{padding:13px 14px 14px}
+    .mpgrab{width:36px;height:5px;border-radius:var(--r-full);background:var(--line);margin:2px auto 12px}
+    .mphead{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:11px}
+    .mphead b{font-size:var(--fs-sm);font-weight:var(--w-semibold)}
+    .mphead .scopetag{font-size:var(--fs-2xs);font-weight:var(--w-semibold);color:var(--accent-ink);background:var(--accent-soft);border-radius:var(--r-sm);padding:3px 8px}
+    .mphead .mpclose{margin-left:auto;width:30px;height:30px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    .mphead .mpclose svg{width:17px;height:17px}
+    .mpgrid{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+    /* scope line (whole wall / selected piece) */
+    .mscope{display:flex;align-items:center;gap:10px;min-height:34px}
+    .mscope .msback{width:34px;height:34px;border-radius:var(--r-ui);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none}
+    .mscope .msback svg{width:17px;height:17px}
+    .mscope .msthumb{width:28px;height:34px;border-radius:var(--r-sm);object-fit:cover;background:var(--media);flex:none}
+    .mscope .mslabel{min-width:0;line-height:var(--lh-tight)}
+    .mscope .mslabel b{font-family:var(--serif);font-size:var(--fs-md);font-weight:var(--w-medium);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mscope .mslabel small{font-size:var(--fs-2xs);color:var(--muted)}
+    .mscope .msprice{margin-left:auto;font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+    /* attribute chips */
+    .mtabs{display:flex;gap:var(--sp-2)}
+    .mtab{flex:1;height:52px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);transition:var(--dur-fast);min-width:0}
+    .mtab small{font-weight:var(--w-normal);color:var(--muted);font-size:var(--fs-2xs);max-width:96%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mtab.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+    .mtab.on small{color:var(--accent-ink)}
+    .mtab:disabled{opacity:.4}
+    /* action row (CTA / piece actions) */
+    .mact{display:flex;gap:var(--sp-2)}
+    .mact>*{flex:1}
+    .mact .addcart{width:auto;height:var(--btn-lg);margin:0}
+    .mact .mbtn{height:var(--btn-lg);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);display:flex;align-items:center;justify-content:center;gap:var(--sp-2)}
+    .mact .mbtn svg{width:16px;height:16px}
+    /* bigger touch targets inside the hero toolbar + pickers */
+    .laychip,.wadd{min-height:40px}
+    .mpick .mat,.mpick .optrow button{min-height:46px}
+    .mpick .frm .box{width:46px;height:46px}
+    .toast{bottom:190px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="sidehead">
+      <div class="brand"><span class="full">Latenca</span><span class="mark">L</span></div>
+    </div>
+    <div class="navgroup">
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Home</span></a>
+      <a class="nav active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2 5.2-5.2 2 2-5.2z"/></svg><span>Explore</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Collections</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Artists</span></a>
+    </div>
+    <div class="spacer"></div>
+    <a class="sell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Sell your art</span></a>
+    <a class="account"><span class="avatar"></span><span class="who">Studio Latenca<small>Curator</small></span></a>
+  </aside>
+
+  <main class="main">
+    <div class="topbar" id="topbar">
+      <button class="railtoggle" id="railToggle" title="Collapse menu"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
+      <a class="brand-m">Latenca</a>
+      <div class="searchwrap">
+        <button class="search" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Try &ldquo;calm terracotta abstract for a bedroom&rdquo;&hellip;</span><span class="kbd">&#8984;K</span></button>
+        <div class="sdrop" id="sdrop">
+          <div class="shint"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Describe what you want — our AI search understands it</div>
+          <div class="sgroup"><div class="slabel">Popular subjects</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Abstract<span class="tag">612 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Celestial &amp; space<span class="tag">470 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Minimalist line art<span class="tag">320 works</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Collections</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Celestial Echoes<span class="tag">26 pieces</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Nordic Calm<span class="tag">40 pieces</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Artists</div>
+            <a class="sitem"><span class="av"></span>Aria Vela<span class="tag">Curator</span></a>
+            <a class="sitem"><span class="av"></span>Studio Vreeken<span class="tag">Creator</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="icobtn" id="themeBtn" title="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/></svg></button>
+        <button class="icobtn" title="Saved"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+        <button class="icobtn cart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span class="badge">2</span></button>
+        <button class="signin">Sign in</button>
+      </div>
+    </div>
+
+    <nav class="crumb"><a>Explore</a><span class="sep">&middot;</span><b>Build your wall</b></nav>
+
+    <section class="pdp">
+      <!-- LEFT: the wall (builder) -->
+      <div class="wallstage">
+        <div class="wbar">
+          <span class="wblab">Layout</span>
+          <button class="laychip on" data-lay="salon">Salon</button>
+          <button class="laychip" data-lay="grid">Grid</button>
+          <button class="wadd" id="addPiece"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add piece</button>
+        </div>
+        <div class="wallwrap">
+          <div class="wallacts">
+            <button class="sact" id="saveWall" title="Save wall"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+            <button class="sact" id="shareWall" title="Share wall"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+          </div>
+          <div class="wzoom">
+            <button id="zoomIn" aria-label="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button id="zoomOut" aria-label="Zoom out" disabled><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+          </div>
+          <div class="wroom">
+            <!-- .wscene holds the whole scene so zoom scales it inside the room (room keeps its shadow + clips overflow) -->
+            <div class="wscene" id="wscene">
+              <div class="wlight"></div><div class="wfloor"></div><div class="wskirt"></div>
+              <div class="wconsole"><div class="wctop"></div><div class="wcbody"></div></div>
+              <div class="wtilelayer" id="wtileLayer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- product single-artwork stage kept (hidden) so the shared configurator JS keeps working -->
+      <div class="stagewrap" style="display:none">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="stage" id="stage">
+          <div class="stageArt"><img id="artImg" src="" alt="Nebula Bloom by Aria Vela"></div>
+          <div class="stageRoom"><img class="bg" id="roomBg" src="" alt=""><span class="frameOnWall"><img id="roomArt" src="" alt=""></span></div>
+          <div class="stageacts">
+            <button class="sact" id="saveBtn" title="Save"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+            <button class="sact" id="shareBtn" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+            <button class="sact zoom" title="View full size"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+          </div>
+          <span class="stagehint" id="stagehint"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/></svg>Actual artwork</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: buy panel — TWO scopes: WALL (top) + SELECTED PIECE (bottom) -->
+      <aside class="buy" id="buyPanel">
+        <!-- ── WALL ── -->
+        <button class="sheetgrip" id="sheetGrip" type="button">
+          <span class="grh"></span>
+          <span class="grinfo"><b>Your wall</b><small id="gripSub">6 pieces &middot; Salon</small></span>
+          <span class="grtotal" id="gripTotal">$416</span>
+          <svg class="grchev" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+        </button>
+        <div class="sheetscroll">
+        <h1 class="ptitle" id="wallName">Your wall</h1>
+        <div class="wallprov" id="wallProv"></div>
+
+        <div class="priceblock"><span class="now" id="wallPrice">$416</span><span class="from">total &middot; incl. VAT</span></div>
+        <div class="deliver" id="deliver"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><span>Free shipping over $60 &middot; arrives <b id="delivDate">soon</b></span></div>
+
+        <!-- ── config accordion: All pieces / Pieces / Selected piece (one open at a time) ── -->
+        <div class="sec open" id="secAll">
+          <button class="sechead" id="secAllHead"><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg><span>All pieces</span><span class="sub" id="secAllSub"></span></button>
+          <div class="secbody">
+            <div class="blabel"><span>Material <button class="minilink" id="matCompare">Compare</button></span></div>
+            <div class="mats" id="matsWall"></div>
+            <div class="blabel"><span>Size <button class="minilink" id="sizeGuide">Size guide</button></span><span class="unit" id="unit"><button class="on" data-u="cm">cm</button><button data-u="in">in</button></span></div>
+            <div class="optrow" id="sizesWall"></div>
+            <div id="frameGroupWall">
+              <div class="blabel"><span>Frame <button class="minilink" id="frameGuide">Frame guide</button></span></div>
+              <div class="frames" id="framesWall"></div>
+              <div class="blabel">Mat</div>
+              <div class="optrow" id="matsWall2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec" id="secPieces">
+          <button class="sechead" id="secPiecesHead"><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg><span>Pieces <b id="piecesCount">6</b></span><span class="sub" id="piecesHeadPrice">$416</span></button>
+          <div class="secbody"><div class="pieceslist" id="piecesList"></div></div>
+        </div>
+
+        <div class="sec" id="secPiece">
+          <button class="sechead" id="secPieceHead"><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg><span id="pbTitle">Center piece</span><span class="sub" id="pbHeadPrice">$84</span></button>
+          <div class="secbody">
+            <div class="pbhead"><img class="pbthumb" id="pbThumb" alt=""><div class="pbmeta"><div class="pbby" id="pbBy">by Aria Vela</div></div></div>
+            <button class="changeart" id="changeArt"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m5 18 5-5 4 4 2-2 3 3"/></svg>Change artwork</button>
+            <div class="blabel">Material</div>
+            <div class="mats" id="matsPiece"></div>
+            <div class="blabel">Size</div>
+            <div class="optrow" id="sizesPiece"></div>
+            <div id="framePieceGroup">
+              <div class="blabel">Frame</div>
+              <div class="frames" id="framesPiece"></div>
+              <div class="blabel">Mat</div>
+              <div class="optrow" id="mats2"></div>
+            </div>
+            <div class="tileacts">
+              <button id="swapBtn"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Shuffle</button>
+              <button id="removeBtn"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Remove piece</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="certline"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><span><b>Signed certificate of authenticity</b> &middot; secure checkout</span></div>
+        </div><!-- /.sheetscroll -->
+
+        <div class="sheetcta">
+          <div class="buyrow">
+            <button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span id="ctaText">Add wall to cart</span><span class="cp" id="ctaPrice">&middot; $416</span></button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- mobile sticky buy bar -->
+<div class="buybar">
+  <span class="bp" id="barPrice">$59</span>
+  <button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg>Add wall to cart</button>
+</div>
+
+<!-- toast (prototype confirmation) -->
+<div class="toast" id="toast"></div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox"><button class="lbclose" id="lbClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><img id="lbImg" alt="Nebula Bloom — full view"></div>
+
+<!-- drawers -->
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="cartDrawer" aria-label="Cart">
+  <div class="dhead"><span class="ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><h3>Added to your cart</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <div class="citem">
+      <img class="th" id="cartThumb" alt="">
+      <div><div class="ct">Your wall</div><div class="cc" id="cartConfig">6 pieces · Salon layout</div><div class="cp" id="cartItemPrice">$318</div></div>
+    </div>
+    <div class="csub"><span>Subtotal</span><b id="cartSubtotal">$59</b></div>
+    <div class="cxsell">
+      <div class="lbl">Pairs well with</div>
+      <div id="cartXsell"></div>
+    </div>
+  </div>
+  <div class="dfoot"><a class="checkout">Checkout · <span id="cartFootPrice">$59</span></a><button class="cont" data-close>Continue shopping</button></div>
+</aside>
+
+<aside class="drawer" id="sizeDrawer" aria-label="Size guide">
+  <div class="dhead"><h3>Size guide</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">All sizes are portrait (3:4) to match this artwork. Shown to scale relative to each other.</p>
+    <div id="sgRows"></div>
+  </div>
+  <div class="dfoot"><button class="checkout" data-close>Got it</button></div>
+</aside>
+
+<aside class="drawer" id="matDrawer" aria-label="Compare materials">
+  <div class="dhead"><h3>Compare materials</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">Six ways to print your wall. Tap a material to apply it to every piece.</p>
+    <div id="mgRows"></div>
+  </div>
+</aside>
+
+<aside class="drawer" id="frameDrawer" aria-label="Frame guide">
+  <div class="dhead"><h3>Frames &amp; mats</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">Solid wood frames, ready to hang. Tap a colour to choose.</p>
+    <div id="fgRows"></div>
+    <div class="fgmat">
+      <b>Mat (passe-partout)</b>
+      <p>The paper border between the artwork and the frame — it gives the piece room to breathe. Choose None, 3&nbsp;cm or 6&nbsp;cm.</p>
+    </div>
+  </div>
+</aside>
+
+<!-- full-screen artwork picker (catalog-style: search + filters + grid) — in prod = Explore in "pick mode" -->
+<div class="apick" id="artPicker" aria-label="Choose artwork">
+  <div class="apickhead">
+    <h3 id="apTitle">Change artwork</h3>
+    <span class="apcount" id="apCount"></span>
+    <button class="dclose" id="apClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="apsearch">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="apSearch" type="text" placeholder="Search artworks — e.g. celestial, botanical&hellip;">
+  </div>
+  <div class="apickfilters" id="apFilters"></div>
+  <p class="aphint" id="apHint"></p>
+  <div class="apickbody"><div class="apickgrid" id="apGrid"></div></div>
+</div>
+
+<!-- MOBILE control bar (compact — wall stays visible, one attribute at a time) -->
+<div class="mctl" id="mctl">
+  <div class="mpick" id="mpick"><div class="mpickin" id="mpickin"></div></div>
+  <div class="mscope" id="mscope"></div>
+  <div class="mtabs">
+    <button class="mtab" data-attr="material"><span>Material</span><small id="tabMatV">Poster</small></button>
+    <button class="mtab" data-attr="size"><span>Size</span><small id="tabSizeV">50&times;70</small></button>
+    <button class="mtab" data-attr="frame" id="tabFrame"><span>Frame</span><small id="tabFrameV">None</small></button>
+  </div>
+  <div class="mact" id="mact"></div>
+</div>
+
+<script>
+  const ART=["photo-1605721911519-3dfeb3be25e7","photo-1612623753207-96465febeee7","photo-1602464729960-f95937746b68","photo-1533157950006-c38844053d55","photo-1615184697985-c9bde1b07da7","photo-1618331833071-ce81bd50d300","photo-1541512416146-3cf58d6b27cc","photo-1541961017774-22349e4a1262","photo-1533158388470-9a56699990c6","photo-1604871000636-074fa5117945","photo-1552250575-e508473b090f","photo-1622542796254-5b9c46ab0d2f","photo-1548362851-ea052637ad64","photo-1444703686981-a3abbc4d4fe3","photo-1502134249126-9f3755a50d78","photo-1465101162946-4377e57745c3","photo-1464802686167-b939a6910659","photo-1566345984367-fa2ba5cedc17","photo-1538370965046-79c0d6907d47","photo-1462331940025-496dfbfc7564","photo-1528722828814-77b9b83aafb2","photo-1462332420958-a05d1e002413"];
+  const ROOMS=[
+    {label:'Living room', file:'assets/rooms/cupboard.webp', pos:'posc'},
+    {label:'Sideboard',   file:'assets/rooms/dresser-zoom.webp', pos:'posd'},
+    {label:'Studio',      file:'assets/rooms/office.webp', pos:'pose'}
+  ];
+  const url=(id,w,h)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+  const HERO=ART[1];
+
+  // ── PER-TILE WALL STATE (one configurator, six pieces) ──
+  const MATERIALS=['Poster','Canvas','Metal','Acrylic','Wood','Foam'];
+  const PRICE={Poster:[39,59,89],Canvas:[55,85,125],Metal:[69,99,149],Acrylic:[79,119,179],Wood:[59,89,129],Foam:[45,69,99]};
+  const SIZES=[
+    {cm:'30×40',in:'12×16',vcm:'30 × 40 cm',vin:'12 × 16 in'},
+    {cm:'50×70',in:'20×28',vcm:'50 × 70 cm',vin:'20 × 28 in'},
+    {cm:'70×100',in:'28×40',vcm:'70 × 100 cm',vin:'28 × 40 in'}
+  ];
+  const FRAMES=[{n:'None',c:null,ex:0},{n:'White',c:'#f4f2ec',ex:25},{n:'Black',c:'#1c1b19',ex:25},{n:'Natural',c:'#c8a26a',ex:29},{n:'Dark',c:'#5a3d28',ex:29}];
+  const MATS=[{n:'None',v:'None'},{n:'3 cm',v:'3 cm'},{n:'6 cm',v:'6 cm'}];
+  const MATDESC=[['Poster','matte fine-art paper, framing optional'],['Canvas','gallery-wrapped cotton, ready to hang'],['Metal','HD print on aluminium — vivid & durable'],['Acrylic','glossy acrylic glass, real depth'],['Wood','printed on real birch plywood'],['Foam','lightweight foam board, easy to hang']];
+  const FRAME2CLASS=['none','white','black','oak','walnut'];
+  const tileNames=['Left tall','Center piece','Right upper','Lower left','Lower center','Lower right'];
+  // one config per wall tile — art = index into ART[]; starting frames mirror the wall
+  const MAXTILES=8;
+  const tiles=[
+    {art:0,material:'Poster',size:0,frame:4,mat:0},{art:1,material:'Poster',size:1,frame:2,mat:0},
+    {art:2,material:'Poster',size:0,frame:3,mat:0},{art:3,material:'Poster',size:0,frame:3,mat:0},
+    {art:4,material:'Poster',size:0,frame:1,mat:0},{art:5,material:'Poster',size:0,frame:2,mat:0}
+  ];
+  let unit='cm', layout='salon', sel=1, st=tiles[sel];
+  const wroom=document.querySelector('.wroom');
+  const wlayer=document.getElementById('wtileLayer');
+  // artist per artwork — first 6 = one artist (default wall reads "by Aria Vela"); rest spread → adding makes it mixed
+  const ARTISTS=['Aria Vela','Studio Vreeken','Noa Lindqvist','Kʼin Ortega','Mara Ito'];
+  const ART_ARTIST=[0,0,0,0,0,0,1,2,3,1,2,4,3,1,2,4,0,3,1,4,2,3];
+  // pseudo-category per artwork — drives the picker's filter chips (demo data)
+  const ART_CAT=['Abstract','Abstract','Abstract','Abstract','Abstract','Abstract','Coastal','Celestial','Abstract','Botanical','Minimal','Abstract','Coastal','Botanical','Celestial','Botanical','Coastal','Botanical','Minimal','Celestial','Coastal','Celestial'];
+  const artistOf=t=>ARTISTS[ART_ARTIST[t.art]??0];
+
+  const matPillsHTML=MATERIALS.map(m=>`<button class="mat" data-m="${m}">${m}</button>`).join('');
+  const framePillsHTML=FRAMES.map((f,i)=>`<button class="frm${f.c?'':' none'}" data-i="${i}" title="${f.n}"><span class="box"><span class="sq" style="--fc:${f.c||'transparent'}"></span></span>${f.n}</button>`).join('');
+  document.getElementById('matsWall').innerHTML=matPillsHTML;
+  document.getElementById('framesWall').innerHTML=framePillsHTML;
+  document.getElementById('matsPiece').innerHTML=matPillsHTML;
+  document.getElementById('framesPiece').innerHTML=framePillsHTML;
+  document.getElementById('mats2').innerHTML=MATS.map((m,i)=>`<button data-i="${i}">${m.n}</button>`).join('');
+  document.getElementById('matsWall2').innerHTML=MATS.map((m,i)=>`<button data-i="${i}">${m.n}</button>`).join('');
+  const sizeBtns=scope=>SIZES.map((s,i)=>`<button data-i="${i}"><span class="sd">${unit==='cm'?s.cm:s.in}<small> ${unit}</small></span>${scope==='piece'?`<span class="sp">$${PRICE[st.material][i]}</span>`:''}</button>`).join('');
+  function drawSizes(){
+    document.getElementById('sizesWall').innerHTML=sizeBtns('wall');
+    document.getElementById('sizesPiece').innerHTML=sizeBtns('piece');
+    document.querySelectorAll('#sizesWall button').forEach(b=>b.onclick=()=>{const sz=+b.dataset.i;visibleTiles().forEach(o=>o.t.size=sz);renderWall();render();});
+    document.querySelectorAll('#sizesPiece button').forEach(b=>b.onclick=()=>{st.size=+b.dataset.i;renderWall();render();});
+  }
+
+  const barPrice=document.getElementById('barPrice'), ctaPrice=document.getElementById('ctaPrice'), ctaText=document.getElementById('ctaText'), deliver=document.getElementById('deliver');
+  const framedMaterial=()=>st.material==='Poster'; // frame + mat only for Poster
+  const truckI='<svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>';
+  function deliveryStr(){const a=new Date(Date.now()+6*864e5),b=new Date(Date.now()+9*864e5);const mo=d=>d.toLocaleDateString('en-US',{month:'short'});return a.getMonth()===b.getMonth()?`${mo(a)} ${a.getDate()}–${b.getDate()}`:`${mo(a)} ${a.getDate()} – ${mo(b)} ${b.getDate()}`;}
+  function tilePrice(t){let p=PRICE[t.material][t.size];if(t.material==='Poster'&&t.frame>0)p+=FRAMES[t.frame].ex;return p;}
+  function wallTotal(){return tiles.reduce((s,t)=>t.removed?s:s+tilePrice(t),0);}
+  function pieceCount(){return tiles.filter(t=>!t.removed).length;}
+  function updateTileVisual(i){const el=wroom.querySelector(`.wtile[data-i="${i}"]`);if(!el)return;el.querySelector('.wframe').className='wframe '+FRAME2CLASS[tiles[i].frame];el.querySelector('.wartbox img').src=url(ART[tiles[i].art],400,500);}
+  // ── build/rebuild the wall from tile data (positions computed per layout + count) ──
+  const SALON6=[[12,12,20,30],[35,7,27,40],[66,11,21,31],[18,47,19,22],[40.5,50,18,22],[61,47,22,23]];
+  const GRID6=[[15,14,20,30],[40,14,20,30],[65,14,20,30],[15,48,20,30],[40,48,20,30],[65,48,20,30]];
+  function computeGrid(n){const cols=Math.min(n,3),rows=Math.ceil(n/cols),gapX=5,gapY=6,areaW=76,w=(areaW-(cols-1)*gapX)/cols,availH=rows<=2?70:82,y0=rows<=2?12:8,h=Math.min(34,(availH-(rows-1)*gapY)/rows),out=[];for(let i=0;i<n;i++){const r=Math.floor(i/cols),c=i%cols,inRow=r===rows-1?n-cols*r:cols,rowW=inRow*w+(inRow-1)*gapX,rx0=(100-rowW)/2;out.push([+(rx0+c*(w+gapX)).toFixed(1),+(y0+r*(h+gapY)).toFixed(1),+w.toFixed(1),+h.toFixed(1)]);}return out;}
+  function computeSalon(n){const top=Math.ceil(n/2),bot=n-top,out=[],areaW=80,x0=10;const row=(cnt,y,baseH)=>{const cell=areaW/cnt;for(let c=0;c<cnt;c++){const w=Math.min(26,cell*0.72),h=baseH+(c%2?3:-2),l=x0+c*cell+(cell-w)/2,t=y+(c%2?3:0);out.push([+l.toFixed(1),+t.toFixed(1),+w.toFixed(1),+h.toFixed(1)]);}};if(bot===0)row(top,26,34);else{row(top,10,32);row(bot,50,26);}return out;}
+  function computeLayout(name,n){if(n===6)return name==='grid'?GRID6.slice():SALON6.slice();return name==='grid'?computeGrid(n):computeSalon(n);}
+  function visibleTiles(){return tiles.map((t,idx)=>({t,idx})).filter(o=>!o.t.removed);}
+  // footprint multiplier by size — 30×40 = baseline (keeps the locked salon), bigger sizes grow in place (tempered so a wall of large pieces stays readable, not piled)
+  const SIZE_SCALE=[1.0,1.1,1.22];
+  function renderWall(){
+    wlayer.querySelectorAll('.wtile').forEach(n=>n.remove());
+    const vis=visibleTiles(), pos=computeLayout(layout,vis.length);
+    vis.forEach((o,k)=>{
+      let [l,t,w,h]=pos[k];
+      const f=SIZE_SCALE[o.t.size]; const nw=w*f, nh=h*f; l+=(w-nw)/2; t+=(h-nh)/2; w=nw; h=nh;
+      const el=document.createElement('div');
+      el.className='wtile'+(o.idx===sel?' sel':''); el.dataset.i=o.idx;
+      el.style.cssText=`left:${l.toFixed(1)}%;top:${t.toFixed(1)}%;width:${w.toFixed(1)}%;height:${h.toFixed(1)}%`;
+      el.innerHTML=`<div class="wframe ${FRAME2CLASS[o.t.frame]}"><div class="wmatte"><div class="wartbox"><img src="${url(ART[o.t.art],400,500)}" alt=""></div></div><div class="wglass"></div></div>`;
+      el.onclick=()=>selectTile(o.idx);
+      wlayer.appendChild(el);
+    });
+  }
+  // ── zoom: scale the scene inside the room to inspect detail; drag to pan when zoomed in ──
+  const wscene=document.getElementById('wscene'), ZMAX=2.6;
+  let zoom=1, panX=0, panY=0;
+  function clampPan(){const w=wscene.offsetWidth,h=wscene.offsetHeight,mx=w*(zoom-1)/2,my=h*(zoom-1)/2;panX=Math.max(-mx,Math.min(mx,panX));panY=Math.max(-my,Math.min(my,panY));}
+  function applyZoom(){
+    if(zoom<=1){zoom=1;panX=0;panY=0;}else clampPan();
+    wscene.style.transform=zoom===1?'':`translate(${panX.toFixed(1)}px,${panY.toFixed(1)}px) scale(${zoom})`;
+    wroom.classList.toggle('zoomed',zoom>1);
+    const zo=document.getElementById('zoomOut'),zi=document.getElementById('zoomIn');
+    if(zo)zo.disabled=zoom<=1; if(zi)zi.disabled=zoom>=ZMAX;
+  }
+  document.getElementById('zoomIn').onclick=()=>{zoom=Math.min(ZMAX,+(zoom+0.5).toFixed(2));applyZoom();};
+  document.getElementById('zoomOut').onclick=()=>{zoom=Math.max(1,+(zoom-0.5).toFixed(2));applyZoom();};
+  // ── touch gestures: 1 finger = pan (when zoomed) · 2 fingers = pinch-zoom ──
+  const ptrs=new Map(); let pinch=null, pan=null, gMoved=false;
+  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  function setTransform(){wscene.style.transform=zoom===1?'':`translate(${panX.toFixed(1)}px,${panY.toFixed(1)}px) scale(${zoom})`;wroom.classList.toggle('zoomed',zoom>1);const zo=document.getElementById('zoomOut'),zi=document.getElementById('zoomIn');if(zo)zo.disabled=zoom<=1;if(zi)zi.disabled=zoom>=ZMAX;}
+  wroom.addEventListener('pointerdown',e=>{
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); gMoved=false;
+    if(ptrs.size===2){const[a,b]=[...ptrs.values()];pinch={d0:dist(a,b),z0:zoom};pan=null;}
+    else if(ptrs.size===1&&zoom>1){pan={x:e.clientX,y:e.clientY,px:panX,py:panY};wroom.classList.add('grabbing');try{wroom.setPointerCapture(e.pointerId);}catch(_){}}
+  });
+  wroom.addEventListener('pointermove',e=>{
+    if(!ptrs.has(e.pointerId))return;
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&ptrs.size>=2){const[a,b]=[...ptrs.values()];zoom=Math.max(1,Math.min(ZMAX,+(pinch.z0*(dist(a,b)/pinch.d0)).toFixed(3)));gMoved=true;if(zoom<=1){panX=0;panY=0;}else clampPan();setTransform();}
+    else if(pan){panX=pan.px+(e.clientX-pan.x);panY=pan.py+(e.clientY-pan.y);if(Math.abs(e.clientX-pan.x)+Math.abs(e.clientY-pan.y)>4)gMoved=true;clampPan();setTransform();}
+  });
+  function ptrEnd(e){
+    ptrs.delete(e.pointerId); if(ptrs.size<2)pinch=null;
+    if(ptrs.size===0){pan=null;wroom.classList.remove('grabbing');if(gMoved){const c=ev=>{ev.stopPropagation();ev.preventDefault();wroom.removeEventListener('click',c,true);};wroom.addEventListener('click',c,true);}}
+    else if(ptrs.size===1&&zoom>1){const[o]=[...ptrs.values()];pan={x:o.x,y:o.y,px:panX,py:panY};}
+  }
+  wroom.addEventListener('pointerup',ptrEnd); wroom.addEventListener('pointercancel',ptrEnd);
+  // tap the empty wall (not a piece) → deselect, back to whole-wall scope (mobile)
+  wroom.addEventListener('click',e=>{ if(e.target.closest('.wtile'))return; if(isMobile()&&mScope==='piece'){mScope='all';closePicker();wroom.querySelectorAll('.wtile').forEach(el=>el.classList.remove('sel'));mRender();} });
+
+  // ── save / share (prototype stub — real persistence needs the backend build) ──
+  let toastT;
+  function toast(msg){const t=document.getElementById('toast');t.innerHTML='<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>'+msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200);}
+  const saveWall=document.getElementById('saveWall'), shareWall=document.getElementById('shareWall');
+  saveWall.onclick=()=>{const on=saveWall.classList.toggle('on');toast(on?'Wall saved to your gallery':'Removed from saved');};
+  shareWall.onclick=()=>{const link='https://latenca.com/w/'+(pieceCount()+'-'+layout).replace(/\s/g,'');try{navigator.clipboard&&navigator.clipboard.writeText(link);}catch(e){}toast('Share link copied');};
+  function commonProp(k){const v=visibleTiles();if(!v.length)return null;const f=v[0].t[k];return v.every(o=>o.t[k]===f)?f:null;}
+  function wallArtists(){return [...new Set(visibleTiles().map(o=>ART_ARTIST[o.t.art]??0))];}
+  function renderPieces(){
+    const v=visibleTiles();
+    document.getElementById('piecesCount').textContent=v.length;
+    document.getElementById('piecesHeadPrice').textContent='$'+wallTotal();
+    document.getElementById('piecesList').innerHTML=v.map(o=>{
+      const t=o.t, cfg=[t.material,(unit==='cm'?SIZES[t.size].vcm:SIZES[t.size].vin)];
+      if(t.material==='Poster'&&t.frame>0)cfg.push(FRAMES[t.frame].n+' frame');
+      return `<button class="piecerow${o.idx===sel?' on':''}" data-i="${o.idx}"><img src="${url(ART[t.art],120,150)}" alt="" loading="lazy"><span class="prm"><b>${artistOf(t)}</b><small>${cfg.join(' · ')}</small></span><span class="prp">$${tilePrice(t)}</span></button>`;
+    }).join('');
+    document.querySelectorAll('#piecesList .piecerow').forEach(b=>b.onclick=()=>selectTile(+b.dataset.i));
+  }
+  function render(){
+    const wt=wallTotal(), pcs=pieceCount(), arts=wallArtists();
+    // WALL header — provenance adapts to 1 vs many artists
+    const prov=arts.length===1?`Artworks by <b>${ARTISTS[arts[0]]}</b>`:`Artworks by <b>${arts.length} artists</b>`;
+    let provHTML=`<span class="av"></span><span>${pcs} pieces &middot; ${prov}</span>`;
+    if(arts.length===1)provHTML+=`<button class="follow" id="followArtist"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Follow</button>`;
+    document.getElementById('wallProv').innerHTML=provHTML;
+    const fa=document.getElementById('followArtist');
+    if(fa)fa.onclick=()=>{const on=fa.classList.toggle('on');fa.innerHTML=(on?'<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Following':'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Follow');};
+    document.getElementById('wallPrice').textContent='$'+wt;
+    deliver.innerHTML=`${truckI}<span>Free shipping &middot; to Poland by <b>${deliveryStr()}</b></span>`;
+    // GLOBAL material/frame — highlight the common value (none if pieces are mixed)
+    const cmat=commonProp('material'), cfrm=commonProp('frame'), allPoster=visibleTiles().every(o=>o.t.material==='Poster');
+    document.querySelectorAll('#matsWall .mat').forEach(b=>b.classList.toggle('on',b.dataset.m===cmat));
+    document.getElementById('frameGroupWall').classList.toggle('hidden',!allPoster);
+    document.querySelectorAll('#framesWall .frm').forEach((b,i)=>b.classList.toggle('on',i===cfrm));
+    // SELECTED PIECE
+    document.getElementById('pbThumb').src=url(ART[st.art],160,200);
+    const k=visibleTiles().findIndex(o=>o.idx===sel);
+    document.getElementById('pbTitle').textContent=tileNames[k]||('Piece '+(k+1));
+    document.getElementById('pbHeadPrice').textContent='$'+tilePrice(st);
+    document.getElementById('pbBy').textContent=`by ${artistOf(st)}`;
+    document.querySelectorAll('#matsPiece .mat').forEach(b=>b.classList.toggle('on',b.dataset.m===st.material));
+    document.getElementById('framePieceGroup').classList.toggle('hidden',st.material!=='Poster');
+    document.querySelectorAll('#framesPiece .frm').forEach((b,i)=>b.classList.toggle('on',i===st.frame));
+    document.querySelectorAll('#mats2 button').forEach((b,i)=>b.classList.toggle('on',i===st.mat));
+    document.querySelectorAll('#sizesPiece button').forEach((b,i)=>b.classList.toggle('on',i===st.size));
+    // GLOBAL size + mat — highlight the common value (none if pieces are mixed)
+    const csize=commonProp('size'), cmatv=commonProp('mat');
+    document.querySelectorAll('#sizesWall button').forEach((b,i)=>b.classList.toggle('on',i===csize));
+    document.querySelectorAll('#matsWall2 button').forEach((b,i)=>b.classList.toggle('on',i===cmatv));
+    // "All pieces" section header summary (collapsed state)
+    const sizeLbl=csize!=null?((unit==='cm'?SIZES[csize].cm:SIZES[csize].in)+' '+unit):'mixed sizes';
+    document.getElementById('secAllSub').textContent=`${cmat||'Mixed'} · ${sizeLbl}`;
+    // CTA + wall
+    ctaText.textContent='Add wall to cart'; ctaPrice.textContent='· $'+wt; barPrice.textContent='$'+wt;
+    // mobile sheet grip (peek summary)
+    document.getElementById('gripSub').textContent=`${pcs} pieces · ${layout[0].toUpperCase()+layout.slice(1)}`;
+    document.getElementById('gripTotal').textContent='$'+wt;
+    updateTileVisual(sel); renderPieces();
+    if(mctl) mRender();
+  }
+  // accordion — one section open at a time (All pieces / Pieces / Selected piece)
+  const SECS={all:document.getElementById('secAll'),pieces:document.getElementById('secPieces'),piece:document.getElementById('secPiece')};
+  function openSection(name){Object.entries(SECS).forEach(([k,el])=>el.classList.toggle('open',k===name));}
+  document.getElementById('secAllHead').onclick=()=>openSection(SECS.all.classList.contains('open')?null:'all');
+  document.getElementById('secPiecesHead').onclick=()=>openSection(SECS.pieces.classList.contains('open')?null:'pieces');
+  document.getElementById('secPieceHead').onclick=()=>openSection(SECS.piece.classList.contains('open')?null:'piece');
+  // mobile bottom sheet — grip toggles the whole configurator open/closed
+  const buyPanel=document.getElementById('buyPanel'), sheetGrip=document.getElementById('sheetGrip');
+  const isMobile=()=>window.matchMedia('(max-width:820px)').matches;
+  sheetGrip.onclick=()=>buyPanel.classList.toggle('up');
+  // GLOBAL controls (apply to EVERY piece) — the default scope
+  document.querySelectorAll('#matsWall .mat').forEach(b=>b.onclick=()=>{const m=b.dataset.m;visibleTiles().forEach(o=>{o.t.material=m;if(m!=='Poster'){o.t.frame=0;o.t.mat=0;}});drawSizes();renderWall();render();});
+  document.querySelectorAll('#framesWall .frm').forEach(b=>b.onclick=()=>{const fi=+b.dataset.i;visibleTiles().forEach(o=>{if(o.t.material==='Poster')o.t.frame=fi;});renderWall();render();});
+  // PER-PIECE override controls (only the selected piece)
+  document.querySelectorAll('#matsPiece .mat').forEach(b=>b.onclick=()=>{st.material=b.dataset.m;if(st.material!=='Poster'){st.frame=0;st.mat=0;}drawSizes();renderWall();render();});
+  document.querySelectorAll('#framesPiece .frm').forEach(b=>b.onclick=()=>{st.frame=+b.dataset.i;renderWall();render();});
+  document.querySelectorAll('#mats2 button').forEach(b=>b.onclick=()=>{st.mat=+b.dataset.i;render();});
+  document.querySelectorAll('#matsWall2 button').forEach(b=>b.onclick=()=>{const mi=+b.dataset.i;visibleTiles().forEach(o=>{if(o.t.material==='Poster')o.t.mat=mi;});render();});
+  // size unit toggle (global display preference; also drives the wall ruler)
+  document.querySelectorAll('#unit button').forEach(b=>b.onclick=()=>{unit=b.dataset.u;document.querySelectorAll('#unit button').forEach(x=>x.classList.toggle('on',x===b));drawSizes();render();});
+  // select a tile on the wall → focus the Selected-piece section
+  function selectTile(i){sel=i;st=tiles[sel];wroom.querySelectorAll('.wtile').forEach(el=>el.classList.toggle('sel',+el.dataset.i===i));openSection('piece');drawSizes();
+    // on mobile: switch the control bar to this piece's scope (chips now edit just this piece) — wall stays visible
+    if(isMobile()){mScope='piece';closePicker();}
+    render();}
+  // wall-level: layout preset repositions every tile (count-aware)
+  document.querySelectorAll('[data-lay]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-lay]').forEach(x=>x.classList.toggle('on',x===b));layout=b.dataset.lay;renderWall();});
+  // add / remove / swap (builder-only actions)
+  const addBtn=document.getElementById('addPiece'), changeBtn=document.getElementById('changeArt');
+  function updateAddState(){addBtn.classList.toggle('is-disabled',pieceCount()>=MAXTILES);}
+  document.getElementById('removeBtn').onclick=()=>{
+    if(pieceCount()<=1)return;
+    tiles[sel].removed=true;
+    const n=tiles.findIndex(t=>!t.removed); sel=n>=0?n:sel; st=tiles[sel];
+    renderWall(); selectTile(sel); updateAddState();
+  };
+  // shuffle: randomise the positions of all pieces (try a different arrangement)
+  document.getElementById('swapBtn').onclick=()=>{
+    if(pieceCount()<2)return;
+    const cur=tiles[sel];
+    for(let i=tiles.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[tiles[i],tiles[j]]=[tiles[j],tiles[i]];}
+    sel=tiles.indexOf(cur); st=tiles[sel]; renderWall(); selectTile(sel);
+  };
+  // ── artwork picker — full-screen, catalog-style (search + category filters + grid) ──
+  // In production this is the Explore catalog COMPONENT reused in "pick mode" (one catalog, not two).
+  const artPicker=document.getElementById('artPicker');
+  const AP_FILTERS=['All','Abstract','Celestial','Botanical','Coastal','Minimal'];
+  let apMode='swap', apFilter='All', apQuery='';
+  function renderFilters(){
+    document.getElementById('apFilters').innerHTML=AP_FILTERS.map(f=>`<button class="apchip${f===apFilter?' on':''}" data-f="${f}">${f}</button>`).join('');
+    document.querySelectorAll('#apFilters .apchip').forEach(b=>b.onclick=()=>{apFilter=b.dataset.f;renderFilters();renderArtGrid();});
+  }
+  function renderArtGrid(){
+    const q=apQuery.trim().toLowerCase();
+    const items=ART.map((id,i)=>({id,i,cat:ART_CAT[i]})).filter(o=>(apFilter==='All'||o.cat===apFilter)&&(!q||o.cat.toLowerCase().includes(q)));
+    const grid=document.getElementById('apGrid');
+    grid.innerHTML=items.length
+      ? items.map(o=>`<button class="artpick${apMode==='swap'&&st.art===o.i?' on':''}" data-i="${o.i}"><img src="${url(o.id,300,375)}" alt="" loading="lazy"></button>`).join('')
+      : `<div class="apempty">No artworks match${q?` &ldquo;${apQuery}&rdquo;`:''}. Try another filter.</div>`;
+    grid.querySelectorAll('.artpick').forEach(b=>b.onclick=()=>pickArt(+b.dataset.i));
+    document.getElementById('apCount').textContent=items.length+' artworks';
+  }
+  function openArtPicker(mode){
+    apMode=mode; apQuery=''; document.getElementById('apSearch').value='';
+    document.getElementById('apTitle').textContent=mode==='add'?'Add a piece':'Change artwork';
+    document.getElementById('apHint').innerHTML=mode==='add'?'Pick a piece to add — it takes on the wall&rsquo;s style, tweak it after.':'Pick a new piece for this spot. Its size, material &amp; frame stay the same.';
+    renderFilters(); renderArtGrid(); artPicker.classList.add('open');
+  }
+  function closeArtPicker(){ artPicker.classList.remove('open'); }
+  function pickArt(ai){
+    if(apMode==='add'){
+      if(pieceCount()>=MAXTILES){closeArtPicker();return;}
+      // new piece inherits the wall's shared style (or the selected piece's if mixed) so it fits in
+      const nt={art:ai, material:commonProp('material')??st.material, size:commonProp('size')??st.size, frame:commonProp('frame')??st.frame, mat:commonProp('mat')??st.mat};
+      if(nt.material!=='Poster'){nt.frame=0;nt.mat=0;}
+      tiles.push(nt);
+      renderWall(); selectTile(tiles.length-1); updateAddState();
+    }else{ tiles[sel].art=ai; updateTileVisual(sel); render(); }
+    closeArtPicker();
+  }
+  document.getElementById('apClose').onclick=closeArtPicker;
+  document.getElementById('apSearch').oninput=e=>{apQuery=e.target.value;renderArtGrid();};
+  addBtn.onclick=()=>{if(pieceCount()>=MAXTILES)return;openArtPicker('add');};
+  changeBtn.onclick=()=>openArtPicker('swap');
+  // ═══════════════ MOBILE CONTROL SYSTEM (compact bar + short pickers — wall stays visible) ═══════════════
+  const mctl=document.getElementById('mctl'), mpick=document.getElementById('mpick'), mpickin=document.getElementById('mpickin'),
+        mscope=document.getElementById('mscope'), mact=document.getElementById('mact');
+  let mScope='all';   // 'all' | 'piece'
+  let mAttr=null;     // 'material' | 'size' | 'frame' | null
+  const mTiles=()=> mScope==='piece' ? [{t:st,idx:sel}] : visibleTiles();
+  const mGet=k=> mScope==='piece' ? st[k] : commonProp(k);
+  const mAllPoster=()=> mScope==='piece' ? st.material==='Poster' : visibleTiles().every(o=>o.t.material==='Poster');
+  function mApply(fn){ mTiles().forEach(o=>fn(o.t)); drawSizes(); renderWall(); render(); }
+  function openPicker(attr){ if(mAttr===attr){closePicker();return;} mAttr=attr; mpick.classList.add('open'); document.querySelectorAll('.mtab').forEach(b=>b.classList.toggle('on',b.dataset.attr===attr)); renderPicker(); }
+  function closePicker(){ mAttr=null; mpick.classList.remove('open'); document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('on')); }
+  const closeX='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  function renderPicker(){
+    if(!mAttr) return;
+    const tag=`<span class="scopetag">${mScope==='piece'?'This piece':'Whole wall'}</span>`;
+    const head=t=>`<div class="mpgrab"></div><div class="mphead"><b>${t}</b>${tag}<button class="mpclose" id="mpClose">${closeX}</button></div>`;
+    if(mAttr==='material'){
+      const cur=mGet('material');
+      mpickin.innerHTML=head('Material')+`<div class="mpgrid">`+MATERIALS.map(m=>`<button class="mat${m===cur?' on':''}" data-m="${m}">${m}</button>`).join('')+`</div>`;
+      mpickin.querySelectorAll('.mat').forEach(b=>b.onclick=()=>{const m=b.dataset.m;mApply(t=>{t.material=m;if(m!=='Poster'){t.frame=0;t.mat=0;}});});
+    }else if(mAttr==='size'){
+      const cur=mGet('size'), matForPrice=(mScope==='piece'?st.material:(commonProp('material')||'Poster'));
+      mpickin.innerHTML=head('Size')+`<div class="optrow">`+SIZES.map((s,i)=>`<button class="${i===cur?'on':''}" data-i="${i}"><span class="sd">${unit==='cm'?s.cm:s.in}<small> ${unit}</small></span><span class="sp">$${PRICE[matForPrice][i]}</span></button>`).join('')+`</div>`;
+      mpickin.querySelectorAll('.optrow button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;mApply(t=>t.size=i);});
+    }else if(mAttr==='frame'){
+      if(!mAllPoster()){ mpickin.innerHTML=head('Frame &amp; mat')+`<p class="sgintro" style="margin:0">Frames &amp; mats apply to poster prints. Switch material to Poster to add one.</p>`; }
+      else{
+        const cf=mGet('frame'), cm=mGet('mat');
+        mpickin.innerHTML=head('Frame &amp; mat')
+          +`<div class="mpgrid" style="gap:14px">`+FRAMES.map((f,i)=>`<button class="frm${f.c?'':' none'}${i===cf?' on':''}" data-i="${i}"><span class="box"><span class="sq" style="--fc:${f.c||'transparent'}"></span></span>${f.n}</button>`).join('')+`</div>`
+          +`<div class="blabel" style="margin:16px 0 8px">Mat</div><div class="optrow">`+MATS.map((m,i)=>`<button class="${i===cm?'on':''}" data-mi="${i}">${m.n}</button>`).join('')+`</div>`;
+        mpickin.querySelectorAll('.frm').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;mApply(t=>{if(t.material==='Poster')t.frame=i;});});
+        mpickin.querySelectorAll('.optrow button').forEach(b=>b.onclick=()=>{const i=+b.dataset.mi;mApply(t=>{if(t.material==='Poster')t.mat=i;});});
+      }
+    }
+    const c=document.getElementById('mpClose'); if(c)c.onclick=closePicker;
+  }
+  function mRender(){
+    const wt=wallTotal(), pcs=pieceCount();
+    if(mScope==='piece'){
+      const k=visibleTiles().findIndex(o=>o.idx===sel);
+      mscope.innerHTML=`<button class="msback" id="msBack" aria-label="Back to whole wall"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><img class="msthumb" src="${url(ART[st.art],80,100)}" alt=""><div class="mslabel"><b>${tileNames[k]||('Piece '+(k+1))}</b><small>by ${artistOf(st)}</small></div><span class="msprice">$${tilePrice(st)}</span>`;
+      document.getElementById('msBack').onclick=()=>{mScope='all';closePicker();wroom.querySelectorAll('.wtile').forEach(el=>el.classList.remove('sel'));mRender();};
+      mact.innerHTML=`<button class="mbtn" id="mChange"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m5 18 5-5 4 4 2-2 3 3"/></svg>Change art</button><button class="mbtn" id="mRemove"${pcs<=1?' disabled':''}><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Remove</button>`;
+      document.getElementById('mChange').onclick=()=>openArtPicker('swap');
+      document.getElementById('mRemove').onclick=()=>{ if(pcs<=1)return; tiles[sel].removed=true; const n=tiles.findIndex(t=>!t.removed); sel=n>=0?n:sel; st=tiles[sel]; mScope='all'; closePicker(); renderWall(); render(); updateAddState(); };
+    }else{
+      mscope.innerHTML=`<div class="mslabel"><b>Your wall</b><small>${pcs} pieces · ${layout[0].toUpperCase()+layout.slice(1)}</small></div><span class="msprice">$${wt}</span>`;
+      mact.innerHTML=`<button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg>Add wall to cart · $${wt}</button>`;
+      mact.querySelector('.addcart').onclick=openCart;
+    }
+    const mat=mGet('material'), sz=mGet('size'), fr=mGet('frame'), ap=mAllPoster();
+    document.getElementById('tabMatV').textContent=mat||'Mixed';
+    document.getElementById('tabSizeV').innerHTML=sz!=null?(unit==='cm'?SIZES[sz].cm:SIZES[sz].in):'Mixed';
+    document.getElementById('tabFrameV').textContent=!ap?'—':(fr!=null?FRAMES[fr].n:'Mixed');
+    document.getElementById('tabFrame').disabled=!ap;
+    if(mAttr) renderPicker();
+  }
+  document.querySelectorAll('.mtab').forEach(b=>b.onclick=()=>openPicker(b.dataset.attr));
+  // swipe down on the picker (when scrolled to top) closes it
+  let sw=null;
+  mpick.addEventListener('pointerdown',e=>{ if(mpick.scrollTop>0){sw=null;return;} sw={y:e.clientY,d:0}; });
+  mpick.addEventListener('pointermove',e=>{ if(sw)sw.d=e.clientY-sw.y; });
+  mpick.addEventListener('pointerup',()=>{ if(sw&&sw.d>44)closePicker(); sw=null; });
+  mpick.addEventListener('pointercancel',()=>{sw=null;});
+
+  openSection('all'); renderWall(); updateAddState(); applyZoom(); drawSizes(); render();
+
+  // theme + rail
+  const sun='<circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/>';
+  const moon='<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/>';
+  const root=document.documentElement, icon=document.getElementById('themeIcon');
+  document.getElementById('themeBtn').onclick=()=>{const d=root.dataset.theme!=='dark';root.dataset.theme=d?'dark':'light';icon.innerHTML=d?moon:sun;};
+  document.getElementById('railToggle').onclick=()=>document.querySelector('.app').classList.toggle('rail');
+  const tb=document.getElementById('topbar');
+  new IntersectionObserver(([e])=>tb.classList.toggle('stuck',e.intersectionRatio<1),{threshold:[1]}).observe(tb);
+
+  // search dropdown — same component/behaviour as Explore
+  const searchBtn=document.getElementById('searchBtn'), sdrop=document.getElementById('sdrop');
+  const openSearch=()=>{sdrop.classList.add('open');searchBtn.classList.add('act');};
+  const closeSearch=()=>{sdrop.classList.remove('open');searchBtn.classList.remove('act');};
+  searchBtn.onclick=e=>{e.stopPropagation();sdrop.classList.contains('open')?closeSearch():openSearch();};
+  document.addEventListener('click',e=>{if(!e.target.closest('.searchwrap'))closeSearch();});
+
+  // ── drawers (cart + size guide) — reuse Explore's right-panel pattern ──
+  const scrim=document.getElementById('scrim'), cartDrawer=document.getElementById('cartDrawer'), sizeDrawer=document.getElementById('sizeDrawer'), matDrawer=document.getElementById('matDrawer');
+  const openDrawer=d=>{scrim.classList.add('open');d.classList.add('open');};
+  const closeDrawers=()=>{scrim.classList.remove('open');document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));};
+  scrim.onclick=closeDrawers;
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDrawers);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawers();closeArtPicker();}});
+  const cartBadge=document.querySelector('.cart .badge');
+  const XSELL=[['Ion Drift','$49',4],['Violet Hour','$59',6]];
+  document.getElementById('cartXsell').innerHTML=XSELL.map((x,i)=>`<div class="cxrow"><img src="${url(ART[(x[2])%ART.length],120,120)}" alt=""><span class="n">${x[0]}<small>${x[1]}</small></span><button class="addx">Add</button></div>`).join('');
+  function openCart(){
+    const wt=wallTotal();
+    document.getElementById('cartThumb').src=url(HERO,200,260);
+    document.getElementById('cartConfig').textContent=pieceCount()+' pieces · '+(layout[0].toUpperCase()+layout.slice(1))+' layout';
+    document.getElementById('cartItemPrice').textContent='$'+wt;
+    document.getElementById('cartSubtotal').textContent='$'+wt;
+    document.getElementById('cartFootPrice').textContent='$'+wt;
+    cartBadge.textContent=parseInt(cartBadge.textContent||'0',10)+1;
+    openDrawer(cartDrawer);
+  }
+  document.querySelectorAll('.addcart').forEach(b=>b.onclick=openCart);
+  const SG=[
+    {cm:'30 × 40 cm',inch:'12 × 16 in',bf:'Desks, shelves &amp; gallery clusters',w:42,h:56},
+    {cm:'50 × 70 cm',inch:'20 × 28 in',bf:'Above a sofa or bed',w:54,h:72},
+    {cm:'70 × 100 cm',inch:'28 × 40 in',bf:'Statement wall &amp; focal points',w:66,h:88}
+  ];
+  document.getElementById('sgRows').innerHTML=SG.map(s=>`<div class="sgrow"><div class="sgscale"><i style="--w:${s.w}px;--h:${s.h}px"></i></div><div class="sz">${s.cm}<small>${s.inch}</small></div><div class="bf">${s.bf}</div></div>`).join('');
+  document.getElementById('sizeGuide').onclick=()=>openDrawer(sizeDrawer);
+
+  // material compare + picker drawer
+  const MATSWATCH={Poster:'#efe9dc',Canvas:'repeating-linear-gradient(45deg,#e3d9c6,#e3d9c6 3px,#dad0bb 3px,#dad0bb 6px)',Metal:'linear-gradient(135deg,#d9dbdf,#a8acb3 55%,#e7e9eb)',Acrylic:'linear-gradient(135deg,#e4eef6,#bad1e5)',Wood:'linear-gradient(135deg,#cda872,#b8895180 60%,#c8a26a)',Foam:'#e6e6e3'};
+  function renderMatDrawer(){
+    const cmat=commonProp('material');
+    document.getElementById('mgRows').innerHTML=MATDESC.map(m=>{const name=m[0],on=cmat===name;return `<button class="mgrow${on?' on':''}" data-m="${name}"><span class="sw" style="--mg:${MATSWATCH[name]}"></span><span class="mn">${name}<small>${m[1]}</small></span><span class="mp">from $${PRICE[name][0]}</span></button>`;}).join('');
+    document.querySelectorAll('.mgrow').forEach(b=>b.onclick=()=>{const m=b.dataset.m;visibleTiles().forEach(o=>{o.t.material=m;if(m!=='Poster'){o.t.frame=0;o.t.mat=0;}});drawSizes();renderWall();render();closeDrawers();});
+  }
+  document.getElementById('matCompare').onclick=()=>{renderMatDrawer();openDrawer(matDrawer);};
+
+  // frame guide + picker drawer (explains frames + mat, consistent with Material's Compare)
+  const frameDrawer=document.getElementById('frameDrawer');
+  const FRAMEDESC=['Ships rolled, unframed','Matte lacquered wood','Matte lacquered wood','Solid oak, clear finish','Stained walnut'];
+  function renderFrameDrawer(){
+    const cfrm=commonProp('frame');
+    document.getElementById('fgRows').innerHTML=FRAMES.map((f,i)=>{const on=cfrm===i;return `<button class="mgrow${on?' on':''}" data-i="${i}"><span class="sw" style="--mg:${f.c||'var(--panel)'}"></span><span class="mn">${f.n}<small>${FRAMEDESC[i]}</small></span>${f.ex?`<span class="mp">+$${f.ex}</span>`:''}</button>`;}).join('');
+    document.querySelectorAll('#fgRows .mgrow').forEach(b=>b.onclick=()=>{const fi=+b.dataset.i;visibleTiles().forEach(o=>{if(o.t.material==='Poster')o.t.frame=fi;});renderWall();render();closeDrawers();});
+  }
+  document.getElementById('frameGuide').onclick=()=>{renderFrameDrawer();openDrawer(frameDrawer);};
+</script>
+</body>
+</html>

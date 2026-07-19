@@ -1,0 +1,72 @@
+/* ============================================================
+   Latenca — design system (tokeny)
+   Przeniesione 1:1 z projektu 15 (prototyp). Akcent: lawenda #7C6CF0.
+   Wartości tokenów NIE zmieniane. Mobile-first dotyczy UŻYCIA (patrz DESIGN_SYSTEM.md),
+   nie wartości. Fonty Lora + Inter dołącz osobno (@font-face / <link>).
+   ============================================================ */
+:root{
+  /* Palette */
+  --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+  --ink:#1A1917; --muted:#6E695F; --faint:#8C8578; --line:#E7E2D8;
+  --accent:#7C6CF0; --accent-soft:#ECE6FA; --accent-ink:#5F4DE0;
+  --media:#E7E0D3;                      /* image-placeholder & set-wall surface */
+  --on-dark:#fff;                       /* text/marks over imagery */
+  --ink-strong:#141018;                 /* solid near-black on white */
+  --glass:rgba(20,16,26,.75);           /* dark glass pills over imagery */
+  --grad-a:#c9bff2; --grad-b:#8f7fe0;   /* avatar gradient */
+  --ok:#3f9d6d; --err:#c0553f; --ok-soft:#e4f0e9; --err-soft:#f7e6e0;  /* status */
+  /* Radius — by role */
+  --r-tile:2px;   /* image tiles (print-sharp) */
+  --r-sm:4px;     /* chips & badges */
+  --r-ui:6px;     /* controls, inputs, buttons */
+  --r-full:999px; /* pills & circles */
+  /* Elevation */
+  --shadow-1:0 6px 16px rgba(20,16,10,.20);
+  --shadow-2:0 12px 28px rgba(20,16,10,.30);
+  --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+  --shadow-drawer:-14px 0 40px rgba(15,12,20,.18);
+  --shadow-bar:0 -8px 24px rgba(15,12,20,.08);
+  --ring:0 0 0 3px var(--accent-soft);
+  /* Icon system — touch-first */
+  --icon:20px; --iconbtn:40px;
+  /* Type scale */
+  --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-base:14px; --fs-md:16px; --fs-lg:20px; --fs-xl:24px; --fs-2xl:32px;
+  /* Weight — 3 only (calm, no 700) */
+  --w-normal:400; --w-medium:500; --w-semibold:600;
+  /* Line-height */
+  --lh-tight:1.2; --lh-base:1.5;
+  /* Spacing — 4pt grid */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-12:48px;
+  /* Buttons — 3 fixed heights */
+  --btn-sm:36px; --btn-md:40px; --btn-lg:48px;
+  /* Card/surface internal padding */
+  --card-pad:16px; --card-pad-lg:20px;
+  /* Motion — 3 durations + 2 easings */
+  --dur-fast:.15s; --dur-base:.25s; --dur-slow:.4s;
+  --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1);
+  /* Z-index — layer scale */
+  --z-sticky:100; --z-header:200; --z-dropdown:300; --z-tabbar:400; --z-scrim:500; --z-panel:600; --z-toast:700;
+  /* Focus ring — WCAG 2.2 */
+  --focus-ring:2px solid var(--accent);
+  /* Fonts */
+  --serif:'Lora',Georgia,"Times New Roman",serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+html[data-theme="dark"]{
+  --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+  --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+  --accent:#8E7DF3; --accent-soft:#221E33; --accent-ink:#8E7DF3;
+  --media:#1b1826; --err:#e0715c; --ok-soft:#17281f; --err-soft:#2c1a16;
+}
+
+/* ── Base reset ── */
+*{box-sizing:border-box}
+html,body{margin:0}
+html{overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);
+  line-height:var(--lh-base);-webkit-font-smoothing:antialiased;overflow-x:clip;
+  transition:background var(--dur-base),color var(--dur-base)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:var(--focus-ring);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

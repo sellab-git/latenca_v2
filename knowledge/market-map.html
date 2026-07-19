@@ -1,0 +1,406 @@
+<title>Rynek sztuki i druku 2026 — mapa dla Latenca</title>
+<style>
+  :root{
+    --bg:#F1EEE9; --panel:#FBFAF7; --panel2:#F5F2EC; --ink:#1C1B18; --muted:#6C665C;
+    --faint:#8B8578; --line:#E3DED4; --accent:#5B4BD4; --accent-ink:#4A3BC2; --accent-soft:#EAE6FB;
+    --ok:#2E7D5B; --ok-soft:#E1F0E8; --warn:#9C6A12; --warn-soft:#F5EAD6; --bad:#AE3A46; --bad-soft:#F5E2E4;
+    --shadow:0 1px 2px rgba(28,27,24,.05), 0 8px 26px rgba(28,27,24,.06);
+    --r:12px; --r-sm:7px; --maxw:1080px;
+    --serif:'Iowan Old Style','Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,'SF Mono','Cascadia Code','Roboto Mono',Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#121118; --panel:#1A1922; --panel2:#211F2B; --ink:#ECEAE4; --muted:#9C968C;
+      --faint:#7E7869; --line:#2C2A36; --accent:#8E7DF3; --accent-ink:#A99BF7; --accent-soft:#241F3A;
+      --ok:#5FC496; --ok-soft:#17281F; --warn:#D6A24C; --warn-soft:#2A2313;
+      --bad:#E4838E; --bad-soft:#2C1A1D;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121118; --panel:#1A1922; --panel2:#211F2B; --ink:#ECEAE4; --muted:#9C968C;
+    --faint:#7E7869; --line:#2C2A36; --accent:#8E7DF3; --accent-ink:#A99BF7; --accent-soft:#241F3A;
+    --ok:#5FC496; --ok-soft:#17281F; --warn:#D6A24C; --warn-soft:#2A2313; --bad:#E4838E; --bad-soft:#2C1A1D;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F1EEE9; --panel:#FBFAF7; --panel2:#F5F2EC; --ink:#1C1B18; --muted:#6C665C;
+    --faint:#8B8578; --line:#E3DED4; --accent:#5B4BD4; --accent-ink:#4A3BC2; --accent-soft:#EAE6FB;
+    --ok:#2E7D5B; --ok-soft:#E1F0E8; --warn:#9C6A12; --warn-soft:#F5EAD6; --bad:#AE3A46; --bad-soft:#F5E2E4;
+    --shadow:0 1px 2px rgba(28,27,24,.05), 0 8px 26px rgba(28,27,24,.06);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;font-size:16px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--accent-ink);text-decoration:none}
+  a:hover{text-decoration:underline}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;line-height:1.15;margin:0}
+
+  /* header */
+  header.top{border-bottom:1px solid var(--line);background:var(--panel);
+    position:relative;overflow:hidden}
+  header.top .wrap{padding-top:46px;padding-bottom:38px;position:relative;z-index:1}
+  .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+    font-weight:600;margin-bottom:16px}
+  h1{font-size:clamp(30px,4.6vw,46px)}
+  .lede{font-size:clamp(16px,1.7vw,18.5px);color:var(--muted);max-width:60ch;margin-top:16px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-size:13px;color:var(--faint)}
+  .meta-row b{color:var(--muted);font-weight:600}
+
+  /* sticky nav */
+  nav.jump{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav.jump .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:10px;padding-bottom:10px;
+    scrollbar-width:thin}
+  nav.jump a{color:var(--muted);font-size:13.5px;font-weight:500;padding:6px 12px;border-radius:99px;
+    white-space:nowrap;flex:0 0 auto}
+  nav.jump a:hover{background:var(--panel2);color:var(--ink);text-decoration:none}
+
+  section{padding:46px 0}
+  section+section{border-top:1px solid var(--line)}
+  .kicker{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);
+    font-weight:700;margin-bottom:10px}
+  h2{font-size:clamp(22px,2.8vw,30px);margin-bottom:6px}
+  .sub{color:var(--muted);max-width:64ch;margin-bottom:26px}
+
+  /* verdict box */
+  .verdict{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow)}
+  .verdict h2{font-size:clamp(20px,2.4vw,26px)}
+  .verdict p{margin:14px 0 0;color:var(--ink)}
+  .verdict .punch{font-weight:600}
+  .verdict ul{margin:16px 0 0;padding-left:0;list-style:none;display:grid;gap:12px}
+  .verdict li{padding-left:26px;position:relative;color:var(--muted)}
+  .verdict li::before{content:"→";position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
+  .verdict li b{color:var(--ink);font-weight:600}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-size:13px;color:var(--muted)}
+  .legend .grp{display:flex;align-items:center;gap:8px}
+
+  /* chips */
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+    padding:3px 9px;border-radius:99px;letter-spacing:.01em;white-space:nowrap;line-height:1.4}
+  .chip.ok{background:var(--ok-soft);color:var(--ok)}
+  .chip.warn{background:var(--warn-soft);color:var(--warn)}
+  .chip.bad{background:var(--bad-soft);color:var(--bad)}
+  .chip.neu{background:var(--panel2);color:var(--muted)}
+  .chip.acc{background:var(--accent-soft);color:var(--accent-ink)}
+
+  /* category block */
+  .cat-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .cat-head h3{font-size:20px}
+  .cat-head .tag{font-size:12px;font-weight:600;color:var(--faint);letter-spacing:.02em}
+  .cat-def{color:var(--muted);font-size:14.5px;max-width:66ch;margin:0 0 20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 17px;
+    display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow);transition:transform .12s ease,border-color .12s ease}
+  .card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  .card .name{font-family:var(--serif);font-size:17.5px;font-weight:600;display:flex;
+    justify-content:space-between;align-items:center;gap:8px}
+  .card .dom{font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);word-break:break-all}
+  .card .desc{font-size:13.5px;color:var(--muted);flex:1}
+  .card .foot{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+
+  .cat-block{margin-top:34px}
+  .cat-block:first-of-type{margin-top:0}
+
+  /* tables */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px;background:var(--panel)}
+  th,td{text-align:left;padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--panel2);font-family:var(--sans);font-size:12px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--faint);font-weight:700;position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:none}
+  td b{font-weight:600}
+  td .m{font-variant-numeric:tabular-nums}
+  .rowname{font-family:var(--serif);font-weight:600;font-size:14.5px;white-space:nowrap}
+
+  /* two-col reality */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;
+    box-shadow:var(--shadow)}
+  .panel h3{font-size:18px;margin-bottom:6px;display:flex;align-items:center;gap:9px}
+  .panel p{color:var(--muted);font-size:14px;margin:10px 0 0}
+  .panel .src{font-size:12px;color:var(--faint);margin-top:14px;font-family:var(--mono)}
+
+  /* analogs */
+  .analog{display:grid;grid-template-columns:auto 1fr;gap:2px 20px;padding:18px 0;
+    border-bottom:1px solid var(--line)}
+  .analog:last-child{border-bottom:none}
+  .analog .n{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--accent);
+    grid-row:span 2;line-height:1;padding-top:2px;font-variant-numeric:tabular-nums}
+  .analog .who{font-family:var(--serif);font-size:18px;font-weight:600}
+  .analog .who a{font-family:var(--mono);font-size:12.5px;font-weight:400;margin-left:8px}
+  .analog .teach{color:var(--muted);font-size:14px}
+  .analog .teach b{color:var(--ink);font-weight:600}
+
+  /* positioning options */
+  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .opt{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+  .opt.pick{border-color:var(--accent);border-width:1.5px}
+  .opt h3{font-size:17px}
+  .opt .verdict-tag{align-self:flex-start}
+  .opt p{font-size:13.5px;color:var(--muted);margin:0}
+
+  footer{padding:40px 0 60px;color:var(--faint);font-size:13px}
+  footer .wrap{display:grid;gap:10px}
+  footer b{color:var(--muted)}
+
+  @media (max-width:720px){
+    .two{grid-template-columns:1fr}
+    section{padding:36px 0}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Latenca · analiza rynku · lipiec 2026</div>
+    <h1>Kto sprzedaje sztukę i druki — i gdzie jest miejsce dla nas</h1>
+    <p class="lede">Mapa całego rynku, nie tylko Mixtiles i Displate. Sześć modeli biznesowych, ~35 realnych platform do samodzielnego sprawdzenia, kto pozwala na AI, i gdzie została wolna przestrzeń.</p>
+    <div class="meta-row">
+      <span><b>Źródło:</b> deep-research, 105 agentów, 23 źródła</span>
+      <span><b>Zweryfikowano:</b> 19 twierdzeń · <b>Obalono:</b> 6</span>
+      <span><b>Prawo:</b> tylko USA</span>
+    </div>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="wrap">
+    <a href="#verdict">Wniosek</a>
+    <a href="#directory">Katalog platform</a>
+    <a href="#models">Modele biznesowe</a>
+    <a href="#perso">Personalizacja</a>
+    <a href="#reality">AI-art: prawo i realia</a>
+    <a href="#position">Pozycjonowanie</a>
+    <a href="#analogs">5 analogów</a>
+  </div>
+</nav>
+
+<section id="verdict">
+  <div class="wrap">
+    <div class="verdict">
+      <div class="kicker">Najważniejszy wniosek</div>
+      <h2>„Idealny katalog grafik AI na Gelato" to najsłabsza z możliwych pozycji</h2>
+      <p class="punch">Generyczny katalog ładnych grafik na ścianę to dokładnie to, co robią już Displate, Society6 i Redbubble — z ogromną skalą, pozycją w Google i podażą artystów za ~20% prowizji. Bez wyróżnika wchodzisz wprost pod walec.</p>
+      <ul>
+        <li><b>Działające biznesy na AI-arcie to personalizacja, nie katalogi.</b> Mixtiles (zdjęcie psa → styl → portret AI), NightCafe (generujesz → kupujesz druk), a nawet kurowany sklep Desenio dokleił generator AI „Imaginator". Katalog sam nie sprzedaje — personalizacja tak.</li>
+        <li><b>Prawo autorskie zabija „katalog z promptów".</b> W USA grafika z samego promptu nie ma ochrony (Copyright Office 2025 + Sąd Najwyższy, marzec 2026). Bez realnej pracy człowieka przy każdym dziele — każdy może to skopiować.</li>
+        <li><b>Platformy NIE banują AI</b> — ustabilizowało się na „wolno, ale z oznaczeniem". Etsy pozwala na AI + druk przez Gelato. Bariera to etykieta, nie zakaz.</li>
+        <li><b>Biała plama:</b> kurowana, prowadzona przez człowieka marka AI-art z opcjonalną personalizacją na szynach. Nie otwarty marketplace, nie generyczny katalog — hybryda.</li>
+      </ul>
+      <div class="legend">
+        <span class="grp"><span class="chip ok">zweryfikowane</span> potwierdzone źródłem</span>
+        <span class="grp"><span class="chip warn">zgłoszone</span> jedno źródło, sprawdź sam</span>
+        <span class="grp"><span class="chip bad">ryzyko / obalone</span></span>
+        <span class="grp"><span class="chip acc">analog do studiowania</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="directory">
+  <div class="wrap">
+    <div class="kicker">Katalog do przeglądania</div>
+    <h2>Sześć kategorii, ~35 platform</h2>
+    <p class="sub">Pogrupowane po modelu, z domenami. Kliknij dowolną, żeby sprawdzić samodzielnie. Nazwy i domeny są sprawdzone; jednozdaniowe opisy to skrót ich modelu.</p>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>a · Otwarte marketplace POD</h3><span class="tag">każdy artysta wgrywa, ~20% dla twórcy</span></div>
+      <p class="cat-def">Otwarta podaż: dowolny artysta wrzuca grafikę, platforma drukuje i wysyła, twórca dostaje niski royalty. Skala i SEO, zero kurowania.</p>
+      <div class="grid">
+        <div class="card"><div class="name">Redbubble</div><div class="dom"><a href="https://www.redbubble.com" target="_blank" rel="noopener">redbubble.com</a></div><div class="desc">Największy otwarty POD; druki, ubrania, gadżety. Domyślnie ~20% marży dla twórcy. Pozwala na AI.</div></div>
+        <div class="card"><div class="name">Society6</div><div class="dom"><a href="https://society6.com" target="_blank" rel="noopener">society6.com</a></div><div class="desc">Dekor i druki artystów; od 2025 model bardziej kurowany/redakcyjny. Mechanika royalty — sprawdź bezpośrednio.</div></div>
+        <div class="card"><div class="name">Displate</div><div class="dom"><a href="https://displate.com" target="_blank" rel="noopener">displate.com</a></div><div class="desc">Plakaty na metalu — wyróżniający się format. Revenue-share, wg źródeł ~$5–15/sprzedaż. Duży, „kurowany w odczuciu".</div></div>
+        <div class="card"><div class="name">Fine Art America / Pixels</div><div class="dom"><a href="https://fineartamerica.com" target="_blank" rel="noopener">fineartamerica.com</a></div><div class="desc">Ogromny POD dla druków i płócien; artysta ustawia narzut. Bardzo szeroki katalog.</div></div>
+        <div class="card"><div class="name">INPRNT</div><div class="dom"><a href="https://www.inprnt.com" target="_blank" rel="noopener">inprnt.com</a></div><div class="desc">Jakościowy POD z głosowaniem społeczności przy przyjęciu; wg źródeł 50% na druki fine-art. Archiwalny druk.</div></div>
+        <div class="card"><div class="name">Curioos</div><div class="dom"><a href="https://www.curioos.com" target="_blank" rel="noopener">curioos.com</a></div><div class="desc">Sztuka cyfrowa i nowoczesna grafika na druk; węższa, „designerska" kuratela niż Redbubble.</div></div>
+        <div class="card"><div class="name">Zazzle</div><div class="dom"><a href="https://www.zazzle.com" target="_blank" rel="noopener">zazzle.com</a></div><div class="desc">Masowy POD z mocną personalizacją produktów (tekst, imię, data) — bardziej gadżet/prezent niż galeria.</div></div>
+      </div>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>b · Kurowane sklepy z plakatami</h3><span class="tag">kontrolują katalog — najbliżej Twojej wizji</span></div>
+      <p class="cat-def">Marka kontroluje katalog (własny lub na zaproszenie), spójna estetyka, sama ustala ceny. To model, który rozważasz dla Latenca.</p>
+      <div class="grid">
+        <div class="card"><div class="name">Desenio</div><div class="dom"><a href="https://desenio.com" target="_blank" rel="noopener">desenio.com</a></div><div class="desc">Kurowany lider plakatów w Europie. <b>Dokleił generator AI „Imaginator"</b> + personalizację imię/data — najbliższy analog.</div><div class="foot"><span class="chip acc">analog</span><span class="chip ok">robi AI</span></div></div>
+        <div class="card"><div class="name">Poster Store</div><div class="dom"><a href="https://posterstore.com" target="_blank" rel="noopener">posterstore.com</a></div><div class="desc">Skandynawski, minimalistyczny kurowany katalog plakatów; własna produkcja i ceny.</div></div>
+        <div class="card"><div class="name">JUNIQE</div><div class="dom"><a href="https://www.juniqe.com" target="_blank" rel="noopener">juniqe.com</a></div><div class="desc">Kurowana marka „przystępnej sztuki"; katalog redakcyjny z artystami, spójna oprawa produktu.</div><div class="foot"><span class="chip acc">analog</span></div></div>
+        <div class="card"><div class="name">King &amp; McGaw</div><div class="dom"><a href="https://www.kingandmcgaw.com" target="_blank" rel="noopener">kingandmcgaw.com</a></div><div class="desc">Brytyjski, bardziej premium; licencjonowane i autorskie druki, oprawa jako część produktu.</div></div>
+        <div class="card"><div class="name">Absolut Art</div><div class="dom"><a href="https://absolutart.com" target="_blank" rel="noopener">absolutart.com</a></div><div class="desc">Kurowana galeria edycji limitowanych online; pozycjonowanie „galeria dla każdego".</div></div>
+        <div class="card"><div class="name">Fy!</div><div class="dom"><a href="https://iamfy.co" target="_blank" rel="noopener">iamfy.co</a></div><div class="desc">Kurowany dekor i druki z mocnym personalizowaniem produktów; nowoczesny, „design-led".</div></div>
+      </div>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>c · Marketplace sztuki / edycje limitowane</h3><span class="tag">bramkowane, prowizja 40–45%</span></div>
+      <p class="cat-def">Prestiż i selekcja: artysta przechodzi akceptację, platforma bierze wysoką prowizję (40–45%), sprzedaje oryginały i limitowane edycje. Kuratela = wartość.</p>
+      <div class="grid">
+        <div class="card"><div class="name">Saatchi Art</div><div class="dom"><a href="https://www.saatchiart.com" target="_blank" rel="noopener">saatchiart.com</a></div><div class="desc">Największy kurowany marketplace sztuki. <b>40% prowizji od oryginałów</b> (artysta 60%); na open-edition druki artysta 60% zysku.</div><div class="foot"><span class="chip acc">analog</span><span class="chip ok">ekonomia potwierdzona</span></div></div>
+        <div class="card"><div class="name">Artsy</div><div class="dom"><a href="https://www.artsy.net" target="_blank" rel="noopener">artsy.net</a></div><div class="desc">Galeryjny, wyższa półka; agreguje galerie i aukcje. Bardziej rynek dzieł niż druków.</div></div>
+        <div class="card"><div class="name">Artfinder</div><div class="dom"><a href="https://www.artfinder.com" target="_blank" rel="noopener">artfinder.com</a></div><div class="desc">Bramkowany, tylko oryginały (nie masowa produkcja). Prowizja 40–45% w planach (Core 45% / Premium 40%).</div><div class="foot"><span class="chip ok">model potwierdzony</span></div></div>
+        <div class="card"><div class="name">Singulart</div><div class="dom"><a href="https://www.singulart.com" target="_blank" rel="noopener">singulart.com</a></div><div class="desc">Kurowana galeria online z selekcją artystów; sprzedaje oryginały i edycje globalnie.</div></div>
+        <div class="card"><div class="name">Rise Art</div><div class="dom"><a href="https://www.riseart.com" target="_blank" rel="noopener">riseart.com</a></div><div class="desc">Kuratorska rekomendacja + opcja wypożyczenia sztuki; „doradca" jako wyróżnik.</div></div>
+        <div class="card"><div class="name">20x200</div><div class="dom"><a href="https://20x200.com" target="_blank" rel="noopener">20x200.com</a></div><div class="desc">Edycje limitowane w przystępnej cenie — pionier modelu „sztuka dla każdego w edycjach".</div></div>
+      </div>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>d · Foto-na-ścianę / dekor konsumencki</h3><span class="tag">to Twoje zdjęcie staje się produktem</span></div>
+      <p class="cat-def">Nie sprzedają katalogu — sprzedają przerobienie TWOJEGO zdjęcia w dekor. Tu personalizacja jest rdzeniem produktu, nie dodatkiem.</p>
+      <div class="grid">
+        <div class="card"><div class="name">Mixtiles</div><div class="dom"><a href="https://www.mixtiles.com" target="_blank" rel="noopener">mixtiles.com</a></div><div class="desc"><b>Zdjęcie psa → styl AI → portret na kafelek.</b> Szablony „The Photoshoot", „High Society" itd. Mainstream AI-personalizacja na skalę.</div><div class="foot"><span class="chip acc">analog</span><span class="chip ok">AI generatywne</span></div></div>
+        <div class="card"><div class="name">Artifact Uprising</div><div class="dom"><a href="https://www.artifactuprising.com" target="_blank" rel="noopener">artifactuprising.com</a></div><div class="desc">Premium foto-druki i albumy; jakość materiałów i oprawy jako główny wyróżnik.</div></div>
+        <div class="card"><div class="name">Shutterfly</div><div class="dom"><a href="https://www.shutterfly.com" target="_blank" rel="noopener">shutterfly.com</a></div><div class="desc">Masowy foto-dekor i prezenty ze zdjęć; ogromna baza, szablony i personalizacja tekstem.</div></div>
+        <div class="card"><div class="name">Nations Photo Lab</div><div class="dom"><a href="https://www.nationsphotolab.com" target="_blank" rel="noopener">nationsphotolab.com</a></div><div class="desc">Profesjonalne laboratorium foto; jakość druku dla fotografów, mniej „zabawy" w UI.</div></div>
+        <div class="card"><div class="name">CanvasPop</div><div class="dom"><a href="https://www.canvaspop.com" target="_blank" rel="noopener">canvaspop.com</a></div><div class="desc">Zdjęcie → płótno/plakat; prosty edytor kadr/rozmiar/oprawa wokół Twojego zdjęcia.</div></div>
+      </div>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>e · Platformy AI-art</h3><span class="tag">generatory z opcją druku / sprzedaży</span></div>
+      <p class="cat-def">Tu AI jest jawnie w centrum: generujesz obraz i możesz go wydrukować lub sprzedać. Najbliżej Twojego kierunku — i najważniejsze do zbadania.</p>
+      <div class="grid">
+        <div class="card"><div class="name">NightCafe</div><div class="dom"><a href="https://creator.nightcafe.studio" target="_blank" rel="noopener">creator.nightcafe.studio</a></div><div class="desc"><b>Generujesz portret AI → kupujesz jako oprawiony druk.</b> Pełen pipeline generacja→druk + społeczność. Działający dowód modelu.</div><div class="foot"><span class="chip acc">analog</span><span class="chip ok">AI → druk potwierdzone</span></div></div>
+        <div class="card"><div class="name">Ideogram</div><div class="dom"><a href="https://ideogram.ai" target="_blank" rel="noopener">ideogram.ai</a></div><div class="desc">Generator AI pozycjonujący się „pod print-on-demand". UX, który Ci się podoba. Uwaga: upscaling ≠ rozdzielczość do dużego druku.</div><div class="foot"><span class="chip bad">upscaling nie rozwiąże DPI</span></div></div>
+        <div class="card"><div class="name">Midjourney</div><div class="dom"><a href="https://www.midjourney.com" target="_blank" rel="noopener">midjourney.com</a></div><div class="desc">Najwyższa jakość generacji; źródło grafik, które ludzie potem drukują przez zewnętrzne POD.</div></div>
+        <div class="card"><div class="name">PromptBase</div><div class="dom"><a href="https://promptbase.com" target="_blank" rel="noopener">promptbase.com</a></div><div class="desc">Marketplace promptów (nie druków) — pokazuje popyt na „gotowe recepty" na obraz. Sygnał, nie konkurent.</div></div>
+        <div class="card"><div class="name">Etsy — sklepy AI-art</div><div class="dom"><a href="https://www.etsy.com" target="_blank" rel="noopener">etsy.com</a></div><div class="desc">Tysiące sklepów sprzedających AI-art jako druki cyfrowe/fizyczne. Pozwala z oznaczeniem + drukiem przez Gelato.</div><div class="foot"><span class="chip acc">analog</span><span class="chip ok">AI dozwolone z oznaczeniem</span></div></div>
+        <div class="card"><div class="name">Desenio Imaginator</div><div class="dom"><a href="https://desenio.com/posters-prints/personalized-wall-art/create-ai-art/" target="_blank" rel="noopener">desenio.com/…/create-ai-art</a></div><div class="desc">Generator AI wbudowany w kurowany sklep — dowód, że kuratela i AI-personalizacja mogą żyć razem.</div><div class="foot"><span class="chip acc">analog</span></div></div>
+      </div>
+    </div>
+
+    <div class="cat-block">
+      <div class="cat-head"><h3>f · Personalizowane prezenty POD</h3><span class="tag">portret/prezent z Twojego zdjęcia</span></div>
+      <p class="cat-def">Silnik „prezentowy": zdjęcie → produkt na prezent. Wysoka gotowość do zapłaty, bo to emocja, nie dekor. Crown &amp; Paw robi portrety psów — ręcznie, nie AI.</p>
+      <div class="grid">
+        <div class="card"><div class="name">Crown &amp; Paw</div><div class="dom"><a href="https://crownandpaw.com" target="_blank" rel="noopener">crownandpaw.com</a></div><div class="desc">Portrety pupili w kostiumach ze zdjęcia. Uwaga: robią to <b>ludzie-graficy</b>, nie automat AI — jakość ponad skalę.</div><div class="foot"><span class="chip warn">człowiek, nie AI</span></div></div>
+        <div class="card"><div class="name">Printful</div><div class="dom"><a href="https://www.printful.com" target="_blank" rel="noopener">printful.com</a></div><div class="desc">Silnik POD + storefronty dla marek; personalizacja produktu, własny branding. Alternatywa/uzupełnienie Gelato.</div></div>
+        <div class="card"><div class="name">Printify</div><div class="dom"><a href="https://printify.com" target="_blank" rel="noopener">printify.com</a></div><div class="desc">Sieć drukarni + storefronty; szeroki wybór dostawców i cen. Konkurent Gelato po stronie fulfillmentu.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="models">
+  <div class="wrap">
+    <div class="kicker">Jak zarabiają</div>
+    <h2>Porównanie modeli biznesowych</h2>
+    <p class="sub">Dwa przeciwne bieguny: otwarty marketplace (skala, cienki royalty) vs kuratela (wysoka prowizja, bramkowana podaż). Latenca musi wybrać jeden albo świadomie je zhybrydyzować.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Model</th><th>Kto rządzi katalogiem</th><th>Ekonomia dla twórcy</th><th>Przykłady</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="rowname">Otwarty POD</td><td>Nikt — każdy wgrywa</td><td class="m">Twórca ~20% (Redbubble domyślnie)</td><td>Redbubble, Fine Art America</td><td><span class="chip ok">zweryfikowane</span></td></tr>
+          <tr><td class="rowname">POD „designerski"</td><td>Lekka selekcja / głosowanie</td><td class="m">50% na druki fine-art (INPRNT, wg źródeł)</td><td>INPRNT, Curioos, Displate</td><td><span class="chip warn">zgłoszone</span></td></tr>
+          <tr><td class="rowname">Kurowany sklep</td><td>Marka (własny katalog + ceny)</td><td>Umowa/licencja z artystą; marka bierze marżę</td><td>Desenio, JUNIQE, Poster Store</td><td><span class="chip warn">zgłoszone</span></td></tr>
+          <tr><td class="rowname">Marketplace sztuki</td><td>Bramka akceptacyjna</td><td class="m">Prowizja 40–45%; artysta 55–60%</td><td>Saatchi Art, Artfinder</td><td><span class="chip ok">zweryfikowane</span></td></tr>
+          <tr><td class="rowname">Foto-na-ścianę</td><td>Marka — Twoje zdjęcie to produkt</td><td>Marża na druku + AI; brak zewn. twórców</td><td>Mixtiles, CanvasPop</td><td><span class="chip ok">zweryfikowane</span></td></tr>
+          <tr><td class="rowname">Prezent POD / AI-tool</td><td>Marka + silnik generacji</td><td>Marża na produkcie; subskrypcja/kredyty</td><td>Crown &amp; Paw, NightCafe, Ideogram</td><td><span class="chip ok">zweryfikowane</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sub" style="margin-top:16px;font-size:13.5px">Uwaga o marżach: konkretne widełki „55–70% na druku / 70–85% na cyfrze" <b>nie przeszły weryfikacji</b> — traktuj matematykę marż jako niepotwierdzoną i policz na realnych cenach Gelato. Mechanika royalty Society6 również obalona — sprawdź u źródła.</p>
+  </div>
+</section>
+
+<section id="perso">
+  <div class="wrap">
+    <div class="kicker">Co klient może zmienić</div>
+    <h2>Zakres personalizacji — kto i jak daleko</h2>
+    <p class="sub">Cztery poziomy: <b>brak</b> · <b>prezentacja</b> (rozmiar/oprawa/materiał) · <b>treść</b> (tekst/imię/data, upload zdjęcia) · <b>generatywny</b> (AI zmienia sam obraz). Kluczowa obserwacja: generatywna personalizacja AI jest już mainstreamem.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Platforma</th><th>Poziom</th><th>Co dokładnie</th><th>AI?</th></tr></thead>
+        <tbody>
+          <tr><td class="rowname">Displate / Society6</td><td><span class="chip neu">prezentacja</span></td><td>Rozmiar, oprawa, materiał — obraz artysty bez zmian</td><td>nie</td></tr>
+          <tr><td class="rowname">Saatchi / Artfinder</td><td><span class="chip bad">brak</span></td><td>Kupujesz dzieło jak jest; co najwyżej rozmiar edycji</td><td>nie</td></tr>
+          <tr><td class="rowname">Zazzle / Fy!</td><td><span class="chip neu">treść</span></td><td>Tekst, imię, data, monogram na gotowym wzorze</td><td>nie</td></tr>
+          <tr><td class="rowname">CanvasPop / Shutterfly</td><td><span class="chip neu">treść</span></td><td>Upload zdjęcia + kadr, oprawa, prosty tekst</td><td>nie</td></tr>
+          <tr><td class="rowname">Crown &amp; Paw</td><td><span class="chip neu">treść→prezent</span></td><td>Zdjęcie pupila → portret w kostiumie (robią ludzie)</td><td>nie (ręcznie)</td></tr>
+          <tr><td class="rowname">Desenio Imaginator</td><td><span class="chip ok">generatywny</span></td><td>Generacja AI + imię/data w kurowanym sklepie</td><td><b>tak</b></td></tr>
+          <tr><td class="rowname">NightCafe</td><td><span class="chip ok">generatywny</span></td><td>Upload + styl → AI tworzy portret → druk</td><td><b>tak</b></td></tr>
+          <tr><td class="rowname">Mixtiles</td><td><span class="chip ok">generatywny</span></td><td>Zdjęcie psa → szablon stylu → portret AI na kafelku</td><td><b>tak</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="reality">
+  <div class="wrap">
+    <div class="kicker">AI-art: prawo i realia 2026</div>
+    <h2>Dwie rzeczy, które musisz wiedzieć zanim zbudujesz katalog</h2>
+    <p class="sub">Nie strasz się — obie są do ogarnięcia, ale zmieniają projekt.</p>
+    <div class="two">
+      <div class="panel">
+        <h3><span class="chip ok">dobra wiadomość</span> Polityka platform</h3>
+        <p>Rynek ustabilizował się na <b>„wolno, ale z oznaczeniem"</b> — nie ma banów. Etsy pozwala na AI-art, jeśli sprzedawca daje własny wkład twórczy (prompty) i <b>ujawnia użycie AI</b> w opisie. Etsy pozwala też na druk przez zewnętrznego partnera jak <b>Gelato</b> — zakazuje tylko czystego odsprzedawania.</p>
+        <p>Redbubble, Society6 i Displate przyjmują AI-art. Adobe Stock akceptuje AI (33% royalty), Shutterstock banuje (wg źródeł). Dla Latenca: ryzyko to etykieta, nie zakaz.</p>
+        <p class="src">źródła: etsy.com/legal/creativity · shieldmyshop, listybox (2026)</p>
+      </div>
+      <div class="panel">
+        <h3><span class="chip bad">twarde ograniczenie</span> Prawo autorskie</h3>
+        <p>W USA grafika stworzona <b>samym promptem NIE ma ochrony prawnej</b> (Copyright Office, raporty 2025). 2 marca 2026 Sąd Najwyższy odmówił rozpatrzenia sprawy Thaler v. Perlmutter — wymóg autora-człowieka został utrzymany.</p>
+        <p>Skutek dla Ciebie: katalogu „wpisz prompt → sprzedaj" <b>nie da się obronić jako Twojej wyłącznej własności</b> — każdy może skopiować grafikę. Obrona wymaga <b>realnej pracy człowieka</b> (kurator/artysta kieruje, dobiera, przerabia) i wskazania autora-człowieka.</p>
+        <p class="src">źródła: copyright.gov (Part 2, 2025) · Morgan Lewis, marzec 2026 · uwaga: tylko prawo USA</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="position">
+  <div class="wrap">
+    <div class="kicker">Gdzie jest wolna przestrzeń</div>
+    <h2>Trzy pozycje — i moja rekomendacja</h2>
+    <p class="sub">Dane wykluczają jedno i wskazują na drugie. Oto opcje bez owijania.</p>
+    <div class="opts">
+      <div class="opt">
+        <span class="chip bad verdict-tag">unikaj</span>
+        <h3>1 · Generyczny katalog AI na Gelato</h3>
+        <p>Ładne grafiki + druk, bez wyróżnika. Wchodzisz wprost pod Displate/Society6/Redbubble — mają skalę, SEO i tańszą podaż. Do tego katalog z promptów jest nie do obronienia prawnie. Najsłabsza pozycja.</p>
+      </div>
+      <div class="opt pick">
+        <span class="chip acc verdict-tag">rekomendacja</span>
+        <h3>2 · Kurowana marka AI-art + personalizacja na szynach</h3>
+        <p>Hybryda: kontrola katalogu jak Desenio/JUNIQE + prowadzona przez człowieka kuratela (obrona prawna) + opcjonalna personalizacja jak Mixtiles/NightCafe, drukowana przez Gelato. Personalizacja może być głównym produktem, nie dodatkiem. Tu jest biała plama.</p>
+      </div>
+      <div class="opt">
+        <span class="chip warn verdict-tag">rozważ</span>
+        <h3>3 · Wąska nisza „prezentowa"</h3>
+        <p>Jeden segment o wysokiej emocji (np. pupile, jak Crown &amp; Paw, ale z AI zamiast grafików). Najwyższa gotowość do zapłaty, najprostszy marketing. Węższe niż wizja Latenca, ale najszybsze do walidacji.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="analogs">
+  <div class="wrap">
+    <div class="kicker">Ucz się od tych pięciu</div>
+    <h2>Najbliższe analogi do studiowania</h2>
+    <p class="sub">Nie kopiuj — rozłóż każdy na części i weź to, czego uczy. Kliknij i przejdź całą ścieżkę zakupu.</p>
+    <div>
+      <div class="analog"><div class="n">1</div><div class="who">Mixtiles <a href="https://www.mixtiles.com/photo-to-art" target="_blank" rel="noopener">mixtiles.com/photo-to-art</a></div><div class="teach">Masowa foto-na-AI-ścianę + personalizacja na szynach. <b>Uczy:</b> jak wygląda UX personalizacji dla mas i pozycjonowanie dekoru, nie „narzędzia AI".</div></div>
+      <div class="analog"><div class="n">2</div><div class="who">NightCafe <a href="https://creator.nightcafe.studio/pet-portraits" target="_blank" rel="noopener">creator.nightcafe.studio</a></div><div class="teach">Generacja AI wprost spięta z drukiem. <b>Uczy:</b> pipeline generuj→drukuj i budowanie społeczności wokół tworzenia.</div></div>
+      <div class="analog"><div class="n">3</div><div class="who">Desenio <a href="https://desenio.com/posters-prints/personalized-wall-art/create-ai-art/" target="_blank" rel="noopener">desenio.com — Imaginator</a></div><div class="teach">Kurowany sklep, który dokleił AI. <b>Uczy:</b> jak połączyć kuratelę z generatywną personalizacją, nie tracąc spójności marki.</div></div>
+      <div class="analog"><div class="n">4</div><div class="who">Saatchi Art <a href="https://www.saatchiart.com" target="_blank" rel="noopener">saatchiart.com</a></div><div class="teach">Ekonomia kuratorska i splity 60/40. <b>Uczy:</b> struktura prowizji i kuratela jako prestiż/wartość dla klienta.</div></div>
+      <div class="analog"><div class="n">5</div><div class="who">Etsy — sklepy AI-art <a href="https://www.etsy.com/market/ai_art" target="_blank" rel="noopener">etsy.com/market/ai_art</a></div><div class="teach">Zgodna z prawem ścieżka sprzedaży AI. <b>Uczy:</b> oznaczanie/polityka i realne sygnały popytu — co ludzie faktycznie kupują.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span><b>Zweryfikowane vs założone.</b> Mocne (źródła pierwotne): prawo autorskie (copyright.gov, Sąd Najwyższy), ekonomia Saatchi Art, produkty Mixtiles/NightCafe/Ideogram, polityka Etsy. Słabsze (jedno źródło, sprawdź sam): marże Displate/INPRNT, royalty Redbubble ~20%, taksonomia dodatkowych domen.</span>
+    <span><b>Obalone — nie zakładaj:</b> upscaling AI Ideogram nie daje pewnego 600 DPI (rozdzielczość do dużego druku pozostaje realnym problemem); konkretne widełki marż POD; mechanika royalty Society6.</span>
+    <span><b>Otwarte pytania na później:</b> polityka AI Displate/Society6 (do dystrybucji); czy ktoś prowadzi czysto kurowaną markę AI-art bez personalizacji na realnym przychodzie; wymogi Gelato dla AI + personalizacji w czasie rzeczywistym; gotowość klientów do zapłaty za „AI-art jako sztukę" vs AI ukryte w prezencie.</span>
+    <span style="color:var(--accent-ink)">Latenca · deep-research lipiec 2026 · prawo tylko USA</span>
+  </div>
+</footer>
