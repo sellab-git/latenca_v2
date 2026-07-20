@@ -144,3 +144,62 @@ Kolejność wdrożenia — od tego, co najtaniej ratuje najwięcej:
 6. Limity per-IP, walidacja wejścia, monitoring
 
 **Punkty 1–2 to nie optymalizacja — to warunek, żeby w ogóle uruchomić doradcę publicznie.**
+
+---
+
+## 9. Drugie wejście: czat na stronie produktu (D-034)
+
+Sekcje 1–8 broniły przed **jedną długą rozmową**. To jest rozwiązane — stan zamiast transkryptu plus limit tur daje sufit ~1 zł niezależnie od tego, jak długo ktoś siedzi.
+
+Czat na stronie produktu **nie łamie sufitu na sesję. Mnoży liczbę sesji.** To inne ryzyko i żadna z sześciu warstw go nie łapie.
+
+### Skala problemu — uczciwie
+
+Przy 1000 wejściach dziennie i 10% klikalności to ~100 sesji × 1 zł = **~100 zł dziennie**.
+
+Ale ta liczba wymaga natychmiastowego sprostowania: **to jest scenariusz sukcesu, którego Latenca nie ma.** Ryzyko nr 1 to dystrybucja, a ruch wynosi dziś zero. Realne wczesne wolumeny (50–200 wejść dziennie) to **5–20 zł dziennie** — całkowicie do przyjęcia.
+
+Co więcej, przy 1000 wejść i konwersji ~1,5% sklep robi ~15 zamówień dziennie, czyli ~2200 zł zysku brutto. AI za 100 zł to **~5% zysku** — porównywalnie z obsługą płatności. Nie jest to katastrofa, którą początkowo zasugerowałem.
+
+### Prawdziwy przypadek do pilnowania
+
+Nie „dużo rozmów", tylko **dużo rozmów przy niskiej sprzedaży**. Wtedy koszt AI odrywa się od przychodu. Stąd zmiana mechanizmu:
+
+> **Sufit wyrażamy jako procent przychodu, nie jako kwotę dzienną.** Gdy koszt AI przekroczy ustalony procent dziennego zysku brutto, doradca dławi się sam — najpierw schodzi do gotowych odpowiedzi, potem się wyłącza.
+
+Samoczynnie tanieje w ciche dni i pozwala wydawać, kiedy sprzedaż idzie. Kwota dzienna tego nie potrafi. **Sam procent jest decyzją biznesową Artura, nie techniczną.**
+
+### Warstwa 0 — połowa pytań nie potrzebuje modelu
+
+Na stronie produktu wracają w kółko te same pytania: jaki rozmiar do sypialni, czy pasuje do dębu, ile trwa dostawa, czym różni się papier od płótna. **Gotowe odpowiedzi plus podpowiedzi jednym kliknięciem załatwiają sporą ich część za zero i odpowiadają natychmiast.** To najtańsza i najszybsza warstwa w całym dokumencie — wdrożyć przed dobieraniem modeli.
+
+### Dwie klasy sesji
+
+| Klasa | Wejście | Limit tur | Sufit |
+|---|---|---|---|
+| **Pytanie o produkt** | strona produktu | 4–6 | ~0,3 zł |
+| **Sesja doradcza** | „pomóż mi wybrać" | 12 | ~1 zł |
+
+Pytanie, które przeradza się w prawdziwe szukanie, **awansuje** do sesji doradczej — a wtedy klient sam pokazał zaangażowanie. Tanie wejście jest szerokie, drogi tryb wymaga dowodu.
+
+Cache działa tu **dużo lepiej niż u doradcy**: każdy odwiedzający tę samą stronę produktu dostaje ten sam kontekst.
+
+---
+
+## 10. Wybór modelu i dostawcy — kolejność ma znaczenie
+
+Pytanie „może nie Claude, może Kimi albo coś tańszego" jest zasadne i **nie łamie architektury** — D-020 zakłada wprost wymienialną warstwę dostawcy. To jest pomiar, nie zwrot.
+
+Ale dźwignie różnią się o rząd wielkości:
+
+| Dźwignia | Zysk |
+|---|---|
+| **Architektura** — stan zamiast transkryptu, limit tur, warstwa 0, cache | **10–50×** |
+| **Klasa modelu** — Opus → Haiku | **5×** |
+| **Dostawca** — Haiku → tańszy zewnętrzny | **2–3×** |
+
+**Robimy w tej kolejności.** Zmiana dostawcy przed zbudowaniem warstwy 1 i 0 to optymalizowanie najmniejszej dźwigni, kiedy największa leży nietknięta.
+
+**Dobierać model do zadania, nie do strony.** Pytania faktograficzne (rozmiar, dostawa, materiały) to wyszukiwanie — tani model wystarczy. **Sama propozycja to gust**, i tam jakość jest całą wartością funkcji: słaba rekomendacja czyni doradcę bezwartościowym, a wtedy płacimy cokolwiek za nic. To jest powód z D-020, żeby nie startować od najtańszego.
+
+**Czego nie wiem o Kimi i podobnych:** nie zweryfikowałem aktualnych cen ani jakości w ocenie estetycznej po angielsku. Poza ceną trzeba sprawdzić przetwarzanie danych klientów z UE i USA (dostawca chiński, RODO) oraz niezawodność. **Nie decydować na wyczucie** — zbudować warstwę dostawcy (i tak zablokowaną), przepuścić te same ~30 rozmów testowych przez Opusa, Sonneta, Haiku i kandydata, porównać jakość i koszt.

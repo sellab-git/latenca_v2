@@ -538,3 +538,27 @@ Keeping the chat **offered rather than open** on the catalogue entry protects tw
 - Swaps are **sequential** — one proposal at a time, per the locked stance. Alternatives stay available but are not the primary move.
 - The stage still holds **one** frame. Multi-piece walls remain the one genuine structural gap (D-033, item 6).
 - Implemented in `prototypes/mockups/04-advisor.html`; `03-product.html` is left untouched as the reference. They converge into one file once the pattern is proven.
+
+---
+
+# D-035
+## Title
+The three sample rooms become the scale reference, and are calibrated to real centimetres.
+### Status
+LOCKED
+### Decision
+The flat wall stays the **workspace**; the three fixed sample rooms become the **size check**. Each room photo is measured **once** against a known object (a sofa at ~210 cm, a door at ~80 cm, a dresser at ~100 cm) to yield one number — pixels per centimetre on that wall plane. Every artwork at every size then renders at **arithmetically correct scale**, with no AI, no perspective estimation, and no per-customer variance.
+
+Three rooms is the whole system. The set does not grow.
+### Reason
+Artur's observation: a fixed photograph can be calibrated once, whereas an abstract true-scale outline has to be interpreted by the viewer. A real room reads instantly and costs three measurements.
+
+Inspection of the current prototype found the harder reason. Size multipliers are `0.78 / 1 / 1.26` where the true width ratios of 30×40, 50×70 and 70×100 are `0.6 / 1 / 1.4`, with a code comment explaining that the artwork is kept prominent at every size. **The room preview compresses scale — it shows small prints larger and large prints smaller than reality.** It flatters the artwork and misleads about the single thing a customer opens that view to learn.
+
+The same check on `12. Printly` — which has a mature version of this machinery — found it does the same: artwork wrap scales `1 → 1.35 → 1.35`, with the size difference faked by shrinking the room background instead (`bg 1 → 1 → 0.775`), giving effective ratios of about `0.74 / 1 / 1.29`. Neither codebase contains any centimetre-to-pixel conversion. **This is an unsolved problem in both, not a solved one to copy.**
+### Implications
+- **Amends D-033**, which put rooms under a no-further-investment rule. That rule was aimed at compositing onto customer photos and at growing the room set — neither applies to three owned, calibrated photographs. Flat-wall-first is unchanged; rooms simply take a different job.
+- **After calibration, 30 × 40 will look small.** That is the information the customer came for and it must not be compensated for.
+- The calibration assumes the wall plane is roughly parallel to the camera. We own these three photographs, so this is a selection constraint, not a risk.
+- `12. Printly` (`lib/mockup/calibration.ts`, `lib/frames/v3-metas.ts`, `components/blocks/MockupViewer.tsx`) is still worth copying when we reach real code — breakpoint matrix, orientation handling, graceful fallback, data-driven for new Gelato sizes. It uses **the same three room assets** (cupboard / dresser / office), so measurements transfer directly. **Copy the machinery; replace the hand-tuned numbers with computed ones.**
+- Does not reverse D-031: customer photographs remain an analytical input and are never a canvas.
