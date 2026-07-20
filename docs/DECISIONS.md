@@ -490,3 +490,22 @@ The two rules about copying and versioning are not stylistic preferences; both w
 - Reviews critique substance — hierarchy, CTA strength, whether the AI moment reads as intelligent — not "nice".
 - A new screen begins by opening `prototypes/index.html`, not a blank file.
 - Nothing that matters is left in a scratchpad. The scratchpad is for throwaway working files only.
+
+---
+
+# D-033
+## Title
+Perfect the flat wall first. Rooms and customer photos are not considered until we are happy with it.
+### Status
+LOCKED
+### Decision
+The **flat wall is the product's display surface**, and the work now is to make it excellent rather than to add alternatives beside it. Sample rooms stay in the prototype as a comparison toggle, but **receive no further investment** — no expansion of the room set, no per-room tuning. Showing artwork on a customer's own photo is not reconsidered until the flat surface is genuinely good.
+### Reason
+The flat plane is the **primary** surface at both category leaders, not a fallback: Mixtiles shows a single tile on a plain background and brings a room in only for multi-piece sets, and Fy!'s `Flat` mode is the editable working surface while its room render is a non-editable preview. Our MVP is a single piece (D-023) — exactly the case where the leader uses no room.
+
+It also removes every failure mode catalogued in `RESEARCH-wall-display.md` — wrong scale, foreground depth, perspective — from the MVP entirely, rather than managing them. And it is cheap to perfect and expensive to fake: rooms would need six to nine photographs plus per-room placement, while the flat surface needs only craft.
+### Implications
+- **The bar on scale presentation rises sharply.** With no furniture for the eye to catch on, the promise of certainty rests entirely on the numbers and the artwork. The current dimension overlay is a starting point, not the finished thing.
+- Identified work on the flat surface, most important first: **(1)** a true-scale reference outline (sofa or figure) so size can be judged without a room; **(2)** side-by-side size comparison instead of switch-and-guess; (3) a grid toggle, as Fy! has; (4) wall texture and light so the frame reads as hanging rather than pasted; (5) frames and materials — reuse the machinery already built in `03-product.html`, per D-032; (6) multi-piece layouts, since sets are the only economics that work.
+- Does not reverse **D-021** or **D-031**; it sharpens their sequencing. Uploads remain an analytical input (D-031) — the wall colour read from a photo tints this flat surface.
+- Supersedes the earlier working recommendation to keep both surfaces on an equal footing.
