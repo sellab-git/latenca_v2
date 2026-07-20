@@ -48,6 +48,7 @@ Published with a fresh, squashed history so nothing sensitive from earlier histo
 - `/private/` stays gitignored and untracked (real costs/pricing).
 - **No API keys / tokens, ever** (the Gelato key has never been committed — keep it that way).
 - Check `knowledge/BUSINESS.md` and `knowledge/BENCHMARK.md` before adding confidential numbers.
+- **Settled (2026-07-20):** the real Gelato unit costs in `docs/PRODUCT_BIBLE.md` stay public. They are already in the pushed history, and Gelato's pricing is semi-public anyway — anyone can open an account and see it. `private/` still holds the full cost/margin scenarios; don't re-raise this.
 - Anything added here is public the moment it is pushed — assume no take-backs.
 
 ## Status
