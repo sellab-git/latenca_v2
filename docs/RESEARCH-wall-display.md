@@ -60,6 +60,33 @@ Po dłuższej zabawie z narzędziem Fy! wyprodukowało render **dobrej jakości*
 
 > **Uczciwa uwaga metodologiczna:** wniosek „gorsze niż brak" postawiony po pierwszym, nieudanym renderze był **za mocny na podstawie jednego przypadku**. Drugi test go obalił w ciągu kilkunastu minut. Zapis zostawiony celowo — jako przypomnienie, żeby nie hartować wniosków na pojedynczej obserwacji.
 
+### Katalog zaobserwowanych trybów awarii
+
+Cztery próby, jeden sukces. Bilans i warunki:
+
+| # | Wejście | Wynik | Tryb awarii |
+|---|---|---|---|
+| 1 | Zrzut sceny z Mixtiles (skażone) | ❌ | Test nieważny |
+| 2 | Czyste zdjęcie frontalne, **bez podanych wymiarów** | ❌ | **Skala** — prace wielkości znaczków |
+| 3 | To samo zdjęcie, **po podaniu informacji** | ✅ | — (dobry render) |
+| 4 | Zdjęcie **w perspektywie** (ściana pod kątem) | ❌ | **Perspektywa** — grafiki wklejone jako płaski prostokąt na wprost, nieleżący w płaszczyźnie ściany; dodatkowo **wklejone na istniejące obrazy w ramach**, zamiast je uwzględnić |
+
+**Trzy niezależne tryby awarii:**
+1. **Brak wymiarów ściany** → błędna skala *(rozwiązywalne — wystarczy zapytać)*
+2. **Plany sceny** → rośliny/meble na pierwszym planie, glitchujące przesłanianie *(trudne — segmentacja)*
+3. **Perspektywa** → grafika nie leży w płaszczyźnie ściany *(trudne — estymacja płaszczyzny i homografia)*
+4. *(pochodna 3.)* **Istniejące obrazy na ścianie** — wklejane „po wierzchu", nie wykrywane
+
+### 🔑 Wniosek praktyczny: okno warunków, w którym to działa, jest wąskie
+
+Montaż zadziałał **wyłącznie** przy: zdjęciu **frontalnym**, **dobrze oświetlonym**, ściana **pusta**, bez przedmiotów na pierwszym planie, **plus podane wymiary**.
+
+**To jest opis zdjęcia studyjnego.** A zdjęcie studyjne pustej ściany to dokładnie to, czym jest **gotowe pomieszczenie przykładowe**.
+
+> **Jeśli montaż wymaga warunków zbliżonych do studia, to równie dobrze można użyć zdjęcia studyjnego — czyli własnego, kontrolowanego pomieszczenia.** Zyskujesz wtedy pewność renderu bez żadnej pracy na obrazie.
+
+To jest praktyczne uzasadnienie D-021 — mocniejsze niż „to trudne". Realne zdjęcia od klientów **z reguły** są robione pod kątem (bo inaczej pokój nie mieści się w kadrze) i zawierają meble oraz rośliny na pierwszym planie. Czyli **typowe wejście wpada w tryby awarii 2 i 3**, a nie w wąskie okno sukcesu.
+
 ---
 
 ## 2. Trzy rzeczy, które wywracają nasze wcześniejsze założenia
@@ -106,9 +133,10 @@ To nie jest już hipoteza. To działający wzorzec, łącznie z **uczciwą degra
 4. **Montaż na zdjęciu pokoju zostaje w BACKLOGU — ale z jasno nazwanym warunkiem odblokowania.** *(Wcześniejsza rekomendacja w tym dokumencie, żeby przenieść go do „odrzucone z dowodem", została **wycofana** po trzecim teście — patrz §1.)*
    Warunek nie jest już mglisty („trudne"), tylko rozbity na dwa mierzalne składniki:
    - **(a) Wymiary ściany** — bez nich skala zgaduje i render kłamie w jedynej rzeczy, która ma znaczenie. **Ten składnik już mamy** — pytamy o szerokość ściany w doradcy (D-023)
-   - **(b) Obsługa planów sceny** — wycinanie mebli i roślin na pierwszy plan. To realna praca na obrazie, **u Fy! wciąż glitchuje**, i to jest ta droga część. **Tego nie mamy i na MVP nie budujemy**
+   - **(b) Obsługa planów sceny** — wycinanie mebli i roślin na pierwszy plan. Realna praca na obrazie, **u Fy! wciąż glitchuje**. **Nie mamy, na MVP nie budujemy**
+   - **(c) Estymacja płaszczyzny ściany i perspektywy** — bez tego grafika nie leży na ścianie, tylko na zdjęciu. **Nie mamy, na MVP nie budujemy**
 
-   Czyli: nie „może kiedyś", tylko **„gdy (b) stanie się niezawodne i tanie"**.
+   Czyli: nie „może kiedyś", tylko **„gdy (b) i (c) staną się niezawodne i tanie"**. Oba to praca na obrazie, nie orkiestracja cudzego API — czyli **inny rodzaj przedsięwzięcia niż to, co opisuje D-020**.
 
 ### Otwarte pytanie produktowe (nierozstrzygnięte badaniem)
 
