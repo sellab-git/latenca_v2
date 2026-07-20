@@ -176,8 +176,8 @@
   .stageArt img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;box-sizing:border-box;background:#fff;border:var(--fw,0px) solid var(--fc,transparent);padding:var(--mw,0px);box-shadow:var(--shadow-2);cursor:zoom-in;transition:border-color var(--dur-base),border-width var(--dur-base),padding var(--dur-base)}
   .stageRoom{position:absolute;inset:0;display:none}
   .stageRoom img.bg{width:100%;height:100%;object-fit:cover;object-position:var(--rx,50%) var(--ry,50%);display:block}
-  .frameOnWall{position:absolute;background:#fff;padding:1.1%;box-shadow:0 14px 30px rgba(0,0,0,.4);transform:translate(-50%,-50%);width:calc(var(--fbw,20%) * var(--sf,1));transition:width var(--dur-base)}
-  .frameOnWall img{width:100%;display:block}
+  .frameOnWall{position:absolute;background:#fff;padding:1.1%;box-shadow:0 14px 30px rgba(0,0,0,.4);transform:translate(-50%,-100%);width:calc(var(--fbw,20%) * var(--sf,1));transition:width var(--dur-base)}
+  .frameOnWall img{width:100%;height:100%;object-fit:cover;display:block}
   /* room views use a landscape stage (these are wide interior scenes) */
   /* all views share the same TALL artwork stage; rooms just fill it edge-to-edge */
   .stage.roomon{padding:0}
@@ -186,9 +186,9 @@
   .stage.roomon .stageRoom{display:block;transform:scale(var(--zoom,1.5));transform-origin:50% var(--zoy,38%);animation:roomZoomIn var(--dur-slow) var(--ease-out)}
   @keyframes roomZoomIn{from{transform:scale(calc(var(--zoom,1.5)*1.05))}to{transform:scale(var(--zoom,1.5))}}
   /* per-room: cover-crop focus (--rx/--ry) · art size (--fbw ×--sf) · room closeness (--zoom) · art anchor (--zoy = frame top) */
-  .stage.posc{--rx:26%;--ry:50%;--fbw:26%;--zoom:1.5;--zoy:38%} .stage.posc .frameOnWall{left:50%;top:38%}
-  .stage.posd{--rx:46%;--ry:49%;--fbw:27%;--zoom:1.5;--zoy:35%} .stage.posd .frameOnWall{left:50%;top:35%}
-  .stage.pose{--rx:33%;--ry:47%;--fbw:22%;--zoom:1.6;--zoy:33%} .stage.pose .frameOnWall{left:50%;top:33%}
+  .stage.posc{--rx:26%;--ry:50%;--fbw:26%;--zoom:1;--zoy:38%} .stage.posc .frameOnWall{left:50%;top:38%}
+  .stage.posd{--rx:46%;--ry:49%;--fbw:27%;--zoom:1;--zoy:35%} .stage.posd .frameOnWall{left:50%;top:35%}
+  .stage.pose{--rx:33%;--ry:47%;--fbw:22%;--zoom:1;--zoy:33%} .stage.pose .frameOnWall{left:50%;top:33%}
   /* action icons live ON the image (top-right stack): Save · Share · Zoom — same logic as gallery tiles + Printly/Displate */
   .stageacts{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:var(--sp-2);z-index:4}
   .sact{width:38px;height:38px;border-radius:var(--r-ui);background:var(--glass);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;transition:background var(--dur-fast)}
@@ -939,8 +939,61 @@
     } else {
       stagehint.innerHTML='<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/></svg> Actual artwork';
     }
+    roomScale();   // the room changed, so the centimetre scale changed with it
   }
   thumbs.querySelectorAll('.thumb').forEach(t=>t.onclick=()=>setView(+t.dataset.i));
+
+  /* ── true scale in the sample rooms (D-035) ──────────────────────────────
+     The old multipliers were 0.78 / 1 / 1.26 where the real width ratios of
+     30×40, 50×70 and 70×100 are 0.6 / 1 / 1.4. The preview flattered the
+     artwork and misled about the one thing a customer opens that view to
+     learn. These numbers are measured, not tuned: each photograph was sized
+     once against a known object, cross-checked against a second one.
+
+       cupboard  sideboard 170 cm   → chair reads 61 cm    → 470 cm of wall
+       dresser   sideboard 190 cm   → turntable reads 41 cm → 360 cm
+       office    monitor 53 cm      → alarm clock reads 11 cm → 480 cm
+
+     A fixed percentage cannot be correct here: the frame is a share of the
+     stage, but `object-fit:cover` means how much wall is visible depends on
+     the stage's aspect ratio, which moves with the viewport. That is why
+     Printly needed a per-breakpoint matrix. Computing it removes the matrix.
+     `--zoom` needs no correction — it scales background and frame together. */
+  const ROOM={                                 // cm = wall span across the full photo
+    posc:{cm:470, top:69},                     // top = furniture top edge, % of photo height
+    posd:{cm:360, top:68},
+    pose:{cm:480, top:78}
+  };
+  const ROOM_ASPECT=3000/1109;                 // all three photographs
+  const SIZE_CM=[[30,40],[50,70],[70,100]];    // same order as SIZES
+  const MOUNT=0.011;                           // .frameOnWall padding, in stage widths
+  const HANG_GAP_CM=15;                        // clearance between furniture and frame
+
+  /* True scale broke the old anchoring, which centred the frame at a fixed
+     height tuned for compressed sizes — a real 70×100 ran off the top. Pictures
+     are not hung by their centre, they are hung a fixed distance above the
+     furniture and grow upward, so that is what this does. The room zoom drops
+     to 1: showing a 70 cm print honestly requires showing enough wall to
+     contain it. */
+  function roomScale(){
+    const el=document.querySelector('.frameOnWall');
+    const key=['posc','posd','pose'].find(c=>stage.classList.contains(c));
+    if(!key){el.style.width=el.style.height=el.style.top='';return;}   // flat view keeps the CSS
+    const r=stage.getBoundingClientRect();
+    if(!r.width)return;
+    const room=ROOM[key];
+    // object-fit:cover — the photo fills whichever axis would otherwise gap
+    const shownW=(r.width/r.height<ROOM_ASPECT)?r.height*ROOM_ASPECT:r.width;
+    const perCm=shownW/room.cm;
+    // box-sizing is border-box, so add the mount back or the print comes out small
+    // height too, not just width: the three formats are 1:1.33, 1:1.4 and
+    // 1:1.43, so one fixed crop would render 30×40 as 30×42
+    const mount=2*MOUNT*r.width;   // padding % always resolves against inline size
+    el.style.width=(SIZE_CM[st.size][0]*perCm+mount)+'px';
+    el.style.height=(SIZE_CM[st.size][1]*perCm+mount)+'px';
+    el.style.top=(room.top-(HANG_GAP_CM*perCm/r.height)*100)+'%';
+  }
+  addEventListener('resize',roomScale);
 
   // ── buy state ──
   const MATERIALS=['Poster','Canvas','Metal','Acrylic','Wood','Foam'];
@@ -996,8 +1049,7 @@
     ai.style.setProperty('--fw',showFrame?'14px':'0px');
     ai.style.setProperty('--mw',showFrame?(st.mat===0?'0px':st.mat===1?'18px':'32px'):'0px');
     document.querySelector('.frameOnWall').style.background=showFrame?FRAMES[st.frame].c:'#fff';
-    // frame scales with the chosen print size on the wall (kept prominent in every size — we sell the art)
-    document.getElementById('stage').style.setProperty('--sf',[0.78,1,1.26][st.size]);
+    roomScale();
     // selection summary
     let summ;
     if(dig){summ='Digital file · full-res, all print ratios';}
