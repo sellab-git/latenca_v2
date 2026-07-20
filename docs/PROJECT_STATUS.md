@@ -53,6 +53,16 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 
 ---
 
+## Kolejność prac (Artur, 2026-07-20) — obowiązuje
+
+**1. System** (makiety, ogólny wygląd) → **2. Właściwy kod MVP** → **3. Dystrybucja**
+
+⛔ **Dystrybucja jest zamknięta do czasu ukończenia MVP.** Nie wracać do niej, nie proponować testów, nie liczyć kanałów — nawet jeśli pozostaje ryzykiem nr 1. Kolejność jest świadoma.
+
+⛔ **Skalowanie w pokojach: nie pogłębiać.** Kalibracja jest zrobiona i uczciwa — to wystarcza jako makieta. `12. Printly` ma znacznie więcej (ruch kamery zależny od rozmiaru, pełny system ram, formaty i materiały). **Analiza Printly i decyzja kopiować/zaadaptować/napisać od nowa należy do etapu prawdziwego kodu.**
+
+---
+
 ## Aktywne zadania — doskonalenie płaskiej ściany (D-033)
 
 Kolejność od najważniejszego. Cała obietnica pewności spoczywa teraz na liczbach i samej pracy, bo nie ma mebla, o który oko może zahaczyć.
@@ -66,7 +76,7 @@ Kolejność od najważniejszego. Cała obietnica pewności spoczywa teraz na lic
 
 ## Poza powierzchnią wyświetlania
 
-- [ ] **Ręczny test dystrybucji** — 20–30 materiałów, zero automatyzacji, **równolegle** z budową (D-028). Dotyka ryzyka nr 1 i nie wymaga gotowego produktu
+- ⏸ ~~Ręczny test dystrybucji (D-028)~~ — **wstrzymane do czasu MVP** decyzją Artura. Patrz „Kolejność prac" wyżej
 - [ ] Krok 1: kręgosłup sklepu (katalog → strona produktu → konfigurator → koszyk)
 - [ ] Baza wiedzy projektowej, warstwy A/B/D (D-024) — warunek jakości doradcy od dnia 1
 - [ ] Log decyzji od dnia 1; pętli uczenia nie budujemy do czasu wolumenu

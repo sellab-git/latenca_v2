@@ -562,3 +562,13 @@ The same check on `12. Printly` — which has a mature version of this machinery
 - The calibration assumes the wall plane is roughly parallel to the camera. We own these three photographs, so this is a selection constraint, not a risk.
 - `12. Printly` (`lib/mockup/calibration.ts`, `lib/frames/v3-metas.ts`, `components/blocks/MockupViewer.tsx`) is still worth copying when we reach real code — breakpoint matrix, orientation handling, graceful fallback, data-driven for new Gelato sizes. It uses **the same three room assets** (cupboard / dresser / office), so measurements transfer directly. **Copy the machinery; replace the hand-tuned numbers with computed ones.**
 - Does not reverse D-031: customer photographs remain an analytical input and are never a canvas.
+
+### D-035 — sprostowanie i zakres (2026-07-20, Artur)
+
+**Sprostowanie oceny Printly.** Napisałem wyżej, że Printly „udaje różnicę rozmiaru pomniejszaniem tła". To była błędna interpretacja intencji. Artur, który to budował: był tam **system ruchu kamery** — przy małym obrazie kamera przybliża, przy dużym odjeżdża. Liczby `bg: 1 → 1 → 0,775` to właśnie to, a nie obejście.
+
+Zmierzony fakt zostaje: efektywne proporcje wychodzą `0,74 / 1 / 1,29` zamiast prawdziwych `0,6 / 1 / 1,4`. Ale to **skutek uboczny ujęcia filmowego**, nie próba oszukania klienta — i tak trzeba to opisywać.
+
+**Te dwa podejścia nie są sprzeczne.** Kamerę i prawdziwą skalę można mieć naraz: `--zoom` skaluje tło i ramkę **razem**, więc stosunek obrazu do ściany zostaje nienaruszony niezależnie od pozycji kamery. Nasze przeliczenie cm→px liczy od wyrenderowanej szerokości zdjęcia, więc jest odporne na zoom. Znaczy to, że **ruch kamery Printly da się nałożyć na naszą kalibrację bez utraty żadnej z tych dwóch rzeczy.** Ustawiłem zoom na 1 tylko dlatego, że stare zaczepienie przy prawdziwej skali wypychało obraz poza kadr — nie dlatego, że kamera przeszkadza.
+
+**Zakres — decyzja Artura:** dalsze pogłębianie skalowania w pokojach **jest wstrzymane**. Jesteśmy w makietach HTML i teraz liczy się ogólny wygląd. Printly ma znacznie więcej dorobku niż obecna makieta: ruch kamery, pełny system ram, obsługa formatów i materiałów (papier, płótno itd.). **Analiza Printly i decyzja „kopiować / zaadaptować / napisać od nowa" należy do etapu prawdziwego kodu, nie do makiet.** To, co jest teraz, wystarcza jako makieta i jest uczciwe — dalej nie drążymy.
