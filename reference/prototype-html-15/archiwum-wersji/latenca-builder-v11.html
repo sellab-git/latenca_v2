@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Build your wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette — identical to the store (Explore/Product) */
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#6E695F; --faint:#8C8578; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA; --accent-ink:#5F4DE0;
+    --media:#E7E0D3; --on-dark:#fff; --ink-strong:#141018; --glass:rgba(20,16,26,.75);
+    --grad-a:#c9bff2; --grad-b:#8f7fe0;
+    --ok:#3f9d6d; --err:#c0553f; --ok-soft:#e4f0e9; --err-soft:#f7e6e0;
+    /* Radius */
+    --r-tile:2px; --r-sm:4px; --r-ui:6px; --r-full:999px;
+    /* Elevation — store's cool-tinted shadows */
+    --shadow-1:0 6px 16px rgba(20,16,10,.20);
+    --shadow-2:0 12px 28px rgba(20,16,10,.30);
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --shadow-drawer:-14px 0 40px rgba(15,12,20,.18);
+    --shadow-bar:0 -8px 24px rgba(15,12,20,.08);
+    --ring:0 0 0 3px var(--accent-soft);
+    /* Icons / type / weight / line-height */
+    --icon:20px; --iconbtn:40px;
+    --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-base:14px; --fs-md:16px; --fs-lg:20px; --fs-xl:24px; --fs-2xl:32px;
+    --w-normal:400; --w-medium:500; --w-semibold:600;
+    --lh-tight:1.2; --lh-base:1.5;
+    /* Spacing / buttons / card padding */
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-12:48px;
+    --btn-sm:36px; --btn-md:40px; --btn-lg:48px;
+    --card-pad:16px; --card-pad-lg:20px;
+    /* Motion / z-index / focus / fonts */
+    --dur-fast:.15s; --dur-base:.25s; --dur-slow:.4s;
+    --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1);
+    --z-sticky:100; --z-header:200; --z-dropdown:300; --z-tabbar:400; --z-scrim:500; --z-panel:600; --z-toast:700;
+    --focus-ring:2px solid var(--accent);
+    --serif:'Lora',Georgia,"Times New Roman",serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    /* builder-only floating elevation — cool tint to match the store */
+    --float-sm:0 2px 8px rgba(15,12,20,.10), 0 1px 2px rgba(15,12,20,.06);
+    --float-md:0 8px 24px -6px rgba(15,12,20,.16), 0 2px 6px rgba(15,12,20,.08);
+    --float-lg:0 20px 50px -14px rgba(15,12,20,.22), 0 4px 12px rgba(15,12,20,.08);
+    /* framed-art photographic drop shadow (neutral-dark) */
+    --frame-shadow:0 1px 2px rgba(20,16,22,.28), 0 4px 6px -2px rgba(20,16,22,.20), 0 22px 34px -14px rgba(20,16,22,.36);
+    --frame-shadow-sel:0 1px 2px rgba(20,16,22,.28), 0 6px 10px -2px rgba(20,16,22,.26), 0 30px 46px -14px rgba(20,16,22,.44);
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33; --accent-ink:#8E7DF3;
+    --media:#1b1826; --err:#e0715c; --ok-soft:#17281f; --err-soft:#2c1a16;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  html{overflow-x:clip}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;color:inherit}
+  :focus-visible{outline:var(--focus-ring);outline-offset:2px}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+  button:disabled,.is-disabled{opacity:.5;pointer-events:none}
+  .defs{position:absolute;width:0;height:0;overflow:hidden}
+
+  /* ── App shell / infinite canvas ── */
+  .app{display:flex;height:100dvh;min-height:100vh;overflow:hidden}
+  .work{position:relative;flex:1;display:grid;place-items:center;min-width:0;
+    background:radial-gradient(130% 90% at 50% -10%, #f4f0e8 0%, #ece6da 55%, #e4ddce 100%)}
+  /* faint canvas dot-grid */
+  .work::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(120,100,70,.09) 1.1px, transparent 1.1px);background-size:22px 22px}
+  html[data-theme="dark"] .work{background:radial-gradient(130% 90% at 50% -10%, #1b1926 0%, #16141f 55%, #110f18 100%)}
+  html[data-theme="dark"] .work::before{background-image:radial-gradient(rgba(255,255,255,.05) 1.1px, transparent 1.1px)}
+  html[data-theme="dark"] .rail{background:rgba(23,21,30,.72)}
+
+  /* ── Left tool/step rail (desktop) ── */
+  .rail{display:none;flex-direction:column;align-items:center;gap:var(--sp-2);width:88px;flex:none;
+    padding:var(--sp-4) 0;background:rgba(251,249,245,.72);backdrop-filter:blur(10px);border-right:1px solid var(--line);z-index:6}
+  .rlogo{display:grid;place-items:center;height:40px;margin-bottom:var(--sp-2);color:var(--ink);font-family:var(--serif);font-size:23px;font-weight:600}
+  .rtool{width:64px;padding:9px 0 7px;border:none;background:none;border-radius:var(--r-ui);display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease)}
+  .rtool .ic{width:34px;height:34px;display:grid;place-items:center}
+  .rtool svg{width:var(--icon);height:var(--icon);stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .rtool small{font-size:var(--fs-2xs);font-weight:var(--w-medium);letter-spacing:.01em}
+  .rtool:hover{color:var(--ink);background:var(--panel2)}
+  .rtool.on{color:var(--accent-ink);background:var(--accent-soft)}
+  .rtool.on small{color:var(--accent-ink);font-weight:var(--w-semibold)}
+  .rtool .num{position:absolute;transform:translate(14px,-13px);font-size:9px;font-weight:var(--w-semibold);color:var(--faint)}
+  .rspring{flex:1}
+
+  /* ── Floating top bar ── */
+  .topbar{position:absolute;top:var(--sp-4);left:0;right:0;display:flex;align-items:center;gap:var(--sp-2);padding:0 var(--sp-4);z-index:5;pointer-events:none}
+  .topbar>*{pointer-events:auto}
+  .fbtn{width:var(--btn-md);height:var(--btn-md);border-radius:var(--r-ui);border:1px solid var(--line);background:var(--panel);box-shadow:var(--float-sm);display:grid;place-items:center;flex:none}
+  .fbtn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .etitle{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md);color:var(--ink);white-space:nowrap}
+  .drop{flex:none;display:inline-flex;align-items:center;gap:var(--sp-2);height:var(--btn-md);padding:0 13px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-medium);color:var(--muted);white-space:nowrap;box-shadow:var(--float-sm)}
+  .drop:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .drop b{color:var(--ink);font-weight:var(--w-semibold)}
+  .drop .lead{width:15px;height:15px;stroke:var(--muted);fill:none}
+  .drop .cv{width:13px;height:13px;stroke:var(--faint);fill:none}
+  .tspring{flex:1}
+  .cartpill{flex:none;display:inline-flex;align-items:center;gap:var(--sp-2);height:var(--btn-md);padding:0 var(--sp-4);border-radius:var(--r-ui);background:var(--panel);color:var(--ink);font-weight:var(--w-semibold);font-size:var(--fs-sm);border:1px solid var(--line);white-space:nowrap;box-shadow:var(--float-sm)}
+  .cartpill svg{width:16px;height:16px;stroke:var(--ink);fill:none}
+
+  /* mobile step progress pill */
+  .mstep{display:none}
+
+  /* ── Canvas stage (floating room) ── */
+  .stage{width:100%;max-width:640px;position:relative}
+  .ruler{position:absolute;bottom:11px;right:11px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--muted);white-space:nowrap;background:rgba(251,249,245,.82);backdrop-filter:blur(3px);border-radius:var(--r-ui);padding:5px 11px;box-shadow:var(--float-sm)}
+  .ruler svg{width:13px;height:13px;stroke:var(--faint);fill:none}
+  .ruler b{color:var(--ink);font-weight:var(--w-semibold)}
+
+  .room{position:relative;width:100%;aspect-ratio:240/168;border-radius:var(--r-ui);overflow:hidden;
+    box-shadow:var(--float-lg);background:linear-gradient(178deg,#efe9df 0%,#e9e2d5 62%,#e4dccd 78%)}
+  .room::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 70% at 22% 6%, rgba(255,252,245,.85), rgba(255,252,245,0) 60%);pointer-events:none}
+  .room::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 80% at 92% 100%, rgba(60,46,28,.10), rgba(60,46,28,0) 55%);pointer-events:none}
+  .floor{position:absolute;left:0;right:0;bottom:0;height:15%;background:linear-gradient(180deg,#cbb493 0%,#c0a684 40%,#b89c76 100%)}
+  .floor::before{content:"";position:absolute;inset:0;opacity:.35;background:repeating-linear-gradient(90deg, rgba(120,92,58,0) 0 46px, rgba(120,92,58,.18) 46px 47px)}
+  .skirt{position:absolute;left:0;right:0;bottom:15%;height:2.4%;background:linear-gradient(180deg,#f2ece1,#e4dccd);border-top:1px solid rgba(255,255,255,.5);box-shadow:0 2px 4px rgba(30,22,12,.10)}
+  .console{position:absolute;bottom:14.4%;left:50%;transform:translateX(-50%);width:52%;height:8%}
+  .console .top{position:absolute;top:0;left:0;right:0;height:26%;border-radius:3px;background:linear-gradient(180deg,#d7c4a4,#c3ab86);box-shadow:0 6px 14px -4px rgba(30,22,12,.28)}
+  .console .body{position:absolute;top:26%;left:6%;right:6%;bottom:0;background:linear-gradient(180deg,#cdb994,#bda175);border-radius:0 0 3px 3px}
+  .console .body::before,.console .body::after{content:"";position:absolute;top:18%;bottom:18%;width:1px;background:rgba(90,66,38,.18)}
+  .console .body::before{left:33%} .console .body::after{left:66%}
+
+  /* framed art */
+  .tile{position:absolute;transition:box-shadow var(--dur-base) var(--ease),transform var(--dur-base) var(--ease)}
+  .frame{position:relative;width:100%;height:100%;padding:2.6%;border-radius:var(--r-tile);box-shadow:var(--frame-shadow)}
+  .frame.black{background:linear-gradient(135deg,#2b2825 0%,#141210 60%,#000 100%)}
+  .frame.white{background:linear-gradient(135deg,#ffffff,#ece6db);box-shadow:var(--frame-shadow),inset 0 0 0 1px rgba(20,16,10,.06)}
+  .frame.oak{background:linear-gradient(135deg,#dcb884,#c39a5f 70%,#b48a4d);
+    background-image:repeating-linear-gradient(90deg,rgba(120,86,40,0) 0 5px,rgba(120,86,40,.10) 5px 6px),linear-gradient(135deg,#dcb884,#c39a5f 70%,#b48a4d)}
+  .frame.walnut{background:linear-gradient(135deg,#71503a,#4c3020 70%,#3c2517);
+    background-image:repeating-linear-gradient(90deg,rgba(20,10,4,0) 0 5px,rgba(20,10,4,.16) 5px 6px),linear-gradient(135deg,#71503a,#4c3020 70%,#3c2517)}
+  .mat{position:relative;width:100%;height:100%;padding:7%;background:linear-gradient(160deg,#f8f5ef,#efeadf);box-shadow:inset 0 1px 2px rgba(255,255,255,.7)}
+  .artbox{position:relative;width:100%;height:100%;overflow:hidden;box-shadow:0 0 0 1px rgba(20,16,10,.10), inset 0 2px 5px rgba(20,16,10,.16)}
+  .artbox svg,.artbox img{display:block;width:100%;height:100%;object-fit:cover}
+  .frame .glass{position:absolute;inset:2.6%;pointer-events:none;border-radius:1px;background:linear-gradient(125deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 68%, rgba(255,255,255,.06) 100%)}
+  .tile.sel{z-index:3}
+  .tile.sel .frame{box-shadow:var(--frame-shadow-sel)}
+  .tile.sel::after{content:"";position:absolute;inset:-7px;border:var(--focus-ring);border-radius:6px;pointer-events:none}
+  .tile .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:var(--r-full);background:#b6ab97;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+
+  /* ── Floating zoom control ── */
+  .zoom{position:absolute;left:var(--sp-4);bottom:var(--sp-4);display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:var(--r-ui);border:1px solid var(--line);background:var(--panel);box-shadow:var(--float-sm);z-index:5}
+  .zoom button{width:30px;height:30px;border:none;background:none;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--muted)}
+  .zoom button:hover{background:var(--panel2);color:var(--ink)}
+  .zoom svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-linecap:round}
+  .zoom .lvl{font-size:var(--fs-xs);font-weight:var(--w-medium);color:var(--muted);min-width:40px;text-align:center}
+
+  /* ── Floating edit panel (desktop) / bottom sheet (mobile) ── */
+  .panel{background:var(--panel);display:flex;flex-direction:column;overflow:hidden}
+  .scroll{flex:1;min-height:0;overflow-y:auto}
+  .grab{width:36px;height:4px;border-radius:var(--r-full);background:var(--line);margin:8px auto 2px;flex:none}
+  .phead{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-4) var(--sp-4) var(--sp-2)}
+  .phead h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-lg);margin:0}
+  .phead .close{margin-left:auto;width:32px;height:32px;border-radius:var(--r-full);border:none;background:var(--panel2);display:grid;place-items:center}
+  .phead .close svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-linecap:round}
+  .pbody{padding:0 var(--sp-4) var(--sp-4)}
+
+  .lbl{display:flex;align-items:baseline;font-size:var(--fs-2xs);font-weight:var(--w-semibold);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:20px 0 10px}
+  .row{display:flex;gap:var(--sp-2);overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .row::-webkit-scrollbar{display:none}
+  .thumb{width:62px;height:62px;flex:none;padding:5px;border-radius:var(--r-sm);background:linear-gradient(135deg,#2b2825,#141210);box-shadow:0 2px 6px rgba(15,12,20,.16);border:1px solid var(--line);cursor:pointer}
+  .thumb .tmat{width:100%;height:100%;padding:5%;background:#f7f4ee}
+  .thumb .tart{width:100%;height:100%;overflow:hidden}
+  .thumb .tart svg,.thumb .tart img{display:block;width:100%;height:100%;object-fit:cover}
+  .thumb.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+  /* frame chips — same primitive as the product page's .mat (renamed .frbtn to avoid the passe-partout .mat) */
+  .frgrid{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+  .frbtn{display:inline-flex;align-items:center;gap:7px;height:var(--btn-sm);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:0 15px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--muted);transition:var(--dur-fast)}
+  .frbtn:hover{color:var(--ink);border-color:var(--faint)}
+  .frbtn.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .frbtn .fsw{width:14px;height:14px;border-radius:var(--r-sm);flex:none;box-shadow:inset 0 0 0 1px rgba(20,16,10,.12)}
+  /* size cards — same primitive as the product page's .optrow */
+  .optrow{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+  .optrow button{flex:1 1 44%;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:11px 6px;font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px;transition:var(--dur-fast)}
+  .optrow button small{font-weight:var(--w-normal);color:var(--muted);font-size:var(--fs-2xs)}
+  .optrow button .sp{font-weight:var(--w-semibold);font-size:var(--fs-xs);font-variant-numeric:tabular-nums}
+  .optrow button:hover{border-color:var(--faint)}
+  .optrow button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .optrow button.on .sp,.optrow button.on small{color:var(--accent-ink)}
+  .llink{margin-left:auto;color:var(--accent-ink);font-size:var(--fs-2xs);font-weight:var(--w-semibold);text-transform:none;letter-spacing:0}
+  .acts{display:flex;gap:var(--sp-2);margin-top:var(--sp-4)}
+  /* secondary button — same primitive as the store's .sell */
+  .ghost{flex:1;height:var(--btn-md);border-radius:var(--r-ui);border:1px solid var(--line);background:var(--panel);color:var(--ink);font-weight:var(--w-semibold);font-size:var(--fs-sm);display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2)}
+  .ghost:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .ghost svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .fileopt{display:flex;align-items:center;gap:var(--sp-2);margin-top:var(--sp-3);font-size:var(--fs-sm);color:var(--muted)}
+  .fileopt .tgl{width:34px;height:20px;border-radius:var(--r-full);background:var(--accent);position:relative;flex:none}
+  .fileopt .tgl::after{content:"";position:absolute;width:16px;height:16px;border-radius:var(--r-full);background:var(--on-dark);top:2px;right:2px}
+  .pcta{flex:none;display:flex;flex-direction:column;align-items:stretch;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--line);background:var(--panel)}
+  .cfg{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-xs);font-weight:var(--w-medium);color:var(--ink);background:var(--panel2);border-radius:var(--r-ui);padding:10px 13px}
+  .cfg svg{width:15px;height:15px;stroke:var(--muted)}
+  .vatnote{font-size:var(--fs-2xs);color:var(--faint);text-align:center;letter-spacing:.01em}
+  .pcta .tot{display:flex;flex-direction:column;line-height:1.15}
+  .pcta .tot small{font-size:var(--fs-xs);color:var(--muted)} .pcta .tot b{font-size:var(--fs-md);font-weight:var(--w-semibold)}
+  /* primary button — same primitive as the product page's .addcart */
+  .btn-lg{width:100%;height:var(--btn-lg);border-radius:var(--r-ui);background:var(--ink);color:var(--bg);border:none;font-weight:var(--w-semibold);font-size:var(--fs-base);display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);transition:filter var(--dur-fast)}
+  .btn-lg:hover{filter:brightness(1.14)}
+  .btn-lg svg{width:17px;height:17px;stroke:currentColor;fill:none}
+  .btn-lg .cp{opacity:.72;font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
+
+  /* ── Mobile bottom tab-steps ── */
+  .mtabs{display:none}
+
+  /* ═══ MOBILE (default) ═══ */
+  @media(max-width:899px){
+    .work{padding:64px var(--sp-3) 0}
+    .work{place-items:start center}
+    .stage{margin-top:var(--sp-2)}
+    .topbar{top:var(--sp-3);padding:0 var(--sp-3)}
+    .etitle{display:none} .dwall{display:none}
+    .zoom{display:none}
+    /* mobile step pill under top bar */
+    .mstep{display:flex;align-items:center;gap:var(--sp-3);position:absolute;top:60px;left:var(--sp-3);right:var(--sp-3);z-index:4;
+      padding:8px var(--sp-3);border-radius:var(--r-ui);background:var(--panel);border:1px solid var(--line);box-shadow:var(--float-sm)}
+    .mstep .lab{font-size:var(--fs-sm);font-weight:var(--w-semibold);white-space:nowrap}
+    .mstep .lab span{color:var(--faint);font-weight:var(--w-normal)}
+    .mstep .segs{display:flex;gap:5px;flex:1}
+    .mstep .segs i{height:4px;flex:1;border-radius:var(--r-full);background:var(--line)}
+    .mstep .segs i.done{background:var(--accent-soft)} .mstep .segs i.on{background:var(--accent)}
+    .work{padding-top:104px}
+    /* floating bottom sheet */
+    .panel{position:fixed;left:8px;right:8px;bottom:8px;max-height:52dvh;border-radius:12px;box-shadow:var(--float-lg);z-index:20}
+    .phead{padding-top:var(--sp-2)}
+  }
+
+  /* ═══ DESKTOP ═══ */
+  @media(min-width:900px){
+    .rail{display:flex}
+    .grab{display:none}
+    .work{padding:84px 372px 84px 40px}
+    .panel{position:absolute;top:80px;right:24px;bottom:24px;width:336px;border-radius:12px;box-shadow:var(--float-md)}
+    .stage{max-width:min(640px, 100%)}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ── Art library ── -->
+<svg class="defs" aria-hidden="true">
+  <defs>
+    <linearGradient id="gDune" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9cfa6"/><stop offset="1" stop-color="#d8a877"/></linearGradient>
+  </defs>
+  <symbol id="artA" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="#ecdfcb"/><circle cx="200" cy="205" r="150" fill="#c8794f"/>
+    <path d="M120 205a80 80 0 0 1 160 0v150H120z" fill="#e7c07a"/><line x1="70" y1="410" x2="330" y2="410" stroke="#3a2b20" stroke-width="4"/>
+  </symbol>
+  <symbol id="artB" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="#eaeee5"/>
+    <path d="M200 480C185 400 220 350 200 270C182 200 214 150 200 60" fill="none" stroke="#7e977f" stroke-width="5" stroke-linecap="round"/>
+    <path d="M200 150c-40-30-78-20-96-42" fill="none" stroke="#7e977f" stroke-width="4"/>
+    <ellipse cx="150" cy="230" rx="42" ry="16" fill="#8fa88f" transform="rotate(-32 150 230)"/>
+    <ellipse cx="252" cy="300" rx="46" ry="17" fill="#9db69d" transform="rotate(28 252 300)"/>
+    <ellipse cx="150" cy="360" rx="40" ry="15" fill="#8fa88f" transform="rotate(-30 150 360)"/>
+  </symbol>
+  <symbol id="artC" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="#efe7d7"/>
+    <path d="M150 90c70-30 150 10 120 90-25 66-120 40-150-10-24-40-20-58 30-80z" fill="#b7a7e0"/>
+    <path d="M120 300c60-40 170-20 150 60-14 56-120 78-176 30-40-34-16-70 26-90z" fill="#cf9f86"/>
+    <path d="M250 250c40 6 60 40 44 70" fill="none" stroke="#3a2b20" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="artD" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="url(#gDune)"/><circle cx="290" cy="130" r="46" fill="#f2e2c2"/>
+    <path d="M0 320c90-50 150 20 220-10s120-40 180-10v210H0z" fill="#c98a5c"/>
+    <path d="M0 400c110-40 180 30 260 0s90-20 140-6v116H0z" fill="#a9673f"/>
+  </symbol>
+  <symbol id="artE" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="#e8e0d0"/>
+    <path d="M200 90a110 110 0 0 1 0 220z" fill="#cf9f6a"/><path d="M200 90a110 110 0 0 0 0 220z" fill="#9aa7b8"/>
+    <rect x="70" y="330" width="120" height="120" fill="#c07d64"/>
+    <circle cx="300" cy="390" r="60" fill="none" stroke="#3a2b20" stroke-width="6"/>
+  </symbol>
+  <symbol id="artF" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="500" fill="#eee7d9"/>
+    <path d="M150 70c-60 34-58 150-6 190-46 40-38 150 60 160 84 8 120-70 96-140 60-30 44-150-30-180-40-16-84-6-120-30z" fill="none" stroke="#1a1917" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="176" cy="200" r="9" fill="#1a1917"/>
+    <path d="M150 300c40 30 90 26 120-6" fill="none" stroke="#c8794f" stroke-width="6" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<div class="app">
+
+  <!-- Left tool/step rail (desktop) -->
+  <nav class="rail">
+    <div class="rlogo">L</div>
+    <button class="rtool"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><small>Layout</small></button>
+    <button class="rtool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg></span><small>Size</small></button>
+    <button class="rtool on"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg></span><small>Artworks</small></button>
+    <button class="rtool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span><small>Preview</small></button>
+    <button class="rtool"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></span><small>Cart</small></button>
+    <span class="rspring"></span>
+    <button class="rtool"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .8-1 1.7"/><path d="M12 17h.01"/></svg></span><small>Help</small></button>
+  </nav>
+
+  <!-- Canvas work area -->
+  <div class="work">
+
+    <!-- floating top bar -->
+    <div class="topbar">
+      <button class="fbtn" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="etitle">Build your wall</span>
+      <button class="drop"><svg class="lead" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Salon<svg class="cv" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="drop dwall"><svg class="lead" viewBox="0 0 24 24"><path d="M3 6h18M3 6v12M21 6v12M3 18h18"/></svg><b>240×150 cm</b><svg class="cv" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="tspring"></span>
+      <button class="cartpill"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>$318</button>
+    </div>
+
+    <!-- mobile step pill -->
+    <div class="mstep">
+      <span class="lab">Step 3/5 <span>· Artworks</span></span>
+      <span class="segs"><i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i></span>
+    </div>
+
+    <!-- floating room -->
+    <div class="stage">
+      <span class="ruler"><svg viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg>Wall <b>240 × 150 cm</b></span>
+      <div class="room">
+        <div class="floor"></div><div class="skirt"></div>
+        <div class="console"><div class="top"></div><div class="body"></div></div>
+
+        <div class="tile" style="left:12%;top:12%;width:20%;height:30%"><div class="frame walnut"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile sel" style="left:35%;top:7%;width:27%;height:40%"><div class="frame black"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1612623753207-96465febeee7?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:66%;top:11%;width:21%;height:31%"><div class="frame oak"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1602464729960-f95937746b68?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:18%;top:47%;width:19%;height:22%"><div class="frame oak"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:40.5%;top:50%;width:18%;height:22%"><div class="frame white"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:61%;top:47%;width:22%;height:23%"><div class="frame black"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+      </div>
+    </div>
+
+    <!-- floating zoom control (desktop) -->
+    <div class="zoom">
+      <button aria-label="Cofnij"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
+      <button aria-label="Pomniejsz"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      <span class="lvl">100%</span>
+      <button aria-label="Powiększ"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+
+    <!-- floating edit panel / bottom sheet -->
+    <aside class="panel">
+      <div class="grab"></div>
+      <div class="phead">
+        <h3>Center piece</h3>
+        <button class="close" aria-label="Done"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="scroll"><div class="pbody">
+        <div class="lbl">From the Latenca collection</div>
+        <div class="row">
+          <button class="thumb on"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1612623753207-96465febeee7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+          <button class="thumb"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1602464729960-f95937746b68?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+          <button class="thumb"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+          <button class="thumb"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+          <button class="thumb"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+          <button class="thumb"><div class="tmat"><div class="tart"><img src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></div></button>
+        </div>
+        <div class="lbl">Frame</div>
+        <div class="frgrid">
+          <button class="frbtn on"><span class="fsw" style="background:linear-gradient(135deg,#2b2825,#141210)"></span>Black</button>
+          <button class="frbtn"><span class="fsw" style="background:linear-gradient(135deg,#fff,#ece6db)"></span>White</button>
+          <button class="frbtn"><span class="fsw" style="background:linear-gradient(135deg,#dcb884,#b48a4d)"></span>Oak</button>
+          <button class="frbtn"><span class="fsw" style="background:linear-gradient(135deg,#71503a,#3c2517)"></span>Walnut</button>
+          <button class="frbtn"><span class="fsw" style="background:repeating-linear-gradient(45deg,#ddd,#ddd 3px,#fff 3px,#fff 6px)"></span>No frame</button>
+        </div>
+        <div class="lbl">Print size <a class="llink">Size guide</a></div>
+        <div class="optrow">
+          <button>30×40 <small>cm</small><span class="sp">$39</span></button>
+          <button class="on">40×50 <small>cm</small><span class="sp">$59</span></button>
+          <button>50×70 <small>cm</small><span class="sp">$79</span></button>
+          <button>70×100 <small>cm</small><span class="sp">$109</span></button>
+        </div>
+        <div class="acts">
+          <button class="ghost"><svg viewBox="0 0 24 24"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/></svg>Swap position</button>
+          <button class="ghost"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Remove</button>
+        </div>
+        <div class="fileopt"><span class="tgl"></span>Also add as a downloadable file (+$12)</div>
+      </div></div>
+      <div class="pcta">
+        <div class="cfg"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Wall · 6 artworks · Salon layout</div>
+        <button class="btn-lg"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>Add wall to cart <span class="cp">· $318</span></button>
+        <div class="vatnote">incl. VAT · free shipping over $60</div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+</body>
+</html>

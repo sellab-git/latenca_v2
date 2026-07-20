@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Aria Vela</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     LATENCA — Creator profile · same design tokens as Explore/Product/Cart
+     ============================================================ */
+  :root{
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#847F76; --faint:#B4AEA3; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA;
+    --media:#E7E0D3;
+    --on-dark:#fff;
+    --ink-strong:#141018;
+    --glass:rgba(20,16,26,.75);
+    --grad-a:#c9bff2; --grad-b:#8f7fe0;
+    --ok:#3f9d6d; --err:#c0553f;
+    --r-tile:2px; --r-sm:4px;    --shadow-1:0 6px 16px rgba(20,16,10,.20);
+    --shadow-2:0 12px 28px rgba(20,16,10,.30);
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --shadow-drawer:-14px 0 40px rgba(15,12,20,.18); /* side drawers/panels (directional) */
+    --shadow-bar:0 -8px 24px rgba(15,12,20,.08);      /* sticky bottom bars */
+    --ring:0 0 0 3px var(--accent-soft);
+    --icon:20px; --iconbtn:40px;   /* icon system — touch-first; Ideogram = 18/36 */
+    /* Type scale — brand logo & hero use display sizes off this scale */
+    --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-base:14px; --fs-md:16px; --fs-lg:20px; --fs-xl:24px; --fs-2xl:32px;
+    /* Weight — 3 only (Ideogram-calm, no 700) */
+    --w-normal:400; --w-medium:500; --w-semibold:600;
+    /* Line-height */
+    --lh-tight:1.2; --lh-base:1.5;
+    /* Spacing — 4pt grid */
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-12:48px;
+    /* Buttons — 3 fixed heights: sm compact / md default (== --iconbtn) / lg primary CTA */
+    --btn-sm:36px; --btn-md:40px; --btn-lg:48px;
+    /* Motion — 3 durations + 2 easings */
+    --dur-fast:.15s; --dur-base:.25s; --dur-slow:.4s;
+    --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1);
+    /* Z-index — layer scale (tile-internal z2/3/4 stay local) */
+    --z-sticky:100; --z-header:200; --z-dropdown:300; --z-tabbar:400; --z-scrim:500; --z-panel:600; --z-toast:700;
+    /* Focus ring — single source (WCAG 2.2) */
+    --focus-ring:2px solid var(--accent);
+    --serif:'Lora',Georgia,"Times New Roman",serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33;
+    --media:#1b1826; --err:#e0715c;
+  }
+
+  /* ── Base ── */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  html{overflow-x:clip}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);-webkit-font-smoothing:antialiased;overflow-x:clip;transition:background var(--dur-base),color var(--dur-base)}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  :focus-visible{outline:var(--focus-ring);outline-offset:2px}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+
+  /* ── Reusable buttons / chrome (identical to Explore/Product/Cart) ── */
+  .signin{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold)}
+  .sell{display:flex;align-items:center;gap:var(--sp-2);border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink)}
+  .sell:hover{border-color:var(--accent);color:var(--accent)}
+  .signin,.sell,.pfollow,.gtab,.crumb b,.crumb a,.loadmore .more{white-space:nowrap}
+  .brand .mark{display:none}
+  .sidehead{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);position:relative;height:40px}
+  /* menu toggle — always visible in the top bar (getimg-style), outside the sidebar */
+  .railtoggle{width:40px;height:40px;flex:none;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background var(--dur-fast),color var(--dur-fast)}
+  .railtoggle:hover{background:var(--panel2);color:var(--ink)}
+  .railtoggle svg{width:19px;height:19px}
+  @media(max-width:820px){.railtoggle{display:none}}
+  .app.rail{grid-template-columns:64px minmax(0,1fr)}
+  .app.rail .side{padding:14px 8px 24px}
+  .app.rail .sidehead{justify-content:center}
+  .app.rail .brand{text-align:center;font-size:var(--fs-lg);padding:2px 0}
+  .app.rail .brand .full{display:none}
+  .app.rail .brand .mark{display:inline}
+  /* (menu toggle now lives in the top bar) */
+  .app.rail .nav,.app.rail .sell,.app.rail .account{justify-content:center;gap:0;width:37px;height:37px;padding:0;align-self:center}
+  .app.rail .nav>span,.app.rail .sell>span,.app.rail .account .who{display:none}
+  /* rail buttons are square 40×40 (set in the combined rule above) */
+  .app{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}
+  .side{border-right:1px solid var(--line);padding:14px 16px 24px;display:flex;flex-direction:column;gap:var(--sp-6);position:sticky;top:0;height:100vh;background:var(--bg)}
+  .brand{font-family:var(--serif);font-size:23px;line-height:var(--lh-tight);padding:2px 8px;font-weight:var(--w-semibold)}
+  .navgroup{display:flex;flex-direction:column;gap:2px}
+  .nav{display:flex;align-items:center;gap:var(--sp-3);padding:9px 10px;border-radius:var(--r-ui);color:var(--muted);font-size:var(--fs-base);font-weight:var(--w-medium)}
+  .nav svg{width:19px;height:19px}
+  .nav:hover{background:var(--panel2);color:var(--ink)}
+  .nav.active{background:var(--accent-soft);color:var(--accent)}
+  .side .spacer{flex:1}
+  .sell{justify-content:center;padding:11px}
+  .sell svg{width:16px;height:16px}
+  .account{display:flex;align-items:center;gap:var(--sp-3);padding:7px 8px;border-radius:var(--r-ui)}
+  .account:hover{background:var(--panel2)}
+  .avatar{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .account .who{font-size:var(--fs-sm);font-weight:var(--w-semibold);line-height:var(--lh-tight)}
+  .account .who small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-2xs)}
+  .main{--mainpad:clamp(20px,3.2vw,44px);padding:0 var(--mainpad) 70px;min-width:0}
+  .topbar{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:var(--sp-2);margin:0 calc(var(--mainpad) * -1);padding:14px 18px 12px 12px;background:var(--bg);border-bottom:1px solid transparent;transition:border-color var(--dur-base)}
+  .topbar.stuck{border-color:var(--line)}
+  .searchwrap{position:relative;flex:0 1 640px;margin-inline:auto;min-width:0}
+  .search{width:100%;min-width:0;display:flex;align-items:center;gap:var(--sp-3);background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:11px 16px;color:var(--muted);font-size:var(--fs-base);text-align:left}
+  .search span:not(.kbd){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .search svg{width:17px;height:17px;stroke:var(--faint)}
+  .search .kbd{margin-left:auto;font-size:var(--fs-2xs);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 7px;color:var(--faint)}
+  /* search dropdown — same component as Explore */
+  .search.act{border-color:var(--accent);box-shadow:var(--ring)}
+  .sdrop{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-ui);box-shadow:var(--shadow-pop);padding:8px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:var(--dur-fast);z-index:var(--z-dropdown)}
+  .sdrop.open{opacity:1;transform:none;pointer-events:auto}
+  .shint{display:flex;align-items:center;gap:var(--sp-2);padding:9px 11px;margin:2px 2px 6px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r-ui);font-size:var(--fs-xs);font-weight:var(--w-semibold)}
+  .shint svg{width:15px;height:15px}
+  .sgroup{padding:4px 2px}
+  .slabel{font-size:var(--fs-2xs);letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);padding:6px 10px 4px}
+  .sitem{display:flex;align-items:center;gap:var(--sp-3);padding:8px 10px;border-radius:var(--r-ui);font-size:var(--fs-sm);color:var(--ink)}
+  .sitem:hover{background:var(--panel2)}
+  .sitem svg{width:15px;height:15px;stroke:var(--muted)}
+  .sitem .av{width:20px;height:20px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .sitem .tag{margin-left:auto;font-size:var(--fs-2xs);color:var(--faint)}
+  .topbar .right{display:flex;align-items:center;gap:var(--sp-2)}
+  .icobtn{width:40px;height:40px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);position:relative}
+  .icobtn:hover{background:var(--panel2);color:var(--ink)}
+  .icobtn svg{width:19px;height:19px}
+  .cart .badge{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 4px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);font-size:var(--fs-2xs);font-weight:var(--w-semibold);display:flex;align-items:center;justify-content:center}
+  .signin{margin-left:6px;padding:9px 16px}
+  .crumb{display:inline-flex;align-items:center;gap:var(--sp-2);color:var(--muted);font-size:var(--fs-sm);margin:16px 0 0}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--faint)}
+  .crumb b{color:var(--ink);font-weight:var(--w-medium)}
+
+  /* ============================================================
+     CREATOR PROFILE — calm, Ideogram-minimal (no loud banner)
+     ============================================================ */
+  .profile{margin-top:22px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .phead{display:flex;align-items:flex-start;gap:var(--sp-6)}
+  .pav{width:88px;height:88px;flex:none;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));box-shadow:var(--shadow-1);display:flex;align-items:center;justify-content:center;color:var(--on-dark);font-family:var(--serif);font-size:var(--fs-2xl);font-weight:var(--w-medium);letter-spacing:.02em}
+  .pid{flex:1;min-width:0}
+  .pname{font-family:var(--serif);font-weight:var(--w-medium);font-size:clamp(23px,3vw,30px);line-height:var(--lh-tight);margin:2px 0 0;display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap}
+  .vbadge{display:inline-flex;align-items:center;gap:var(--sp-1);background:var(--accent-soft);color:var(--accent);border-radius:var(--r-ui);padding:4px 10px;font-size:var(--fs-2xs);font-weight:var(--w-semibold);font-family:var(--sans)}
+  .vbadge svg{width:13px;height:13px}
+  .pbio{color:var(--muted);font-size:var(--fs-base);line-height:var(--lh-base);margin:11px 0 0;max-width:60ch}
+  .pmeta2{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;margin-top:11px;color:var(--faint);font-size:var(--fs-xs)}
+  .pmeta2 span{display:inline-flex;align-items:center;gap:var(--sp-2)}
+  .pmeta2 svg{width:14px;height:14px}
+  .pmeta2 .sep{color:var(--line)}
+  .pactions{display:flex;align-items:center;gap:var(--sp-2);flex:none}
+  .pfollow{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:10px 18px;font-size:var(--fs-sm);font-weight:var(--w-semibold);transition:filter var(--dur-fast),background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast)}
+  .pfollow svg{width:15px;height:15px}
+  .pfollow:hover{filter:brightness(1.14)}
+  .pfollow.on{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:9px 17px}
+  .pfollow.on:hover{border-color:var(--accent);color:var(--accent);filter:none}
+
+  /* stat row — horizontal, big number / small label (Ideogram-style) */
+  .pstats{display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,44px);margin-top:22px;padding-left:110px}
+  .stat b{display:block;font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums;line-height:1}
+  .stat span{display:block;font-size:var(--fs-xs);color:var(--muted);margin-top:4px}
+  .stat .star{stroke:none;fill:var(--accent);width:15px;height:15px;vertical-align:-2px;margin-right:2px}
+
+  /* slim provenance line — our AI-art trust signal (one line, not a banner) */
+  .provenance{display:flex;align-items:center;gap:var(--sp-2);margin-top:20px;padding-left:110px;font-size:var(--fs-xs);color:var(--muted)}
+  .provenance svg{width:16px;height:16px;stroke:var(--accent)}
+  .provenance b{color:var(--ink);font-weight:var(--w-semibold)}
+
+  /* sort toolbar — same pills as Explore/Product, but left-aligned like a catalog toolbar (aligns with the grid) */
+  .gtabs{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin:22px 0 16px}
+  .gtabs .tabs{display:flex;gap:var(--sp-2);min-width:0;flex-wrap:wrap}
+  .gcount{font-size:var(--fs-xs);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .gtab{padding:8px 16px;border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-medium);color:var(--muted);transition:background var(--dur-fast),color var(--dur-fast);white-space:nowrap}
+  .gtab:hover{background:var(--panel2);color:var(--ink)}
+  .gtab.on{background:var(--accent-soft);color:var(--accent)}
+
+  /* works grid — same masonry tile component as Explore/Product */
+  .grid{column-count:5;column-gap:10px}
+  @media(min-width:2100px){.grid{column-count:6}}
+  @media(max-width:1440px){.grid{column-count:4}}
+  @media(max-width:1040px){.grid{column-count:3}}
+  @media(max-width:640px){.grid{column-count:2}}
+  .tile{break-inside:avoid;margin-bottom:10px;position:relative;border-radius:var(--r-tile);overflow:hidden;background:var(--media);display:block}
+  .tile img{width:100%;display:block;transition:transform var(--dur-slow) ease}
+  .tile:hover img{transform:scale(1.04)}
+  .tgrad{position:absolute;inset:0;opacity:0;transition:opacity var(--dur-fast);pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.32),transparent 26%),linear-gradient(to top,rgba(0,0,0,.44),transparent 40%)}
+  .tile:hover .tgrad{opacity:1}
+  .fav{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.42);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;z-index:3;transition:background var(--dur-fast)}
+  .fav:hover{background:rgba(20,16,26,.8)}
+  .fav svg{width:16px;height:16px}
+  .acts{position:absolute;top:8px;right:8px;display:flex;gap:var(--sp-2);opacity:0;transform:translateY(-3px);transition:var(--dur-fast);z-index:3}
+  .tile:hover .acts{opacity:1;transform:none}
+  .tbtn{width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.5);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+  .tbtn:hover{background:rgba(20,16,26,.82)}
+  .tbtn svg{width:16px;height:16px}
+  .tbtn .dots circle{fill:currentColor}
+  /* creator page: tile shows the work title + price only (no author — you're on their page) */
+  .info{position:absolute;left:10px;right:48px;bottom:10px;color:var(--on-dark);opacity:0;transform:translateY(3px);transition:var(--dur-fast);z-index:3}
+  .tile:hover .info{opacity:1;transform:none}
+  .info .t{font-family:var(--serif);font-size:var(--fs-sm);font-weight:var(--w-medium);line-height:var(--lh-tight);text-shadow:0 1px 3px rgba(0,0,0,.55);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+  .info .p{font-size:var(--fs-2xs);opacity:.92;margin-top:2px;font-variant-numeric:tabular-nums;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+
+  /* load more (same as Explore/Product) */
+  .loadmore{display:flex;flex-direction:column;align-items:center;gap:var(--sp-3);margin:34px 0 0}
+  .loadmore .txt{font-size:var(--fs-xs);color:var(--muted);font-variant-numeric:tabular-nums}
+  .loadmore .more{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-sm);font-weight:var(--w-semibold);color:var(--ink);padding:11px 28px;transition:border-color var(--dur-fast),color var(--dur-fast)}
+  .loadmore .more:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ── Responsive ── */
+  .brand-m{display:none}
+  @media(max-width:820px){
+    .app,.app.rail{grid-template-columns:minmax(0,1fr)}
+    .side{display:none}
+    .main{--mainpad:clamp(14px,4vw,26px);padding:0 var(--mainpad) 80px}
+    .topbar{gap:var(--sp-3)}
+    .searchwrap{flex:1;margin-inline:0}
+    .brand-m{display:block;font-family:var(--serif);font-size:22px;font-weight:var(--w-semibold)}
+    #themeBtn,.topbar [title="Saved"],.signin{display:none}
+    .search .kbd{display:none}
+  }
+  @media(max-width:640px){
+    .phead{flex-wrap:wrap;gap:var(--sp-4)}
+    .pav{width:70px;height:70px}
+    .pactions{order:3;width:100%}
+    .pfollow{flex:1;justify-content:center}
+    .pstats,.provenance{padding-left:0}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+  /* ── ICON SYSTEM — single source of truth. Switch to Ideogram = set --icon:18px; --iconbtn:36px in :root ── */
+  .nav svg,.icobtn svg,.railtoggle svg,.fav svg,.tbtn svg{width:var(--icon);height:var(--icon)}
+  .icobtn,.railtoggle,.fav,.tbtn{width:var(--iconbtn);height:var(--iconbtn)}
+  .nav{min-height:var(--iconbtn)}
+  .app.rail .nav,.app.rail .sell,.app.rail .account{width:var(--iconbtn);height:var(--iconbtn)}
+  .info .a .dot{width:24px;height:24px}
+
+  /* == BUTTON SYSTEM — one fixed height per tier, every button of a tier is pixel-identical. Retune feel = change --btn-sm/md/lg only. ==
+     lg = primary CTA (buy / pay / hero)  ·  md = default  ·  sm = compact toggle */
+  .addcart,.paymain,.xpay,.btn{height:var(--btn-lg)}
+  .signin,.sell,.more,.loadmore .more,.frameToggle,.cont,.checkout,.papply,.pfollow{height:var(--btn-md)}
+  .pill,.cbtn,.gtab,.mat,.seg button,.addx,.follow,.allf,.drop{height:var(--btn-sm)}
+  .addcart,.paymain,.xpay,.btn,.signin,.sell,.more,.loadmore .more,.frameToggle,.cont,.checkout,.papply,.pfollow,.pill,.cbtn,.gtab,.mat,.seg button,.addx,.follow,.allf,.drop{padding-top:0;padding-bottom:0;line-height:1}
+  /* centering for buttons that were block/inline (already-flex buttons keep their layout; .frameToggle keeps its space-between) */
+  .signin,.btn,.papply,.pill,.cbtn,.gtab,.mat,.addx,.pfollow,.checkout{display:inline-flex;align-items:center;justify-content:center}
+  .cont{display:flex;align-items:center;justify-content:center}
+  /* icon buttons that slipped the icon system -> square 40 like the rest */
+  .dclose,.pclose,.sact{width:var(--iconbtn);height:var(--iconbtn)}
+
+  /* == FORM SYSTEM — text fields share the button height (40) + one padding/focus. bg stays contextual (panel on bg / bg on panel = keeps contrast). == */
+  .field input,.field select,.promobody input,.search,.fsearch{height:var(--btn-md);padding-top:0;padding-bottom:0}
+  .field input,.field select,.promobody input{padding-left:14px;padding-right:14px;font-size:var(--fs-base)}
+  .field input::placeholder,.promobody input::placeholder{color:var(--faint)}
+  .field input:focus,.field select:focus,.promobody input:focus{outline:0;border-color:var(--accent);box-shadow:var(--ring)}
+
+  /* == FOCUS SYSTEM — one visible ring on everything keyboard-reachable (WCAG 2.2). Global :focus-visible covers buttons/links/tiles/nav; borderless-input wrappers use :focus-within. == */
+  .fsearch:focus-within{border-color:var(--accent);box-shadow:var(--ring)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="sidehead">
+      <div class="brand"><span class="full">Latenca</span><span class="mark">L</span></div>
+    </div>
+    <div class="navgroup">
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Explore</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Collections</span></a>
+      <a class="nav active"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Creators</span></a>
+    </div>
+    <div class="spacer"></div>
+    <a class="sell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Sell your art</span></a>
+    <a class="account"><span class="avatar"></span><span class="who">Studio Latenca<small>Curator</small></span></a>
+  </aside>
+
+  <main class="main">
+    <div class="topbar" id="topbar">
+      <button class="railtoggle" id="railToggle" title="Collapse menu"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
+      <a class="brand-m">Latenca</a>
+      <div class="searchwrap">
+        <button class="search" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Try &ldquo;calm terracotta abstract for a bedroom&rdquo;&hellip;</span><span class="kbd">&#8984;K</span></button>
+        <div class="sdrop" id="sdrop">
+          <div class="shint"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Describe what you want — our AI search understands it</div>
+          <div class="sgroup"><div class="slabel">Popular subjects</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Abstract<span class="tag">612 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Celestial &amp; space<span class="tag">470 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Minimalist line art<span class="tag">320 works</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Collections</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Celestial Echoes<span class="tag">26 pieces</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Nordic Calm<span class="tag">40 pieces</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Creators</div>
+            <a class="sitem"><span class="av"></span>Aria Vela<span class="tag">Curator</span></a>
+            <a class="sitem"><span class="av"></span>Studio Vreeken<span class="tag">Creator</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="icobtn" id="themeBtn" title="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/></svg></button>
+        <button class="icobtn" title="Saved"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+        <button class="icobtn cart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span class="badge">2</span></button>
+        <button class="signin">Sign in</button>
+      </div>
+    </div>
+
+    <nav class="crumb"><a>Creators</a><span class="sep">&middot;</span><b>Aria Vela</b></nav>
+
+    <!-- Profile header — calm, no banner -->
+    <section class="profile">
+      <div class="phead">
+        <span class="pav">AV</span>
+        <div class="pid">
+          <h1 class="pname">Aria Vela <span class="vbadge"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verified creator</span></h1>
+          <p class="pbio">Calm, painterly abstractions in deep indigo and warm terracotta — made for quiet walls and slow mornings. Each piece is hand-curated and printed to last.</p>
+          <div class="pmeta2">
+            <span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Joined 2024</span>
+            <span class="sep">&middot;</span>
+            <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Lisbon, Portugal</span>
+          </div>
+        </div>
+        <div class="pactions">
+          <button class="pfollow" id="followBtn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span id="followTxt">Follow</span></button>
+          <button class="icobtn" id="shareBtn" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+          <button class="icobtn" title="More"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>
+        </div>
+      </div>
+
+      <div class="pstats">
+        <div class="stat"><b>84</b><span>Works</span></div>
+        <div class="stat"><b id="followerCount">1,240</b><span>Followers</span></div>
+        <div class="stat"><b><svg class="star" viewBox="0 0 24 24"><path d="M12 3l2.5 5.3 5.5.7-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.5-.7z"/></svg>4.8</b><span>Rating &middot; 128 reviews</span></div>
+        <div class="stat"><b>3,400+</b><span>Sold</span></div>
+      </div>
+
+      <div class="provenance"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><span>Every piece ships with a <b>signed certificate of authenticity</b> &amp; full provenance</span></div>
+    </section>
+
+    <!-- Sort toolbar -->
+    <div class="gtabs" id="gtabs">
+      <div class="tabs">
+        <button class="gtab on" data-t="0">All works</button>
+        <button class="gtab" data-t="1">Latest</button>
+        <button class="gtab" data-t="2">Popular</button>
+      </div>
+      <span class="gcount">84 works</span>
+    </div>
+
+    <section class="grid" id="grid"></section>
+    <div class="loadmore">
+      <div class="txt">Showing <span id="galShown">20</span> of 84 works</div>
+      <button class="more" id="galMore">Load more</button>
+    </div>
+  </main>
+</div>
+
+<script>
+  const ART=["photo-1605721911519-3dfeb3be25e7","photo-1612623753207-96465febeee7","photo-1602464729960-f95937746b68","photo-1533157950006-c38844053d55","photo-1615184697985-c9bde1b07da7","photo-1618331833071-ce81bd50d300","photo-1541512416146-3cf58d6b27cc","photo-1541961017774-22349e4a1262","photo-1533158388470-9a56699990c6","photo-1604871000636-074fa5117945","photo-1552250575-e508473b090f","photo-1622542796254-5b9c46ab0d2f","photo-1548362851-ea052637ad64","photo-1444703686981-a3abbc4d4fe3","photo-1502134249126-9f3755a50d78","photo-1465101162946-4377e57745c3","photo-1464802686167-b939a6910659","photo-1566345984367-fa2ba5cedc17","photo-1538370965046-79c0d6907d47","photo-1462331940025-496dfbfc7564","photo-1528722828814-77b9b83aafb2","photo-1462332420958-a05d1e002413"];
+  const url=(id,w,h)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+  const R=[[560,747],[560,784],[560,560],[560,420],[560,700],[560,747]];
+  const TITLES=["Nebula Bloom","Ion Drift","Violet Hour","Aurora No. 7","Ember Field","Pale Fire","Meridian","Soft Machine","Undertow","Signal","Dust & Gold","Quiet Static","Terra Nova","Slow Tide","Halo","Cinder","Moonwater","Drift No. 3","Warm Fold","Deep Field"];
+  const PRICES=[39,49,59,45,55,42,69,52,48,44,58,46,62,50,47,53,41,57,49,60];
+
+  const heartI='<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>';
+  const shareI='<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+  const moreI='<svg class="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+
+  let sortTab=0, galN=20;
+  function renderGrid(){
+    const off=sortTab;
+    document.getElementById('grid').innerHTML=Array.from({length:galN},(_,i)=>{
+      const idx=(i+off*2)%ART.length;
+      const [iw,ih]=R[(i+off)%R.length];
+      const t=TITLES[(i+off*3)%TITLES.length], p=PRICES[(i+off)%PRICES.length];
+      return `<a class="tile"><img src="${url(ART[idx],iw,ih)}" alt="${t}"><span class="tgrad"></span><button class="fav" title="Save">${heartI}</button><span class="acts"><button class="tbtn" title="More">${moreI}</button><button class="tbtn" title="Share">${shareI}</button></span><span class="info"><span class="t">${t}</span><span class="p">from $${p}</span></span></a>`;
+    }).join('');
+    document.getElementById('galShown').textContent=galN;
+  }
+  renderGrid();
+  document.querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.gtab').forEach(x=>x.classList.toggle('on',x===b));sortTab=+b.dataset.t;galN=20;renderGrid();});
+  document.getElementById('galMore').onclick=()=>{galN=Math.min(galN+20,84);renderGrid();document.getElementById('galShown').textContent=galN;};
+
+  // follow toggle
+  const followBtn=document.getElementById('followBtn'), followTxt=document.getElementById('followTxt'), fc=document.getElementById('followerCount');
+  let following=false, base=1240;
+  followBtn.onclick=()=>{following=!following;followBtn.classList.toggle('on',following);followTxt.textContent=following?'Following':'Follow';fc.textContent=(base+(following?1:0)).toLocaleString('en-US');};
+
+  // share
+  document.getElementById('shareBtn').onclick=async e=>{const b=e.currentTarget,t=b.title;try{if(navigator.share){await navigator.share({title:document.title,url:location.href});}else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);b.title='Link copied';setTimeout(()=>b.title=t,1500);}}catch(err){}};
+
+  // theme + rail (shared chrome)
+  const sun='<circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/>';
+  const moon='<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/>';
+  const root=document.documentElement, icon=document.getElementById('themeIcon');
+  document.getElementById('themeBtn').onclick=()=>{const d=root.dataset.theme!=='dark';root.dataset.theme=d?'dark':'light';icon.innerHTML=d?moon:sun;};
+  document.getElementById('railToggle').onclick=()=>document.querySelector('.app').classList.toggle('rail');
+  const tb=document.getElementById('topbar');
+  new IntersectionObserver(([e])=>tb.classList.toggle('stuck',e.intersectionRatio<1),{threshold:[1]}).observe(tb);
+
+  // search dropdown — same component/behaviour as Explore
+  const searchBtn=document.getElementById('searchBtn'), sdrop=document.getElementById('sdrop');
+  const openSearch=()=>{sdrop.classList.add('open');searchBtn.classList.add('act');};
+  const closeSearch=()=>{sdrop.classList.remove('open');searchBtn.classList.remove('act');};
+  searchBtn.onclick=e=>{e.stopPropagation();sdrop.classList.contains('open')?closeSearch():openSearch();};
+  document.addEventListener('click',e=>{if(!e.target.closest('.searchwrap'))closeSearch();});
+</script>
+</body>
+</html>

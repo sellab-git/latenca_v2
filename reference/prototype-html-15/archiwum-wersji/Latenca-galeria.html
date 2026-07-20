@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca</title>
+<style>
+  :root{
+    --bg:#F6F3ED;            /* warm off-white, Ideogram-like */
+    --panel:#FBF9F5;
+    --ink:#1A1917;
+    --muted:#8A857C;
+    --faint:#B4AEA3;
+    --line:#E7E2D8;
+    --accent:#7C6CF0;        /* soft violet */
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  .app{display:grid;grid-template-columns:244px 1fr;min-height:100vh}
+
+  /* ---------- Sidebar ---------- */
+  .side{border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh}
+  .brand{font-family:var(--serif);font-size:26px;letter-spacing:.01em;padding:4px 8px}
+  .brand b{font-weight:600}
+  .navgroup{display:flex;flex-direction:column;gap:2px}
+  .navlabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:6px 10px 4px}
+  .nav{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:10px;color:#4b473f;font-size:14.5px;font-weight:500}
+  .nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.6}
+  .nav:hover{background:#efeadf}
+  .nav.active{background:#ece4f7;color:#3a2f6b}
+  .nav.active svg{stroke:var(--accent)}
+  .side .spacer{flex:1}
+  .account{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px}
+  .account:hover{background:#efeadf}
+  .avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#c9bff2,#8f7fe0)}
+  .account .who{font-size:13.5px;font-weight:600}
+  .account .who small{display:block;color:var(--muted);font-weight:400;font-size:11.5px}
+
+  /* ---------- Main ---------- */
+  .main{padding:34px clamp(20px,4vw,52px) 60px;max-width:1500px}
+  .hero{text-align:center;padding:14px 0 26px}
+  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4.4vw,52px);letter-spacing:-.01em;margin:0 0 22px}
+  .search{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:13px 20px;color:var(--muted);font-size:15px;box-shadow:0 1px 2px rgba(26,25,23,.03)}
+  .search svg{width:18px;height:18px;stroke:var(--faint);fill:none;stroke-width:1.8}
+
+  /* featured */
+  .feat-head{display:flex;align-items:baseline;justify-content:space-between;margin:30px 0 12px}
+  .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .feat-head h2{font-family:var(--serif);font-weight:500;font-size:21px;margin:4px 0 0}
+  .viewall{font-size:12.5px;color:var(--muted)}
+  .featured{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:8px}
+  .fcard{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:16/10;background:#e9e3d8}
+  .fcard img{width:100%;height:100%;object-fit:cover;display:block}
+  .fcard .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff}
+  .fcard .cap h3{font-family:var(--serif);font-weight:500;font-size:16px;margin:0}
+  .fcard .cap p{margin:2px 0 0;font-size:11.5px;opacity:.82;letter-spacing:.04em;text-transform:uppercase}
+
+  /* filter bar */
+  .filters{display:flex;align-items:center;gap:10px;margin:26px 0 20px;flex-wrap:wrap}
+  .pill{padding:8px 16px;border-radius:999px;font-size:13.5px;font-weight:500;color:#5a554c;cursor:pointer}
+  .pill:hover{background:#efeadf}
+  .pill.active{background:var(--ink);color:#fff}
+  .filters .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+  .filters .right{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .drop{display:flex;align-items:center;gap:6px;padding:8px 13px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:#5a554c;background:var(--panel)}
+  .drop svg{width:13px;height:13px;stroke:var(--faint);fill:none;stroke-width:2}
+  .searchmini{display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);background:var(--panel)}
+  .searchmini svg{width:14px;height:14px;stroke:var(--faint);fill:none;stroke-width:2}
+
+  /* masonry */
+  .grid{column-count:4;column-gap:14px}
+  @media(max-width:1200px){.grid{column-count:3}}
+  .tile{break-inside:avoid;margin-bottom:14px;position:relative;border-radius:14px;overflow:hidden;background:#e9e3d8;cursor:pointer}
+  .tile img{width:100%;display:block}
+  .heart{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:5px;background:rgba(20,18,16,.42);backdrop-filter:blur(4px);color:#fff;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:600;opacity:0;transition:opacity .16s}
+  .heart svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2}
+  .tile:hover .heart{opacity:1}
+  .meta{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0));color:#fff;opacity:0;transition:opacity .16s}
+  .tile:hover .meta{opacity:1}
+  .meta .t{font-family:var(--serif);font-size:15px;font-weight:500;line-height:1.2}
+  .meta .row{display:flex;align-items:center;justify-content:space-between;margin-top:5px}
+  .meta .c{font-size:12px;opacity:.82;display:flex;align-items:center;gap:6px}
+  .meta .c .dot{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#c9bff2,#8f7fe0)}
+  .meta .price{font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="brand"><b>Latenca</b></div>
+    <div class="navgroup">
+      <a class="nav active"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Explore</a>
+      <a class="nav"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Collections</a>
+      <a class="nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Creators</a>
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved</a>
+    </div>
+    <div class="navgroup">
+      <div class="navlabel">Browse</div>
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/></svg>Styles</a>
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>Rooms</a>
+      <a class="nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg>Colours</a>
+    </div>
+    <div class="spacer"></div>
+    <a class="account"><span class="avatar"></span><span class="who">Studio Latenca<small>Curator</small></span></a>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <section class="hero">
+      <h1>Find your next piece</h1>
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        Search artwork, styles, creators…
+      </div>
+    </section>
+
+    <div class="feat-head">
+      <div><span class="eyebrow">Curated selection</span><h2>Featured collections</h2></div>
+      <span class="viewall">View all →</span>
+    </div>
+    <section class="featured">
+      <a class="fcard"><img src="https://picsum.photos/seed/lat-f1/640/400" alt=""><span class="cap"><h3>Organic Minimalism</h3><p>18 pieces · New</p></span></a>
+      <a class="fcard"><img src="https://picsum.photos/seed/lat-f2/640/400" alt=""><span class="cap"><h3>Celestial Echoes</h3><p>26 pieces · Popular</p></span></a>
+      <a class="fcard"><img src="https://picsum.photos/seed/lat-f3/640/400" alt=""><span class="cap"><h3>Neo Botanica</h3><p>14 pieces · Trending</p></span></a>
+    </section>
+
+    <div class="filters">
+      <span class="pill active">All</span>
+      <span class="pill">Abstract</span>
+      <span class="pill">Botanical</span>
+      <span class="pill">Landscapes</span>
+      <span class="pill">Space</span>
+      <span class="pill">Animals</span>
+      <span class="right">
+        <span class="drop">Style <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+        <span class="drop">Room <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+        <span class="drop">Colour <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+        <span class="searchmini"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg> Search all…</span>
+      </span>
+    </div>
+
+    <section class="grid" id="grid"></section>
+  </main>
+</div>
+
+<script>
+  const works = [
+    ["Nebula Bloom","Aria Vela","$39","1,240",700],
+    ["Still Water","M. Kessler","from $9","318",520],
+    ["Gilded Fern","Noor Adisa","$39","96",760],
+    ["Quiet Peak","Elias Rune","$29","1,410",560],
+    ["Ion Drift","Sora Lindqvist","from $9","640",840],
+    ["Cobalt Flow","Elena Kova","$39","210",600],
+    ["Ashen Grove","J. Marlow","$59","27",900],
+    ["Paper Moon","Yuki Tanabe","from $9","540",520],
+    ["Ember Field","L. Poire","$39","1,120",700],
+    ["Glass Lily","Studio Vreeken","$49","83",640],
+    ["North Fjord","Anders V.","$59","470",560],
+    ["Violet Hour","Mira Solheim","from $9","260",820],
+    ["Salt & Slate","R. Okafor","$39","61",600],
+    ["Dune Whisper","Cai Ren","$29","305",760],
+    ["Aurora No. 7","Lena Frost","$59","1,004",900],
+    ["Soft Machine","Kip Alvarez","from $9","72",540]
+  ];
+  const grid = document.getElementById('grid');
+  works.forEach((w,i)=>{
+    const [title,creator,price,likes,h] = w;
+    const a=document.createElement('a');a.className='tile';
+    a.innerHTML=`
+      <img src="https://picsum.photos/seed/lat${i}/560/${h}" alt="">
+      <span class="heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>${likes}</span>
+      <span class="meta">
+        <span class="t">${title}</span>
+        <span class="row">
+          <span class="c"><span class="dot"></span>${creator}</span>
+          <span class="price">${price}</span>
+        </span>
+      </span>`;
+    grid.appendChild(a);
+  });
+</script>
+</body>
+</html>

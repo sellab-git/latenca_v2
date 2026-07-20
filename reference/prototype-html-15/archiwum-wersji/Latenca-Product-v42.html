@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Nebula Bloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     LATENCA — same design tokens as Explore (v29)
+     ============================================================ */
+  :root{
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#847F76; --faint:#B4AEA3; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA;
+    --media:#E7E0D3;
+    --on-dark:#fff;
+    --ink-strong:#141018;
+    --glass:rgba(20,16,26,.75);
+    --grad-a:#c9bff2; --grad-b:#8f7fe0;
+    --ok:#3f9d6d; --err:#c0553f;
+    --r-tile:2px; --r-sm:4px; --r-card:5px; --r-ui:7px; --r-full:999px;
+    --shadow-1:0 6px 16px rgba(20,16,10,.20);
+    --shadow-2:0 12px 28px rgba(20,16,10,.30);
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --ring:0 0 0 3px var(--accent-soft);
+    --icon:20px; --iconbtn:40px;   /* icon system — touch-first; Ideogram = 18/36 */
+    --serif:'Lora',Georgia,"Times New Roman",serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33;
+    --media:#1b1826; --err:#e0715c;
+  }
+
+  /* ── Base ── */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  html{overflow-x:clip}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased;overflow-x:clip;transition:background .3s,color .3s}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+
+  /* ── Reusable buttons ── */
+  .signin{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);font-size:13px;font-weight:600}
+  .sell{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:13px;font-weight:600;color:var(--ink)}
+  .sell:hover{border-color:var(--accent);color:var(--accent)}
+  .btn,.signin,.sell,.follow,.crumb,.addcart,.mat,.optrow button{white-space:nowrap}
+
+  /* collapsible sidebar → icon rail */
+  .brand .mark{display:none}
+  .sidehead{display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative;height:40px}
+  /* menu toggle — always visible in the top bar (getimg-style), outside the sidebar */
+  .railtoggle{width:40px;height:40px;flex:none;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background .15s,color .15s}
+  .railtoggle:hover{background:var(--panel2);color:var(--ink)}
+  .railtoggle svg{width:19px;height:19px}
+  @media(max-width:820px){.railtoggle{display:none}}
+  .app.rail{grid-template-columns:64px minmax(0,1fr)}
+  .app.rail .side{padding:14px 8px 24px}
+  .app.rail .sidehead{justify-content:center}
+  .app.rail .brand{text-align:center;font-size:20px;padding:2px 0}
+  .app.rail .brand .full{display:none}
+  .app.rail .brand .mark{display:inline}
+  /* (menu toggle now lives in the top bar) */
+  .app.rail .nav,.app.rail .sell,.app.rail .account{justify-content:center;gap:0;width:37px;height:37px;padding:0;align-self:center}
+  .app.rail .nav>span,.app.rail .sell>span,.app.rail .account .who{display:none}
+  /* rail buttons are square 40×40 (set in the combined rule above) */
+
+  .app{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}
+
+  /* ── Sidebar ── */
+  .side{border-right:1px solid var(--line);padding:14px 16px 24px;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;background:var(--bg)}
+  .brand{font-family:var(--serif);font-size:23px;line-height:1.2;padding:2px 8px;font-weight:600}
+  .navgroup{display:flex;flex-direction:column;gap:2px}
+  .nav{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:var(--r-ui);color:var(--muted);font-size:14px;font-weight:500}
+  .nav svg{width:19px;height:19px}
+  .nav:hover{background:var(--panel2);color:var(--ink)}
+  .nav.active{background:var(--accent-soft);color:var(--accent)}
+  .side .spacer{flex:1}
+  .sell{justify-content:center;padding:11px}
+  .sell svg{width:16px;height:16px}
+  .account{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:var(--r-ui)}
+  .account:hover{background:var(--panel2)}
+  .avatar{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .account .who{font-size:13px;font-weight:600;line-height:1.15}
+  .account .who small{display:block;color:var(--muted);font-weight:400;font-size:11px}
+
+  .main{--mainpad:clamp(20px,3.2vw,44px);padding:0 var(--mainpad) 70px;min-width:0}
+
+  /* ── Top bar + search ── */
+  .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;margin:0 calc(var(--mainpad) * -1);padding:14px 18px 12px 12px;background:var(--bg);border-bottom:1px solid transparent;transition:border-color .2s}
+  .topbar.stuck{border-color:var(--line)}
+  .searchwrap{position:relative;flex:0 1 640px;margin-inline:auto;min-width:0}
+  .search{width:100%;min-width:0;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:11px 16px;color:var(--muted);font-size:14px;text-align:left}
+  .search span:not(.kbd){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .search svg{width:17px;height:17px;stroke:var(--faint)}
+  .search .kbd{margin-left:auto;font-size:11px;border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 7px;color:var(--faint)}
+  /* search dropdown — same component as Explore */
+  .search.act{border-color:var(--accent);box-shadow:var(--ring)}
+  .sdrop{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-pop);padding:8px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:.16s;z-index:35}
+  .sdrop.open{opacity:1;transform:none;pointer-events:auto}
+  .shint{display:flex;align-items:center;gap:9px;padding:9px 11px;margin:2px 2px 6px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r-ui);font-size:12px;font-weight:600}
+  .shint svg{width:15px;height:15px}
+  .sgroup{padding:4px 2px}
+  .slabel{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:6px 10px 4px}
+  .sitem{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:var(--r-ui);font-size:13px;color:var(--ink)}
+  .sitem:hover{background:var(--panel2)}
+  .sitem svg{width:15px;height:15px;stroke:var(--muted)}
+  .sitem .av{width:20px;height:20px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .sitem .tag{margin-left:auto;font-size:10px;color:var(--faint)}
+  .topbar .right{display:flex;align-items:center;gap:6px}
+  .icobtn{width:40px;height:40px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);position:relative}
+  .icobtn:hover{background:var(--panel2);color:var(--ink)}
+  .icobtn svg{width:19px;height:19px}
+  .cart .badge{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 4px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .signin{margin-left:6px;padding:9px 16px}
+
+  /* ── Breadcrumb ── */
+  .crumb{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;margin:16px 0 0}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--faint)}
+  .crumb b{color:var(--ink);font-weight:500}
+
+  /* ── Product layout ── */
+  .pdp{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:clamp(22px,3vw,44px);align-items:start;margin-top:14px}
+
+  /* left: thumbnail rail + image stage */
+  .stagewrap{display:flex;gap:12px;align-items:flex-start;position:sticky;top:78px}
+  .thumbs{display:flex;flex-direction:column;gap:10px;flex:none;width:62px}
+  .thumb{width:62px;height:62px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--line);background:var(--media);position:relative;padding:0}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+
+  .stage{flex:1;min-width:0;position:relative;background:var(--media);border-radius:var(--r-card);overflow:hidden;height:clamp(430px,calc(100vh - 128px),720px);display:flex;align-items:center;justify-content:center;padding:min(6%,40px)}
+  .stageArt{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+  /* single-element frame preview: border = frame colour, padding = mat (passe-partout), bg = mat white */
+  .stageArt img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;box-sizing:border-box;background:#fff;border:var(--fw,0px) solid var(--fc,transparent);padding:var(--mw,0px);box-shadow:var(--shadow-2);cursor:zoom-in;transition:border-color .22s,border-width .22s,padding .22s}
+  .stageRoom{position:absolute;inset:0;display:none}
+  .stageRoom img.bg{width:100%;height:100%;object-fit:cover;object-position:var(--rx,50%) var(--ry,50%);display:block}
+  .frameOnWall{position:absolute;background:#fff;padding:1.1%;box-shadow:0 14px 30px rgba(0,0,0,.4);transform:translate(-50%,-50%);width:calc(var(--fbw,20%) * var(--sf,1));transition:width .25s}
+  .frameOnWall img{width:100%;display:block}
+  /* room views use a landscape stage (these are wide interior scenes) */
+  /* all views share the same TALL artwork stage; rooms just fill it edge-to-edge */
+  .stage.roomon{padding:0}
+  .stage.roomon .stageArt{display:none}
+  /* zoom INTO the art: scale the whole room scene (bg + frame together) around the frame centre → artwork is BIG, stays proportional to the room, nothing desyncs */
+  .stage.roomon .stageRoom{display:block;transform:scale(var(--zoom,1.5));transform-origin:50% var(--zoy,38%);animation:roomZoomIn .6s cubic-bezier(.16,1,.3,1)}
+  @keyframes roomZoomIn{from{transform:scale(calc(var(--zoom,1.5)*1.05))}to{transform:scale(var(--zoom,1.5))}}
+  /* per-room: cover-crop focus (--rx/--ry) · art size (--fbw ×--sf) · room closeness (--zoom) · art anchor (--zoy = frame top) */
+  .stage.posc{--rx:26%;--ry:50%;--fbw:26%;--zoom:1.5;--zoy:38%} .stage.posc .frameOnWall{left:50%;top:38%}
+  .stage.posd{--rx:46%;--ry:49%;--fbw:27%;--zoom:1.5;--zoy:35%} .stage.posd .frameOnWall{left:50%;top:35%}
+  .stage.pose{--rx:33%;--ry:47%;--fbw:22%;--zoom:1.6;--zoy:33%} .stage.pose .frameOnWall{left:50%;top:33%}
+  /* action icons live ON the image (top-right stack): Save · Share · Zoom — same logic as gallery tiles + Printly/Displate */
+  .stageacts{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:8px;z-index:4}
+  .sact{width:38px;height:38px;border-radius:var(--r-ui);background:var(--glass);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;transition:background .15s}
+  .sact:hover{background:rgba(20,16,26,.92)}
+  .sact svg{width:18px;height:18px}
+  .sact.on svg{fill:var(--on-dark)}
+  .stagehint{position:absolute;left:12px;bottom:12px;z-index:4;display:flex;align-items:center;gap:7px;background:var(--glass);backdrop-filter:blur(6px);color:var(--on-dark);font-size:11px;font-weight:600;padding:6px 11px;border-radius:var(--r-ui)}
+  .stagehint svg{width:13px;height:13px}
+
+  /* right: buy panel */
+  .buy{min-width:0}
+  .creatorline{display:flex;align-items:center;gap:10px}
+  .creatorline .av{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .creatorline .nm{font-size:12px;font-weight:600}
+  .creatorline .nm small{color:var(--muted);font-weight:400}
+  .follow{margin-left:auto;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:7px 13px;font-size:12px;font-weight:600;color:var(--ink)}
+  .follow:hover{border-color:var(--accent);color:var(--accent)}
+  .follow svg{width:13px;height:13px}
+  .ptitle{font-family:var(--serif);font-weight:500;font-size:27px;line-height:1.12;margin:14px 0 0}
+  .pmeta{display:flex;align-items:center;gap:14px;margin-top:8px;color:var(--muted);font-size:12px}
+  .pmeta span{display:flex;align-items:center;gap:5px}
+  .pmeta svg{width:14px;height:14px}
+
+  .pmeta .star{stroke:none;fill:var(--accent)}
+  .pmeta .rev small{color:var(--faint)}
+
+  .priceblock{display:flex;align-items:baseline;gap:9px;margin:16px 0 2px}
+  .priceblock .now{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .priceblock .from{font-size:12px;color:var(--muted)}
+  .deliver{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:2px}
+  .deliver svg{width:15px;height:15px;stroke:var(--faint)}
+  .deliver b{color:var(--ink);font-weight:600}
+
+  /* section label with live value on the right */
+  .blabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:20px 0 10px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+
+  /* format toggle */
+  .fmt{display:flex;gap:8px}
+  .fmt button{flex:1;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:11px 13px;text-align:left;transition:.14s}
+  .fmt button:hover{border-color:var(--faint)}
+  .fmt button.on{border-color:var(--accent);background:var(--accent-soft)}
+  .fmt .ft{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600}
+  .fmt .ft svg{width:15px;height:15px}
+  .fmt button.on .ft{color:var(--accent)}
+  .fmt .fs{font-size:11px;color:var(--muted)}
+
+  /* material pills */
+  .mats{display:flex;flex-wrap:wrap;gap:8px}
+  .mat{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:9px 15px;font-size:13px;font-weight:600;color:var(--muted);transition:.14s}
+  .mat:hover{color:var(--ink);border-color:var(--faint)}
+  .mat.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+
+  /* segmented boxes (size, mat) */
+  .optrow{display:flex;gap:8px}
+  .optrow button{flex:1;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:11px 6px;font-size:13px;font-weight:600;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px;transition:.14s}
+  .optrow button small{font-weight:400;color:var(--muted);font-size:10px}
+  .optrow button .sp{font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;margin-top:2px}
+  .optrow button.on .sp{color:var(--accent)}
+  .optrow button:hover{border-color:var(--faint)}
+  .optrow button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+  .optrow button.on small{color:var(--accent)}
+
+  /* frame swatches */
+  .frames{display:flex;gap:11px}
+  .frm{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);font-size:10px;font-weight:600}
+  .frm .box{width:40px;height:40px;border-radius:var(--r-ui);border:1px solid var(--line);background:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;transition:.14s}
+  .frm .box .sq{width:26px;height:26px;border-radius:3px;background:var(--fc);border:1px solid rgba(0,0,0,.12)}
+  .frm.none .box .sq{background:var(--panel);border-color:var(--line)}
+  .frm.none .box::after{content:"";position:absolute;left:9px;right:9px;top:50%;height:1.5px;background:var(--faint);transform:rotate(-45deg)}
+  .frm:hover .box{border-color:var(--faint)}
+  .frm.on{color:var(--accent)}
+  .frm.on .box{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+  /* cm / inch unit toggle (in the SIZE label row) */
+  .unit{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;text-transform:none;letter-spacing:0}
+  .unit button{padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+  .unit button.on{background:var(--accent-soft);color:var(--accent)}
+  .unit button+button{border-left:1px solid var(--line)}
+
+  /* "Add a frame" optional expander (frame + mat live inside, collapsed by default) */
+  .frameToggle{display:flex;align-items:center;gap:9px;width:100%;margin-top:22px;padding:12px 14px;border:1px dashed var(--line);border-radius:var(--r-ui);font-size:13px;font-weight:600;color:var(--muted);background:var(--panel);transition:.14s}
+  .frameToggle:hover{border-color:var(--accent);color:var(--accent)}
+  .frameToggle svg{width:15px;height:15px;transition:transform .2s}
+  .frameToggle small{margin-left:auto;font-weight:400;color:var(--faint)}
+  .frameToggle.open{border-style:solid;border-color:var(--accent);color:var(--accent)}
+  .frameToggle.open svg{transform:rotate(45deg)}
+  .framebody{margin-top:2px}
+
+  /* small inline "compare" link + expandable material explainer */
+  .minilink{font-size:11px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:4px;letter-spacing:0;text-transform:none}
+
+  /* selected-configuration summary chip */
+  .summ{display:flex;align-items:center;gap:8px;margin-top:20px;padding:10px 13px;background:var(--panel2);border-radius:var(--r-ui);font-size:12.5px;color:var(--ink);font-weight:500}
+  .summ svg{width:15px;height:15px;stroke:var(--muted)}
+
+  .hidden{display:none}
+
+  /* CTA */
+  .buyrow{display:flex;gap:10px;margin-top:22px}
+  .addcart{flex:1;background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:14px;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;transition:filter .15s}
+  .addcart:hover{filter:brightness(1.14)}
+  .addcart svg{width:17px;height:17px}
+  .addcart .cp{font-variant-numeric:tabular-nums;opacity:.72;font-weight:500}
+
+  /* certificate trust line */
+  .certline{display:flex;align-items:center;gap:9px;margin-top:16px;font-size:12px;color:var(--muted)}
+  .certline svg{width:16px;height:16px;stroke:var(--accent)}
+  .certline b{color:var(--ink);font-weight:600}
+
+  /* progressive-disclosure accordions */
+  .accs{margin-top:14px}
+  .acc{border-top:1px solid var(--line)}
+  .acc:last-child{border-bottom:1px solid var(--line)}
+  .acc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;font-size:13px;font-weight:600;color:var(--ink);text-align:left}
+  .acc>button .chev{width:16px;height:16px;color:var(--muted);transition:transform .2s;flex:none}
+  .acc.open>button .chev{transform:rotate(45deg)}
+  .acc .body{display:none;padding:0 0 14px;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .acc.open .body{display:block}
+  .acc .body .r{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .acc .body .r svg{width:14px;height:14px;stroke:var(--faint);flex:none}
+
+  /* digital card */
+  .digital{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:14px 16px}
+  .digital ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  .digital li{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--ink)}
+  .digital li small{display:block;color:var(--muted);font-size:11px;margin-top:1px}
+  .digital li svg{width:15px;height:15px;stroke:var(--accent);margin-top:1px}
+
+  /* ── Details live in the RIGHT column, below the CTA (image stays sticky) — Displate pattern ── */
+  .moreinfo{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+  .desc{color:var(--muted);font-size:13.5px;line-height:1.62;margin:0}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .tag{padding:6px 12px;border:1px solid var(--line);border-radius:var(--r-ui);font-size:12px;color:var(--muted);font-weight:500}
+  .tag:hover{border-color:var(--accent);color:var(--accent)}
+  .moreinfo .accs{margin-top:12px}
+  .acc .body p{margin:10px 0 0;line-height:1.55}
+  .specrow{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:12.5px}
+  .specrow+.specrow{border-top:1px solid var(--line)}
+  .specrow span{color:var(--muted)}
+  .specrow b{font-weight:600;text-align:right}
+
+  /* ── "Why Latenca" benefit band (4 benefits, shared with Explore) ── */
+  .whyband{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.5vw,32px);margin-top:clamp(40px,5vw,60px);padding-top:clamp(30px,4vw,44px);border-top:1px solid var(--line)}
+  @media(max-width:1100px){.whyband{grid-template-columns:1fr 1fr;gap:22px}}
+  .why{display:flex;gap:13px;align-items:flex-start}
+  .why svg{width:22px;height:22px;stroke:var(--accent);flex:none;margin-top:1px}
+  .why b{font-size:14px;font-weight:600;display:block}
+  .why span{font-size:12.5px;color:var(--muted);line-height:1.5;display:block;margin-top:3px}
+
+  @media(max-width:820px){.whyband{grid-template-columns:1fr;gap:20px}}
+
+  /* ── More like this ── */
+  /* gallery tabs (Similar / Popular / Bestselling) */
+  /* gallery tabs = our standard filter pills (accent-soft active), centred like Displate */
+  /* sort toolbar — left-aligned like Explore/Creator (tabs left, count right) */
+  .gtabs{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:clamp(30px,4vw,44px) 0 16px}
+  .gtabs .tabs{display:flex;gap:8px;min-width:0;flex-wrap:wrap}
+  .gcount{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .gtab{padding:8px 16px;border-radius:var(--r-ui);font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;transition:background .14s,color .14s}
+  .gtab:hover{background:var(--panel2);color:var(--ink)}
+  .gtab.on{background:var(--accent-soft);color:var(--accent)}
+  /* load more (matches Explore) */
+  .loadmore{display:flex;flex-direction:column;align-items:center;gap:12px;margin:34px 0 0}
+  .loadmore .txt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .loadmore .more{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:13px;font-weight:600;color:var(--ink);padding:11px 28px;transition:border-color .14s,color .14s;white-space:nowrap}
+  .loadmore .more:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ── Slide-in drawers (cart + size guide) — same right-panel pattern as Explore filters ── */
+  .scrim{position:fixed;inset:0;background:rgba(15,12,20,.44);opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:400px;max-width:92vw;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:51;display:flex;flex-direction:column;box-shadow:-14px 0 40px rgba(15,12,20,.18)}
+  .drawer.open{transform:none}
+  .dhead{display:flex;align-items:center;gap:10px;padding:17px 20px;border-bottom:1px solid var(--line)}
+  .dhead h3{font-family:var(--serif);font-weight:500;font-size:19px;margin:0;flex:1}
+  .dhead .ok{width:22px;height:22px;border-radius:var(--r-sm);background:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
+  .dhead .ok svg{width:14px;height:14px;stroke:var(--on-dark)}
+  .dclose{width:34px;height:34px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);flex:none}
+  .dclose:hover{background:var(--panel2);color:var(--ink)}
+  .dclose svg{width:18px;height:18px}
+  .dbody{flex:1;overflow-y:auto;padding:18px 20px}
+  .dfoot{padding:16px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+  /* cart item */
+  .citem{display:flex;gap:13px}
+  .citem .th{width:62px;height:80px;border-radius:var(--r-sm);object-fit:cover;background:var(--media);flex:none}
+  .citem .ct{font-family:var(--serif);font-size:16px;font-weight:500;line-height:1.2}
+  .citem .cc{font-size:12px;color:var(--muted);margin-top:4px}
+  .citem .cp{font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums}
+  .csub{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .csub b{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .cxsell{margin-top:22px}
+  .cxsell .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:8px}
+  .cxrow{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+  .cxrow img{width:44px;height:44px;border-radius:var(--r-sm);object-fit:cover;flex:none;background:var(--media)}
+  .cxrow .n{flex:1;min-width:0;font-size:12.5px;font-weight:600}
+  .cxrow .n small{display:block;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+  .cxrow .addx{border:1px solid var(--line);border-radius:var(--r-ui);padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+  .cxrow .addx:hover{border-color:var(--accent);color:var(--accent)}
+  .dfoot .checkout{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:14px;font-weight:600;font-size:14px;text-align:center}
+  .dfoot .checkout:hover{filter:brightness(1.14)}
+  .dfoot .cont{padding:11px;font-weight:600;font-size:13px;color:var(--muted);text-align:center}
+  .dfoot .cont:hover{color:var(--ink)}
+  /* size guide */
+  .sgintro{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 6px}
+  .sgrow{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+  .sgrow:first-of-type{border-top:0}
+  .sgscale{display:flex;align-items:flex-end;justify-content:center;height:72px}
+  .sgscale i{display:block;width:var(--w);height:var(--h);background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:2px}
+  .sgrow .sz{font-weight:600;font-size:14px}
+  .sgrow .sz small{display:block;color:var(--muted);font-weight:400;font-size:11px;margin-top:2px}
+  .sgrow .bf{font-size:11.5px;color:var(--muted);text-align:right;line-height:1.4}
+  /* material compare + picker drawer */
+  .mgrow{display:grid;grid-template-columns:46px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line);cursor:pointer;text-align:left;width:100%;background:none}
+  .mgrow:first-of-type{border-top:0}
+  .mgrow .sw{width:46px;height:46px;border-radius:var(--r-sm);border:1px solid rgba(0,0,0,.1);background:var(--mg);flex:none;transition:box-shadow .14s}
+  .mgrow .mn{font-weight:600;font-size:14px;color:var(--ink)}
+  .mgrow .mn small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:2px;line-height:1.4}
+  .mgrow .mp{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;align-self:start;padding-top:2px}
+  .mgrow:hover .sw{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--faint)}
+  .mgrow.on .mn{color:var(--accent)}
+  .mgrow.on .sw{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+  /* frame guide: mat (passe-partout) explainer under the frame rows */
+  .fgmat{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+  .fgmat b{font-size:13px;font-weight:600}
+  .fgmat p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+
+  /* lightbox (click artwork / zoom → full-screen detail view) */
+  .lightbox{position:fixed;inset:0;z-index:60;background:rgba(15,12,20,.93);display:none;align-items:center;justify-content:center;padding:4vh 4vw}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:100%;max-height:92vh;width:auto;height:auto;object-fit:contain;box-shadow:0 24px 70px rgba(0,0,0,.55);cursor:zoom-out}
+  .lbclose{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:var(--r-ui);background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center}
+  .lbclose:hover{background:rgba(255,255,255,.26)}
+  .lbclose svg{width:20px;height:20px}
+  .grid{column-count:5;column-gap:10px}
+  @media(min-width:2100px){.grid{column-count:6}}
+  @media(max-width:1440px){.grid{column-count:4}}
+  @media(max-width:1040px){.grid{column-count:3}}
+  .tile{break-inside:avoid;margin-bottom:10px;position:relative;border-radius:var(--r-tile);overflow:hidden;background:var(--media);display:block}
+  .tile img{width:100%;display:block;transition:transform .5s ease}
+  .tile:hover img{transform:scale(1.04)}
+  .tgrad{position:absolute;inset:0;opacity:0;transition:opacity .18s;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.32),transparent 26%),linear-gradient(to top,rgba(0,0,0,.44),transparent 36%)}
+  .tile:hover .tgrad{opacity:1}
+  .fav{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.42);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center;z-index:3;transition:background .15s}
+  .fav:hover{background:rgba(20,16,26,.8)}
+  .fav svg{width:16px;height:16px}
+  .acts{position:absolute;top:8px;right:8px;display:flex;gap:6px;opacity:0;transform:translateY(-3px);transition:.18s;z-index:3}
+  .tile:hover .acts{opacity:1;transform:none}
+  .tbtn{width:32px;height:32px;border-radius:var(--r-ui);background:rgba(20,16,26,.5);backdrop-filter:blur(6px);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+  .tbtn:hover{background:rgba(20,16,26,.82)}
+  .tbtn svg{width:16px;height:16px}
+  .tbtn .dots circle{fill:currentColor}
+  .info{position:absolute;left:10px;right:48px;bottom:10px;color:var(--on-dark);opacity:0;transform:translateY(3px);transition:.18s;z-index:3}
+  .tile:hover .info{opacity:1;transform:none}
+  .info .t{font-family:var(--serif);font-size:13.5px;font-weight:500;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,.55);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+  .info .a{display:flex;align-items:center;gap:6px;margin-top:3px;font-size:11px;opacity:.92;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+  .info .a .dot{width:32px;height:32px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .info .a span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* ── Responsive ── */
+  .brand-m{display:none}
+  @media(max-width:640px){.grid{column-count:2}}
+  @media(max-width:980px){
+    .pdp{grid-template-columns:1fr}
+    .stagewrap{position:static}
+    .stage{height:clamp(360px,56vh,520px)}
+  }
+  @media(max-width:820px){
+    .app,.app.rail{grid-template-columns:minmax(0,1fr)}
+    .side{display:none}
+    .main{--mainpad:clamp(14px,4vw,26px);padding:0 var(--mainpad) 90px}
+    .topbar{gap:10px}
+    .searchwrap{flex:1;margin-inline:0}
+    .brand-m{display:block;font-family:var(--serif);font-size:22px;font-weight:600}
+    #themeBtn,.topbar [title="Saved"],.signin{display:none}
+    .search .kbd{display:none}
+    .stagewrap{flex-direction:column-reverse;align-items:stretch}
+    .thumbs{flex-direction:row;width:auto}
+    .stage{flex:none;width:100%}
+    .specs{grid-template-columns:1fr 1fr}
+    .buyrow{margin-bottom:8px}
+  }
+  /* mobile sticky buy bar */
+  .buybar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:39;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom));align-items:center;gap:12px;box-shadow:0 -8px 24px rgba(15,12,20,.08)}
+  .buybar .bp{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+  .buybar .addcart{flex:1;padding:13px;margin-top:0}
+  @media(max-width:820px){.buybar{display:flex}}
+
+  @media (hover:none){.tile .acts{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+  /* ── ICON SYSTEM — single source of truth. Switch to Ideogram = set --icon:18px; --iconbtn:36px in :root ── */
+  .nav svg,.icobtn svg,.railtoggle svg,.fav svg,.tbtn svg{width:var(--icon);height:var(--icon)}
+  .icobtn,.railtoggle,.fav,.tbtn{width:var(--iconbtn);height:var(--iconbtn)}
+  .nav{min-height:var(--iconbtn)}
+  .app.rail .nav,.app.rail .sell,.app.rail .account{width:var(--iconbtn);height:var(--iconbtn)}
+  .info .a .dot{width:24px;height:24px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="sidehead">
+      <div class="brand"><span class="full">Latenca</span><span class="mark">L</span></div>
+    </div>
+    <div class="navgroup">
+      <a class="nav active"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Explore</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Collections</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Creators</span></a>
+    </div>
+    <div class="spacer"></div>
+    <a class="sell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Sell your art</span></a>
+    <a class="account"><span class="avatar"></span><span class="who">Studio Latenca<small>Curator</small></span></a>
+  </aside>
+
+  <main class="main">
+    <div class="topbar" id="topbar">
+      <button class="railtoggle" id="railToggle" title="Collapse menu"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
+      <a class="brand-m">Latenca</a>
+      <div class="searchwrap">
+        <button class="search" id="searchBtn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Try &ldquo;calm terracotta abstract for a bedroom&rdquo;&hellip;</span><span class="kbd">&#8984;K</span></button>
+        <div class="sdrop" id="sdrop">
+          <div class="shint"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Describe what you want — our AI search understands it</div>
+          <div class="sgroup"><div class="slabel">Popular subjects</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Abstract<span class="tag">612 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Celestial &amp; space<span class="tag">470 works</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Minimalist line art<span class="tag">320 works</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Collections</div>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Celestial Echoes<span class="tag">26 pieces</span></a>
+            <a class="sitem"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Nordic Calm<span class="tag">40 pieces</span></a>
+          </div>
+          <div class="sgroup"><div class="slabel">Creators</div>
+            <a class="sitem"><span class="av"></span>Aria Vela<span class="tag">Curator</span></a>
+            <a class="sitem"><span class="av"></span>Studio Vreeken<span class="tag">Creator</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="icobtn" id="themeBtn" title="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/></svg></button>
+        <button class="icobtn" title="Saved"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+        <button class="icobtn cart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span class="badge">2</span></button>
+        <button class="signin">Sign in</button>
+      </div>
+    </div>
+
+    <nav class="crumb"><a>Explore</a><span class="sep">&middot;</span><b>Abstract</b></nav>
+
+    <section class="pdp">
+      <!-- LEFT: thumbnails + stage -->
+      <div class="stagewrap">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="stage" id="stage">
+          <div class="stageArt"><img id="artImg" src="" alt="Nebula Bloom by Aria Vela"></div>
+          <div class="stageRoom"><img class="bg" id="roomBg" src="" alt=""><span class="frameOnWall"><img id="roomArt" src="" alt=""></span></div>
+          <div class="stageacts">
+            <button class="sact" id="saveBtn" title="Save"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+            <button class="sact" id="shareBtn" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+            <button class="sact zoom" title="View full size"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+          </div>
+          <span class="stagehint" id="stagehint"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/></svg>Actual artwork</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: buy panel -->
+      <aside class="buy">
+        <div class="creatorline">
+          <span class="av"></span>
+          <span class="nm">Aria Vela <small>&middot; 84 works</small></span>
+          <button class="follow"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Follow</button>
+        </div>
+
+        <h1 class="ptitle">Nebula Bloom</h1>
+        <div class="pmeta">
+          <span class="rev"><svg class="star" viewBox="0 0 24 24"><path d="M12 3l2.5 5.3 5.5.7-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.5-.7z"/></svg>4.8 <small>(128)</small></span>
+          <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>1,240 saves</span>
+        </div>
+
+        <div class="priceblock"><span class="now" id="price">$59</span><span class="from" id="fromnote">incl. VAT</span></div>
+        <div class="deliver" id="deliver"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><span>Free shipping over $60 &middot; arrives <b id="delivDate">soon</b></span></div>
+
+        <div class="blabel">Format</div>
+        <div class="fmt" id="fmt">
+          <button class="on" data-fmt="print">
+            <span class="ft"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><rect x="8" y="7" width="8" height="10"/></svg>Print</span>
+            <span class="fs">Made &amp; shipped &middot; from $39</span>
+          </button>
+          <button data-fmt="digital">
+            <span class="ft"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 21h14"/></svg>Digital file</span>
+            <span class="fs">Instant download &middot; $12</span>
+          </button>
+        </div>
+
+        <!-- PRINT config -->
+        <div id="printOpts">
+          <div class="blabel"><span>Material <button class="minilink" id="matCompare">Compare</button></span></div>
+          <div class="mats" id="mats"></div>
+
+          <div class="blabel"><span>Size <button class="minilink" id="sizeGuide">Size guide</button></span><span class="unit" id="unit"><button class="on" data-u="cm">cm</button><button data-u="in">in</button></span></div>
+          <div class="optrow" id="sizes"></div>
+
+          <div id="frameGroup">
+            <button class="frameToggle" id="frameToggle"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add a frame<small id="frameSmall">optional</small></button>
+            <div class="framebody hidden" id="framebody">
+              <div class="blabel"><span>Frame <button class="minilink" id="frameGuide">Frame guide</button></span></div>
+              <div class="frames" id="frames"></div>
+              <div class="blabel">Mat</div>
+              <div class="optrow" id="mats2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIGITAL config -->
+        <div id="digitalOpts" class="hidden">
+          <div class="blabel">What you get</div>
+          <div class="digital">
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Full-resolution files<small>JPG + PNG, up to 8000&times;10000 px — upscaled on purchase</small></span></li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Every print ratio<small>One ZIP, ready for 30&times;40 up to 70&times;100 cm</small></span></li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Personal-use license<small>Print at home or a local lab, as many as you like</small></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="summ" id="summ"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span id="summText">Poster · 50 × 70 cm · No frame</span></div>
+
+        <div class="buyrow">
+          <button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span id="ctaText">Add to cart</span><span class="cp" id="ctaPrice">&middot; $59</span></button>
+        </div>
+
+        <div class="certline"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><span><b>Signed certificate of authenticity</b> &middot; secure checkout</span></div>
+
+        <div class="moreinfo">
+          <p class="desc">Nebula Bloom pairs deep indigo with a warm terracotta glow, hand-curated for calm, contemplative walls. It sits quietly in a bedroom or reading corner and rewards a closer look with soft, painterly gradients.</p>
+          <div class="tags">
+            <a class="tag">Abstract</a><a class="tag">Painterly</a><a class="tag">Warm red</a><a class="tag">Bedroom</a><a class="tag">Calm</a>
+          </div>
+          <div class="accs">
+            <div class="acc" data-acc>
+              <button><span>Details &amp; materials</span><svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+              <div class="body">
+                <div class="specrow"><span>Medium</span><b>AI &middot; Painterly</b></div>
+                <div class="specrow"><span>Orientation</span><b>Portrait &middot; 3:4</b></div>
+                <div class="specrow"><span>Max print size</span><b>70 &times; 100 cm</b></div>
+                <div class="specrow"><span>Artist</span><b>Aria Vela</b></div>
+                <p>Museum-grade matte fine-art paper, 200 gsm, archival 7-colour giclée inks (100+ year lightfastness). Wipe clean with a dry cloth; avoid direct sunlight.</p>
+              </div>
+            </div>
+            <div class="acc" data-acc>
+              <button><span>Shipping &amp; returns</span><svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+              <div class="body">
+                <div class="r"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>Made to order &middot; printed &amp; shipped in ~5 days</div>
+                <div class="r"><svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 0 1 13.7-5.3L21 9"/><path d="M21 4v5h-5"/><path d="M20 13a8 8 0 0 1-13.7 5.3L3 15"/><path d="M3 20v-5h5"/></svg>Free shipping over $60 &middot; 30-day returns</div>
+                <div class="r"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Secure checkout &middot; Visa, Mastercard, PayPal, Klarna</div>
+              </div>
+            </div>
+            <div class="acc" data-acc>
+              <button><span>Certificate &amp; license</span><svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+              <div class="body">Every Latenca piece ships with a signed digital certificate of authenticity, verifiable online. Purchase includes a personal-use license — print, hang and enjoy at home. Commercial licensing is available on request.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Why Latenca -->
+    <section class="whyband">
+      <div class="why"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></svg><div><b>Museum-grade materials</b><span>Paper, canvas, metal &amp; more, built to last.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><div><b>Made to order</b><span>Shipped in ~5 days, zero waste.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><div><b>Signed certificate</b><span>Verified authenticity, every piece.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Secure checkout</b><span>Safe payment, 30-day returns.</span></div></div>
+    </section>
+
+    <!-- More like this -->
+    <div class="gtabs" id="gtabs">
+      <div class="tabs">
+        <button class="gtab on" data-t="0">Similar</button>
+        <button class="gtab" data-t="1">Popular</button>
+        <button class="gtab" data-t="2">Bestselling</button>
+      </div>
+      <span class="gcount">240 works</span>
+    </div>
+    <section class="grid" id="grid"></section>
+    <div class="loadmore">
+      <div class="txt">Showing <span id="galShown">20</span> of 240 works</div>
+      <button class="more" id="galMore">Load more</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- mobile sticky buy bar -->
+<div class="buybar">
+  <span class="bp" id="barPrice">$59</span>
+  <button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg>Add to cart</button>
+</div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox"><button class="lbclose" id="lbClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><img id="lbImg" alt="Nebula Bloom — full view"></div>
+
+<!-- drawers -->
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="cartDrawer" aria-label="Cart">
+  <div class="dhead"><span class="ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><h3>Added to your cart</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <div class="citem">
+      <img class="th" id="cartThumb" alt="">
+      <div><div class="ct">Nebula Bloom</div><div class="cc" id="cartConfig">Poster · 50 × 70 cm</div><div class="cp" id="cartItemPrice">$59</div></div>
+    </div>
+    <div class="csub"><span>Subtotal</span><b id="cartSubtotal">$59</b></div>
+    <div class="cxsell">
+      <div class="lbl">Pairs well with</div>
+      <div id="cartXsell"></div>
+    </div>
+  </div>
+  <div class="dfoot"><a class="checkout">Checkout · <span id="cartFootPrice">$59</span></a><button class="cont" data-close>Continue shopping</button></div>
+</aside>
+
+<aside class="drawer" id="sizeDrawer" aria-label="Size guide">
+  <div class="dhead"><h3>Size guide</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">All sizes are portrait (3:4) to match this artwork. Shown to scale relative to each other.</p>
+    <div id="sgRows"></div>
+  </div>
+  <div class="dfoot"><button class="checkout" data-close>Got it</button></div>
+</aside>
+
+<aside class="drawer" id="matDrawer" aria-label="Compare materials">
+  <div class="dhead"><h3>Compare materials</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">One artwork, six ways to hang it. Tap a material to choose.</p>
+    <div id="mgRows"></div>
+  </div>
+</aside>
+
+<aside class="drawer" id="frameDrawer" aria-label="Frame guide">
+  <div class="dhead"><h3>Frames &amp; mats</h3><button class="dclose" data-close><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dbody">
+    <p class="sgintro">Solid wood frames, ready to hang. Tap a colour to choose.</p>
+    <div id="fgRows"></div>
+    <div class="fgmat">
+      <b>Mat (passe-partout)</b>
+      <p>The paper border between the artwork and the frame — it gives the piece room to breathe. Choose None, 3&nbsp;cm or 6&nbsp;cm.</p>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const ART=["photo-1605721911519-3dfeb3be25e7","photo-1612623753207-96465febeee7","photo-1602464729960-f95937746b68","photo-1533157950006-c38844053d55","photo-1615184697985-c9bde1b07da7","photo-1618331833071-ce81bd50d300","photo-1541512416146-3cf58d6b27cc","photo-1541961017774-22349e4a1262","photo-1533158388470-9a56699990c6","photo-1604871000636-074fa5117945","photo-1552250575-e508473b090f","photo-1622542796254-5b9c46ab0d2f","photo-1548362851-ea052637ad64","photo-1444703686981-a3abbc4d4fe3","photo-1502134249126-9f3755a50d78","photo-1465101162946-4377e57745c3","photo-1464802686167-b939a6910659","photo-1566345984367-fa2ba5cedc17","photo-1538370965046-79c0d6907d47","photo-1462331940025-496dfbfc7564","photo-1528722828814-77b9b83aafb2","photo-1462332420958-a05d1e002413"];
+  const ROOMS=[
+    {label:'Living room', file:'assets/rooms/cupboard.webp', pos:'posc'},
+    {label:'Sideboard',   file:'assets/rooms/dresser-zoom.webp', pos:'posd'},
+    {label:'Studio',      file:'assets/rooms/office.webp', pos:'pose'}
+  ];
+  const url=(id,w,h)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+  const HERO=ART[1];
+
+  document.getElementById('artImg').src=url(HERO,700,980);
+  document.getElementById('roomArt').src=url(HERO,340,476);
+
+  // ── views (thumbnail rail) ──
+  const VIEWS=[{label:'Artwork', thumb:url(HERO,160,160), type:'art'},
+    ...ROOMS.map(r=>({label:r.label, thumb:r.file, type:'room', bg:r.file, pos:r.pos}))];
+  const stage=document.getElementById('stage'), roomBg=document.getElementById('roomBg'), stagehint=document.getElementById('stagehint');
+  const thumbs=document.getElementById('thumbs');
+  thumbs.innerHTML=VIEWS.map((v,i)=>`<button class="thumb${i===0?' on':''}" data-i="${i}" title="${v.label}"><img src="${v.thumb}" alt="${v.label}"></button>`).join('');
+  function setView(i){
+    const v=VIEWS[i];
+    thumbs.querySelectorAll('.thumb').forEach((t,j)=>t.classList.toggle('on',j===i));
+    stage.classList.remove('posc','posd','pose','roomon');
+    if(v.type==='room'){ roomBg.src=v.bg; stage.classList.add('roomon',v.pos);
+      const sr=document.querySelector('.stageRoom'); sr.style.animation='none'; void sr.offsetWidth; sr.style.animation='';
+      stagehint.innerHTML='<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg> Preview in a room';
+    } else {
+      stagehint.innerHTML='<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/></svg> Actual artwork';
+    }
+  }
+  thumbs.querySelectorAll('.thumb').forEach(t=>t.onclick=()=>setView(+t.dataset.i));
+
+  // ── buy state ──
+  const MATERIALS=['Poster','Canvas','Metal','Acrylic','Wood','Foam'];
+  const PRICE={Poster:[39,59,89],Canvas:[55,85,125],Metal:[69,99,149],Acrylic:[79,119,179],Wood:[59,89,129],Foam:[45,69,99]};
+  const SIZES=[
+    {cm:'30×40',in:'12×16',vcm:'30 × 40 cm',vin:'12 × 16 in'},
+    {cm:'50×70',in:'20×28',vcm:'50 × 70 cm',vin:'20 × 28 in'},
+    {cm:'70×100',in:'28×40',vcm:'70 × 100 cm',vin:'28 × 40 in'}
+  ];
+  const FRAMES=[{n:'None',c:null,ex:0},{n:'White',c:'#f4f2ec',ex:25},{n:'Black',c:'#1c1b19',ex:25},{n:'Natural',c:'#c8a26a',ex:29},{n:'Dark',c:'#5a3d28',ex:29}];
+  const MATS=[{n:'None',v:'None'},{n:'3 cm',v:'3 cm'},{n:'6 cm',v:'6 cm'}];
+  const MATDESC=[['Poster','matte fine-art paper, framing optional'],['Canvas','gallery-wrapped cotton, ready to hang'],['Metal','HD print on aluminium — vivid & durable'],['Acrylic','glossy acrylic glass, real depth'],['Wood','printed on real birch plywood'],['Foam','lightweight foam board, easy to hang']];
+  const DIGITAL_PRICE=12;
+  let st={fmt:'print',material:'Poster',size:1,frame:0,mat:0,unit:'cm'};
+
+  document.getElementById('mats').innerHTML=MATERIALS.map(m=>`<button class="mat${m==='Poster'?' on':''}" data-m="${m}">${m}</button>`).join('');
+  function drawSizes(){
+    document.getElementById('sizes').innerHTML=SIZES.map((s,i)=>`<button data-i="${i}"${i===st.size?' class="on"':''}><span class="sd">${st.unit==='cm'?s.cm:s.in}<small> ${st.unit}</small></span><span class="sp">$${PRICE[st.material][i]}</span></button>`).join('');
+    document.querySelectorAll('#sizes button').forEach(b=>b.onclick=()=>{st.size=+b.dataset.i;render();});
+  }
+  drawSizes();
+  document.getElementById('frames').innerHTML=FRAMES.map((f,i)=>`<button class="frm${f.c?'':' none'}${i===0?' on':''}" data-i="${i}" title="${f.n}"><span class="box"><span class="sq" style="--fc:${f.c||'transparent'}"></span></span>${f.n}</button>`).join('');
+  document.getElementById('mats2').innerHTML=MATS.map((m,i)=>`<button data-i="${i}"${i===0?' class="on"':''}>${m.n}</button>`).join('');
+
+  const priceEl=document.getElementById('price'), barPrice=document.getElementById('barPrice'), ctaPrice=document.getElementById('ctaPrice'), ctaText=document.getElementById('ctaText'), fromnote=document.getElementById('fromnote');
+  const printOpts=document.getElementById('printOpts'), digitalOpts=document.getElementById('digitalOpts'), frameGroup=document.getElementById('frameGroup');
+  const deliver=document.getElementById('deliver');
+  const framedMaterial=()=>st.material==='Poster'; // frame + mat only for Poster
+  const truckI='<svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>';
+  const boltI='<svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>';
+  function deliveryStr(){const a=new Date(Date.now()+6*864e5),b=new Date(Date.now()+9*864e5);const mo=d=>d.toLocaleDateString('en-US',{month:'short'});return a.getMonth()===b.getMonth()?`${mo(a)} ${a.getDate()}–${b.getDate()}`:`${mo(a)} ${a.getDate()} – ${mo(b)} ${b.getDate()}`;}
+  function total(){
+    if(st.fmt==='digital')return DIGITAL_PRICE;
+    let t=PRICE[st.material][st.size];
+    if(framedMaterial())t+=FRAMES[st.frame].ex;
+    return t;
+  }
+  function render(){
+    const t=total(), dig=st.fmt==='digital';
+    priceEl.textContent='$'+t; barPrice.textContent='$'+t; ctaPrice.textContent='· $'+t;
+    fromnote.textContent=dig?'one-time':'incl. VAT';
+    deliver.innerHTML=dig?`${boltI}<span>Instant download after purchase</span>`:`${truckI}<span>Free shipping over $60 &middot; to Poland by <b>${deliveryStr()}</b></span>`;
+    printOpts.classList.toggle('hidden',dig);
+    digitalOpts.classList.toggle('hidden',!dig);
+    ctaText.textContent=dig?'Buy & download':'Add to cart';
+    frameGroup.classList.toggle('hidden',!framedMaterial());
+    // framing expander hint
+    const fs=document.getElementById('frameSmall');
+    if(fs)fs.textContent=FRAMES[st.frame].n==='None'?'optional':FRAMES[st.frame].n+(FRAMES[st.frame].ex?` · +$${FRAMES[st.frame].ex}`:'');
+    // live frame preview on the artwork + on the room mock-up
+    const showFrame=framedMaterial()&&st.frame>0, ai=document.getElementById('artImg');
+    ai.style.setProperty('--fc',showFrame?FRAMES[st.frame].c:'transparent');
+    ai.style.setProperty('--fw',showFrame?'14px':'0px');
+    ai.style.setProperty('--mw',showFrame?(st.mat===0?'0px':st.mat===1?'18px':'32px'):'0px');
+    document.querySelector('.frameOnWall').style.background=showFrame?FRAMES[st.frame].c:'#fff';
+    // frame scales with the chosen print size on the wall (kept prominent in every size — we sell the art)
+    document.getElementById('stage').style.setProperty('--sf',[0.78,1,1.26][st.size]);
+    // selection summary
+    let summ;
+    if(dig){summ='Digital file · full-res, all print ratios';}
+    else{
+      const p=[st.material, (st.unit==='cm'?SIZES[st.size].vcm:SIZES[st.size].vin)];
+      if(framedMaterial()){p.push(FRAMES[st.frame].n==='None'?'no frame':FRAMES[st.frame].n+' frame');if(st.mat>0)p.push(MATS[st.mat].v+' mat');}
+      summ=p.join(' · ');
+    }
+    document.getElementById('summText').textContent=summ;
+    // active states
+    document.querySelectorAll('.fmt button').forEach(b=>b.classList.toggle('on',b.dataset.fmt===st.fmt));
+    document.querySelectorAll('.mat').forEach(b=>b.classList.toggle('on',b.dataset.m===st.material));
+    document.querySelectorAll('#sizes button').forEach((b,i)=>b.classList.toggle('on',i===st.size));
+    document.querySelectorAll('.frm').forEach((b,i)=>b.classList.toggle('on',i===st.frame));
+    document.querySelectorAll('#mats2 button').forEach((b,i)=>b.classList.toggle('on',i===st.mat));
+  }
+  const frameToggle=document.getElementById('frameToggle'), framebody=document.getElementById('framebody');
+  const closeFraming=()=>{framebody.classList.add('hidden');frameToggle.classList.remove('open');};
+  frameToggle.onclick=()=>{const open=framebody.classList.contains('hidden');framebody.classList.toggle('hidden',!open);frameToggle.classList.toggle('open',open);};
+  document.querySelectorAll('.fmt button').forEach(b=>b.onclick=()=>{st.fmt=b.dataset.fmt;render();});
+  document.querySelectorAll('.mat').forEach(b=>b.onclick=()=>{st.material=b.dataset.m;if(!framedMaterial()){st.frame=0;st.mat=0;closeFraming();}drawSizes();render();});
+  document.querySelectorAll('.frm').forEach(b=>b.onclick=()=>{st.frame=+b.dataset.i;render();});
+  document.querySelectorAll('#mats2 button').forEach(b=>b.onclick=()=>{st.mat=+b.dataset.i;render();});
+  // unit toggle
+  document.querySelectorAll('#unit button').forEach(b=>b.onclick=()=>{st.unit=b.dataset.u;document.querySelectorAll('#unit button').forEach(x=>x.classList.toggle('on',x===b));drawSizes();render();});
+  // accordions
+  document.querySelectorAll('[data-acc]').forEach(a=>a.querySelector('button').onclick=()=>a.classList.toggle('open'));
+  // lightbox (click artwork / zoom → full-screen)
+  const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lbImg');
+  const openLB=()=>{if(!lbImg.dataset.loaded){lbImg.src=url(HERO,1500,2100);lbImg.dataset.loaded='1';}lb.classList.add('open');};
+  const closeLB=()=>lb.classList.remove('open');
+  document.querySelector('.zoom').onclick=openLB;
+  document.getElementById('artImg').onclick=openLB;
+  document.getElementById('lbClose').onclick=closeLB;
+  lb.onclick=e=>{if(e.target===lb)closeLB();};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
+  render();
+
+  document.getElementById('saveBtn').onclick=e=>e.currentTarget.classList.toggle('on');
+  document.getElementById('shareBtn').onclick=async e=>{const b=e.currentTarget,t=b.title;try{if(navigator.share){await navigator.share({title:document.title,url:location.href});}else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);b.title='Link copied';setTimeout(()=>b.title=t,1500);}}catch(err){}};
+
+  // theme + rail
+  const sun='<circle cx="12" cy="12" r="5.25"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4 4l2.1 2.1M17.9 17.9l2.1 2.1M20 4l-2.1 2.1M4 20l2.1-2.1"/>';
+  const moon='<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/>';
+  const root=document.documentElement, icon=document.getElementById('themeIcon');
+  document.getElementById('themeBtn').onclick=()=>{const d=root.dataset.theme!=='dark';root.dataset.theme=d?'dark':'light';icon.innerHTML=d?moon:sun;};
+  document.getElementById('railToggle').onclick=()=>document.querySelector('.app').classList.toggle('rail');
+  const tb=document.getElementById('topbar');
+  new IntersectionObserver(([e])=>tb.classList.toggle('stuck',e.intersectionRatio<1),{threshold:[1]}).observe(tb);
+
+  // search dropdown — same component/behaviour as Explore
+  const searchBtn=document.getElementById('searchBtn'), sdrop=document.getElementById('sdrop');
+  const openSearch=()=>{sdrop.classList.add('open');searchBtn.classList.add('act');};
+  const closeSearch=()=>{sdrop.classList.remove('open');searchBtn.classList.remove('act');};
+  searchBtn.onclick=e=>{e.stopPropagation();sdrop.classList.contains('open')?closeSearch():openSearch();};
+  document.addEventListener('click',e=>{if(!e.target.closest('.searchwrap'))closeSearch();});
+
+  // more like this
+  const R=[[560,747],[560,784],[560,560],[560,420],[560,400],[560,700]];
+  const works=[["Ion Drift","Sora Lindqvist",0],["Cobalt Flow","Elena Kova",1],["Violet Hour","Mira Solheim",5],["Aurora No. 7","Lena Frost",2],["Ember Field","L. Poire",1],["Pale Fire","N. Dubois",4],["Meridian","Tomas Ek",0],["Soft Machine","Kip Alvarez",3],["Undertow","Rhea Salt",1],["Signal","Kaia Lund",5]];
+  const heartI='<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>';
+  const shareI='<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+  const moreI='<svg class="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+  let galTab=0, galN=20;
+  function renderGrid(){
+    const off=galTab;
+    document.getElementById('grid').innerHTML=Array.from({length:galN},(_,i)=>{
+      const w=works[(i+off*3)%works.length];const[t,c,ri]=w;const[iw,ih]=R[(i+ri)%R.length];
+      return `<a class="tile"><img src="${url(ART[(i+2+off)%ART.length],iw,ih)}" alt=""><span class="tgrad"></span><button class="fav" title="Save">${heartI}</button><span class="acts"><button class="tbtn" title="More">${moreI}</button><button class="tbtn" title="Share">${shareI}</button></span><span class="info"><span class="t">${t}</span><span class="a"><span class="dot"></span><span>${c}</span></span></span></a>`;
+    }).join('');
+    document.getElementById('galShown').textContent=galN;
+  }
+  renderGrid();
+  document.querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.gtab').forEach(x=>x.classList.toggle('on',x===b));galTab=+b.dataset.t;galN=20;renderGrid();});
+  document.getElementById('galMore').onclick=()=>{galN=Math.min(galN+20,60);renderGrid();};
+
+  // ── drawers (cart + size guide) — reuse Explore's right-panel pattern ──
+  const scrim=document.getElementById('scrim'), cartDrawer=document.getElementById('cartDrawer'), sizeDrawer=document.getElementById('sizeDrawer'), matDrawer=document.getElementById('matDrawer');
+  const openDrawer=d=>{scrim.classList.add('open');d.classList.add('open');};
+  const closeDrawers=()=>{scrim.classList.remove('open');document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));};
+  scrim.onclick=closeDrawers;
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDrawers);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawers();});
+  const cartBadge=document.querySelector('.cart .badge');
+  const XSELL=[['Ion Drift','$49',4],['Violet Hour','$59',6]];
+  document.getElementById('cartXsell').innerHTML=XSELL.map((x,i)=>`<div class="cxrow"><img src="${url(ART[(x[2])%ART.length],120,120)}" alt=""><span class="n">${x[0]}<small>${x[1]}</small></span><button class="addx">Add</button></div>`).join('');
+  function openCart(){
+    const t=total(), dig=st.fmt==='digital';
+    document.getElementById('cartThumb').src=url(HERO,200,260);
+    let cfg;
+    if(dig)cfg='Digital file · full-res, all ratios';
+    else{const p=[st.material,(st.unit==='cm'?SIZES[st.size].vcm:SIZES[st.size].vin)];if(framedMaterial()&&st.frame>0)p.push(FRAMES[st.frame].n+' frame');cfg=p.join(' · ');}
+    document.getElementById('cartConfig').textContent=cfg;
+    document.getElementById('cartItemPrice').textContent='$'+t;
+    document.getElementById('cartSubtotal').textContent='$'+t;
+    document.getElementById('cartFootPrice').textContent='$'+t;
+    cartBadge.textContent=parseInt(cartBadge.textContent||'0',10)+1;
+    openDrawer(cartDrawer);
+  }
+  document.querySelectorAll('.addcart').forEach(b=>b.onclick=openCart);
+  const SG=[
+    {cm:'30 × 40 cm',inch:'12 × 16 in',bf:'Desks, shelves &amp; gallery clusters',w:42,h:56},
+    {cm:'50 × 70 cm',inch:'20 × 28 in',bf:'Above a sofa or bed',w:54,h:72},
+    {cm:'70 × 100 cm',inch:'28 × 40 in',bf:'Statement wall &amp; focal points',w:66,h:88}
+  ];
+  document.getElementById('sgRows').innerHTML=SG.map(s=>`<div class="sgrow"><div class="sgscale"><i style="--w:${s.w}px;--h:${s.h}px"></i></div><div class="sz">${s.cm}<small>${s.inch}</small></div><div class="bf">${s.bf}</div></div>`).join('');
+  document.getElementById('sizeGuide').onclick=()=>openDrawer(sizeDrawer);
+
+  // material compare + picker drawer
+  const MATSWATCH={Poster:'#efe9dc',Canvas:'repeating-linear-gradient(45deg,#e3d9c6,#e3d9c6 3px,#dad0bb 3px,#dad0bb 6px)',Metal:'linear-gradient(135deg,#d9dbdf,#a8acb3 55%,#e7e9eb)',Acrylic:'linear-gradient(135deg,#e4eef6,#bad1e5)',Wood:'linear-gradient(135deg,#cda872,#b8895180 60%,#c8a26a)',Foam:'#e6e6e3'};
+  function renderMatDrawer(){
+    document.getElementById('mgRows').innerHTML=MATDESC.map(m=>{const name=m[0],on=st.material===name;return `<button class="mgrow${on?' on':''}" data-m="${name}"><span class="sw" style="--mg:${MATSWATCH[name]}"></span><span class="mn">${name}<small>${m[1]}</small></span><span class="mp">from $${PRICE[name][0]}</span></button>`;}).join('');
+    document.querySelectorAll('.mgrow').forEach(b=>b.onclick=()=>{st.material=b.dataset.m;if(!framedMaterial()){st.frame=0;st.mat=0;closeFraming();}drawSizes();render();closeDrawers();});
+  }
+  document.getElementById('matCompare').onclick=()=>{renderMatDrawer();openDrawer(matDrawer);};
+
+  // frame guide + picker drawer (explains frames + mat, consistent with Material's Compare)
+  const frameDrawer=document.getElementById('frameDrawer');
+  const FRAMEDESC=['Ships rolled, unframed','Matte lacquered wood','Matte lacquered wood','Solid oak, clear finish','Stained walnut'];
+  function renderFrameDrawer(){
+    document.getElementById('fgRows').innerHTML=FRAMES.map((f,i)=>{const on=st.frame===i;return `<button class="mgrow${on?' on':''}" data-i="${i}"><span class="sw" style="--mg:${f.c||'var(--panel)'}"></span><span class="mn">${f.n}<small>${FRAMEDESC[i]}</small></span>${f.ex?`<span class="mp">+$${f.ex}</span>`:''}</button>`;}).join('');
+    document.querySelectorAll('#fgRows .mgrow').forEach(b=>b.onclick=()=>{st.frame=+b.dataset.i;render();closeDrawers();});
+  }
+  document.getElementById('frameGuide').onclick=()=>{renderFrameDrawer();openDrawer(frameDrawer);};
+</script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     LATENCA — Cart & Checkout · same design tokens as Explore/Product
+     ============================================================ */
+  :root{
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#847F76; --faint:#B4AEA3; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA;
+    --media:#E7E0D3;
+    --on-dark:#fff;
+    --ink-strong:#141018;
+    --glass:rgba(20,16,26,.75);
+    --grad-a:#c9bff2; --grad-b:#8f7fe0;
+    --ok:#3f9d6d;
+    --r-tile:2px; --r-sm:4px; --r-card:5px; --r-ui:7px; --r-full:999px;
+    --shadow-1:0 6px 16px rgba(20,16,10,.20);
+    --shadow-2:0 12px 28px rgba(20,16,10,.30);
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --ring:0 0 0 3px var(--accent-soft);
+    --serif:'Lora',Georgia,"Times New Roman",serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33;
+    --media:#1b1826;
+  }
+
+  /* ── Base ── */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  html{overflow-x:clip}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased;overflow-x:clip;transition:background .3s,color .3s}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  input,select{font-family:inherit;font-size:14px;color:var(--ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none}
+  .brandmark svg{fill:currentColor;stroke:none}
+
+  /* ── Reusable buttons / chrome (identical to Product) ── */
+  .signin{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);font-size:13px;font-weight:600}
+  .sell{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:13px;font-weight:600;color:var(--ink)}
+  .sell:hover{border-color:var(--accent);color:var(--accent)}
+  .brand .mark{display:none}
+  .sidehead{display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative}
+  .railtoggle{width:30px;height:30px;flex:none;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);opacity:0;transition:opacity .15s,background .15s}
+  .side:hover .railtoggle{opacity:1}
+  .railtoggle:hover{background:var(--panel2);color:var(--ink)}
+  .railtoggle svg{width:18px;height:18px}
+  .app.rail{grid-template-columns:64px minmax(0,1fr)}
+  .app.rail .side{padding:22px 8px}
+  .app.rail .sidehead{justify-content:center}
+  .app.rail .brand{text-align:center;font-size:20px;padding:2px 0}
+  .app.rail .brand .full{display:none}
+  .app.rail .brand .mark{display:inline}
+  .app.rail .railtoggle{position:absolute;inset:0;margin:auto;width:38px;height:38px;background:var(--bg)}
+  .app.rail .nav,.app.rail .sell,.app.rail .account{justify-content:center;gap:0}
+  .app.rail .nav>span,.app.rail .sell>span,.app.rail .account .who{display:none}
+  .app.rail .sell{padding:11px 0}
+  .app{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}
+  .side{border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;background:var(--bg)}
+  .brand{font-family:var(--serif);font-size:27px;padding:2px 8px;font-weight:600}
+  .navgroup{display:flex;flex-direction:column;gap:2px}
+  .nav{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:var(--r-ui);color:var(--muted);font-size:14px;font-weight:500}
+  .nav svg{width:19px;height:19px}
+  .nav:hover{background:var(--panel2);color:var(--ink)}
+  .nav.active{background:var(--accent-soft);color:var(--accent)}
+  .side .spacer{flex:1}
+  .sell{justify-content:center;padding:11px}
+  .sell svg{width:16px;height:16px}
+  .account{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:var(--r-ui)}
+  .account:hover{background:var(--panel2)}
+  .avatar{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .account .who{font-size:13px;font-weight:600;line-height:1.15}
+  .account .who small{display:block;color:var(--muted);font-weight:400;font-size:11px}
+  .main{padding:0 clamp(20px,3.2vw,44px) 70px;min-width:0}
+  .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;padding:14px 0 12px;background:var(--bg);border-bottom:1px solid transparent;transition:border-color .2s}
+  .topbar.stuck{border-color:var(--line)}
+  .searchwrap{position:relative;flex:0 1 640px;margin-inline:auto;min-width:0}
+  .search{width:100%;min-width:0;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:11px 16px;color:var(--muted);font-size:14px;text-align:left}
+  .search span:not(.kbd){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .search svg{width:17px;height:17px;stroke:var(--faint)}
+  .search .kbd{margin-left:auto;font-size:11px;border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 7px;color:var(--faint)}
+  .topbar .right{display:flex;align-items:center;gap:6px}
+  .icobtn{width:40px;height:40px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);position:relative}
+  .icobtn:hover{background:var(--panel2);color:var(--ink)}
+  .icobtn svg{width:19px;height:19px}
+  .cart .badge{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 4px;border-radius:var(--r-full);background:var(--accent);color:var(--on-dark);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .signin{margin-left:6px;padding:9px 16px}
+  .crumb{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;margin:16px 0 0}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--faint)}
+  .crumb b{color:var(--ink);font-weight:500}
+
+  /* ============================================================
+     CHECKOUT
+     ============================================================ */
+  .co{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:clamp(24px,3.2vw,48px);align-items:start;margin-top:16px}
+  .co>.cohead{grid-column:1 / -1}
+  .cohead{margin:2px 0 4px}
+  .cohead h1{font-family:var(--serif);font-weight:500;font-size:clamp(23px,3vw,30px);margin:0;line-height:1.1}
+  .cohead .sub{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;margin-top:7px}
+  .cohead .sub svg{width:14px;height:14px;stroke:var(--accent)}
+
+  /* express wallets */
+  .express{margin-top:20px}
+  .xgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .xpay{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:var(--r-ui);font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--ink);transition:.14s}
+  .xpay:hover{border-color:var(--faint)}
+  .xpay.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .xpay.dark:hover{filter:brightness(1.15)}
+  .xpay svg{width:18px;height:18px}
+  .xpay .g{font-weight:700;letter-spacing:-.01em}
+  .ordiv{display:flex;align-items:center;gap:14px;margin:20px 0 4px;color:var(--faint);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .ordiv::before,.ordiv::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* generic checkout section */
+  .sec{border-top:1px solid var(--line);padding:22px 0}
+  .sec:first-of-type{border-top:0}
+  .sechead{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+  .secnum{width:24px;height:24px;flex:none;border-radius:var(--r-sm);background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .sechead h2{font-size:15px;font-weight:600;margin:0;flex:1}
+  .sechead .note{font-size:11.5px;color:var(--muted)}
+  .sechead .note b{color:var(--ok);font-weight:600}
+
+  /* order line items */
+  .items{display:flex;flex-direction:column;gap:2px}
+  .litem{display:grid;grid-template-columns:64px 1fr auto;gap:15px;padding:16px 0;border-top:1px solid var(--line)}
+  .litem:first-child{border-top:0}
+  .litem .lthumb{width:64px;height:82px;border-radius:var(--r-sm);object-fit:cover;background:var(--media)}
+  .litem.digital .lthumb{height:64px}
+  .lbody{min-width:0}
+  .lbody .lt{font-family:var(--serif);font-size:16px;font-weight:500;line-height:1.15}
+  .lbody .la{font-size:12px;color:var(--muted);margin-top:3px}
+  .lchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .lchip{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px 8px;white-space:nowrap}
+  .lchip.badge{border-color:transparent;background:var(--accent-soft);color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:4px}
+  .lchip.badge svg{width:11px;height:11px}
+  .lctl{display:flex;align-items:center;gap:14px;margin-top:12px}
+  .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden}
+  .qty button{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .qty button:hover{background:var(--panel2);color:var(--ink)}
+  .qty button svg{width:14px;height:14px}
+  .qty .n{min-width:26px;text-align:center;font-weight:600;font-size:13px;font-variant-numeric:tabular-nums}
+  .llink{font-size:12px;font-weight:600;color:var(--muted)}
+  .llink:hover{color:var(--accent)}
+  .lright{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+  .lright .lp{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+  .lright .lwas{font-size:11.5px;color:var(--faint)}
+  .addmore{display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:13px;font-weight:600;color:var(--muted)}
+  .addmore:hover{color:var(--accent)}
+  .addmore svg{width:15px;height:15px}
+
+  /* form fields */
+  .fgrid{display:flex;flex-direction:column;gap:14px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field label{font-size:12px;font-weight:600;color:var(--muted)}
+  .field label .opt{font-weight:400;color:var(--faint)}
+  .field input,.field select{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:12px 14px;transition:border-color .14s,box-shadow .14s}
+  .field input::placeholder{color:var(--faint)}
+  .field input:focus,.field select:focus{outline:0;border-color:var(--accent);box-shadow:var(--ring)}
+  .field .hint{font-size:11.5px;color:var(--faint)}
+  .field.card{position:relative}
+  .field.card .cardicons{position:absolute;right:12px;top:34px;display:flex;gap:5px}
+  .field.card .cardicons i{width:26px;height:17px;border-radius:3px;border:1px solid var(--line);background:var(--panel2)}
+
+  /* shipping (single Standard method, cost from Gelato) */
+  .shipcard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:13px 15px;margin-top:4px}
+  .shipcard .shico{width:34px;height:34px;flex:none;border-radius:var(--r-ui);background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
+  .shipcard .shico svg{width:17px;height:17px}
+  .shipcard .sm{flex:1;min-width:0}
+  .shipcard .sm b{font-size:13.5px;font-weight:600;display:block}
+  .shipcard .sm small{font-size:11.5px;color:var(--muted)}
+  .shipcard .smp{font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .shipcard .smp.free{color:var(--ok)}
+  .shipnote{font-size:11.5px;color:var(--faint);line-height:1.5;margin:8px 2px 0}
+
+  /* guest / account */
+  .guest{display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:13px 15px;border:1px solid var(--line);border-radius:var(--r-ui);background:var(--panel)}
+  .guest .cbx{width:20px;height:20px;flex:none;border-radius:var(--r-sm);border:1.75px solid var(--faint);display:flex;align-items:center;justify-content:center;color:transparent;transition:.14s}
+  .guest.on .cbx{background:var(--accent);border-color:var(--accent);color:var(--on-dark)}
+  .guest .cbx svg{width:13px;height:13px}
+  .guest .gt{font-size:12.5px;line-height:1.5}
+  .guest .gt b{font-weight:600}
+  .guest .gt small{color:var(--muted);display:block}
+
+  /* trust badges under payment */
+  .trust{display:flex;flex-wrap:wrap;gap:16px;margin-top:18px}
+  .trust .ti{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  .trust .ti svg{width:16px;height:16px;stroke:var(--accent)}
+  .trust .ti b{color:var(--ink);font-weight:600}
+
+  /* ── Order summary (sticky right) ── */
+  .summary{position:sticky;top:78px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--panel);padding:20px}
+  .sumtoggle{display:none}
+  .sumtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
+  .sumtitle{font-family:var(--serif);font-weight:500;font-size:18px}
+  .cur{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:var(--r-ui);padding:5px 9px;font-size:12px;font-weight:600;color:var(--ink);background:var(--bg)}
+  .cur:hover{border-color:var(--faint)}
+  .cur svg{width:13px;height:13px;color:var(--muted)}
+  .cur select{border:0;background:none;font-weight:600;padding:0;padding-right:2px;cursor:pointer;-webkit-appearance:none;appearance:none}
+  .sumrows{margin-top:16px;display:flex;flex-direction:column;gap:11px}
+  .srow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px;color:var(--muted)}
+  .srow .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500}
+  .srow .v.free{color:var(--ok);font-weight:600}
+  .srow.disc .v{color:var(--ok)}
+  .promo{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+  .promoToggle{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--muted);width:100%}
+  .promoToggle:hover{color:var(--ink)}
+  .promoToggle svg{width:15px;height:15px;transition:transform .2s}
+  .promoToggle.open svg{transform:rotate(45deg)}
+  .promobody{display:none;gap:8px;margin-top:11px}
+  .promobody.open{display:flex}
+  .promobody input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-ui);padding:10px 12px;text-transform:uppercase;letter-spacing:.04em}
+  .promobody input:focus{outline:0;border-color:var(--accent);box-shadow:var(--ring)}
+  .promobody .apply{border:1px solid var(--line);border-radius:var(--r-ui);padding:0 16px;font-size:13px;font-weight:600;background:var(--bg)}
+  .promobody .apply:hover{border-color:var(--accent);color:var(--accent)}
+  .promomsg{font-size:11.5px;margin-top:8px;color:var(--ok);font-weight:600;display:none;align-items:center;gap:5px}
+  .promomsg.show{display:flex}
+  .promomsg svg{width:13px;height:13px;stroke:var(--ok)}
+  .sumtotal{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+  .sumtotal .tl{font-size:14px;font-weight:600}
+  .sumtotal .tv{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .vatnote{font-size:11px;color:var(--faint);text-align:right;margin-top:3px}
+  .pay{width:100%;background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:15px;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:16px;transition:filter .15s}
+  .pay:hover{filter:brightness(1.15)}
+  .pay.paymain{margin-top:24px}
+  .pay svg{width:17px;height:17px}
+  .securenote{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-size:11.5px;color:var(--muted)}
+  .securenote svg{width:14px;height:14px;stroke:var(--accent)}
+  .paymethods{display:flex;justify-content:center;gap:6px;margin-top:12px}
+  .paymethods i{width:34px;height:22px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;letter-spacing:.02em;color:var(--faint)}
+  .dgift{display:flex;align-items:flex-start;gap:9px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.5}
+  .dgift svg{width:15px;height:15px;stroke:var(--accent);flex:none;margin-top:1px}
+
+  /* ── trust band (reused "Why Latenca") ── */
+  .whyband{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.5vw,32px);margin-top:clamp(40px,5vw,60px);padding-top:clamp(30px,4vw,44px);border-top:1px solid var(--line)}
+  .why{display:flex;gap:13px;align-items:flex-start}
+  .why svg{width:22px;height:22px;stroke:var(--accent);flex:none;margin-top:1px}
+  .why b{font-size:14px;font-weight:600;display:block}
+  .why span{font-size:12.5px;color:var(--muted);line-height:1.5;display:block;margin-top:3px}
+  @media(max-width:1100px){.whyband{grid-template-columns:1fr 1fr;gap:22px}}
+  @media(max-width:820px){.whyband{grid-template-columns:1fr;gap:20px}}
+
+  /* mobile sticky pay bar */
+  .paybar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:39;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom));align-items:center;gap:14px;box-shadow:0 -8px 24px rgba(15,12,20,.08)}
+  .paybar .pbt{line-height:1.1}
+  .paybar .pbt small{display:block;font-size:10.5px;color:var(--muted)}
+  .paybar .pbt b{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+  .paybar .pay{margin-top:0;flex:1;padding:13px}
+
+  /* ── empty cart ── */
+  .empty{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:420px;margin:0 auto;padding:clamp(50px,11vh,120px) 20px}
+  .empty .emptyIcon{width:72px;height:72px;flex:none;border-radius:var(--r-card);background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--faint)}
+  .empty .emptyIcon svg{width:30px;height:30px;stroke-width:1.5}
+  .empty h1{font-family:var(--serif);font-weight:500;font-size:24px;margin:20px 0 0}
+  .empty p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:10px 0 0}
+  .empty .emptyCta{display:inline-flex;align-items:center;gap:9px;margin-top:24px;background:var(--ink);color:var(--bg);border-radius:var(--r-ui);padding:13px 24px;font-weight:600;font-size:14px;transition:filter .15s}
+  .empty .emptyCta:hover{filter:brightness(1.15)}
+  .empty .emptyCta svg{width:17px;height:17px}
+
+  .hidden{display:none!important}
+
+  /* ── Responsive ── */
+  .brand-m{display:none}
+  @media(max-width:980px){
+    .co{grid-template-columns:1fr;gap:16px}
+    .cohead{order:0;margin:0}
+    .coflow{order:2}
+    /* order summary → collapsible bar just under the title (total visible immediately) */
+    .summary{order:1;position:static;padding:0;border:0;border-radius:0}
+    .sumtoggle{display:flex;align-items:center;gap:12px;width:100%;padding:15px 18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-card)}
+    .sumtoggle .stl{font-weight:600;font-size:14px}
+    .sumtoggle .sttot{margin-left:auto;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+    .sumtoggle .pchev{width:18px;height:18px;color:var(--muted);transition:transform .2s}
+    .summary.open .sumtoggle{border-radius:var(--r-card) var(--r-card) 0 0}
+    .summary.open .pchev{transform:rotate(45deg)}
+    .sumbody{display:none;border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r-card) var(--r-card);padding:16px 18px}
+    .summary.open .sumbody{display:block}
+    .sumtitle{display:none}
+    .sumtop{justify-content:flex-end;margin-bottom:10px}
+  }
+  @media(max-width:820px){
+    .app,.app.rail{grid-template-columns:minmax(0,1fr)}
+    .side{display:none}
+    .main{padding:0 clamp(14px,4vw,26px) 96px}
+    .topbar{gap:10px}
+    .searchwrap{flex:1;margin-inline:0}
+    .brand-m{display:block;font-family:var(--serif);font-size:22px;font-weight:600}
+    #themeBtn,.topbar [title="Saved"],.signin{display:none}
+    .search .kbd{display:none}
+    .paybar{display:flex}
+    .pay.paymain{display:none}
+  }
+  @media(max-width:460px){
+    .xgrid{grid-template-columns:1fr}
+    .frow{grid-template-columns:1fr}
+    .litem{grid-template-columns:56px 1fr;grid-template-areas:"th body" "th right"}
+    .litem .lthumb{grid-area:th}.lbody{grid-area:body}.lright{grid-area:right;align-items:flex-start;text-align:left;margin-top:8px}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="sidehead">
+      <div class="brand"><span class="full">Latenca</span><span class="mark">L</span></div>
+      <button class="railtoggle" id="railToggle" title="Toggle menu"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
+    </div>
+    <div class="navgroup">
+      <a class="nav"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Explore</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><span>Collections</span></a>
+      <a class="nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Creators</span></a>
+    </div>
+    <div class="spacer"></div>
+    <a class="sell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Sell your art</span></a>
+    <a class="account"><span class="avatar"></span><span class="who">Studio Latenca<small>Curator</small></span></a>
+  </aside>
+
+  <main class="main">
+    <div class="topbar" id="topbar">
+      <a class="brand-m">Latenca</a>
+      <div class="searchwrap">
+        <button class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Try &ldquo;calm terracotta abstract for a bedroom&rdquo;&hellip;</span><span class="kbd">&#8984;K</span></button>
+      </div>
+      <div class="right">
+        <button class="icobtn" id="themeBtn" title="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></button>
+        <button class="icobtn" title="Saved"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+        <button class="icobtn cart"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span class="badge" id="cartBadge">3</span></button>
+        <button class="signin">Sign in</button>
+      </div>
+    </div>
+
+    <nav class="crumb"><a>Explore</a><span class="sep">&middot;</span><b>Checkout</b></nav>
+
+    <!-- empty cart -->
+    <section class="empty hidden" id="emptyState">
+      <span class="emptyIcon"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
+      <h1>Your cart is empty</h1>
+      <p>Nothing here yet. Find a piece you love and it&rsquo;ll show up here, ready to download or print.</p>
+      <a class="emptyCta"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Browse the gallery</a>
+    </section>
+
+    <section class="co">
+      <div class="cohead">
+        <h1>Checkout</h1>
+        <div class="sub"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span id="cohSub">3 items &middot; secure checkout</span></div>
+      </div>
+
+      <!-- LEFT: checkout flow -->
+      <div class="coflow">
+        <!-- Your order -->
+        <div class="sec">
+          <div class="sechead"><span class="secnum" data-n></span><h2>Your order</h2><span class="note" id="freeNote"></span></div>
+          <div class="items" id="items"></div>
+          <a class="addmore"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add more art</a>
+        </div>
+
+        <!-- Contact -->
+        <div class="sec">
+          <div class="sechead"><span class="secnum" data-n></span><h2>Contact</h2></div>
+          <div class="fgrid">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@email.com" autocomplete="email">
+              <span class="hint">Order confirmation &amp; digital downloads are sent here.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery (conditional — only when the cart has a physical print) -->
+        <div class="sec" id="deliverySec">
+          <div class="sechead"><span class="secnum" data-n></span><h2>Delivery</h2><span class="note">For your printed art only</span></div>
+          <div class="fgrid">
+            <div class="field">
+              <label for="fullname">Full name</label>
+              <input id="fullname" placeholder="Anna Nowak" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="addr">Address</label>
+              <input id="addr" placeholder="Street and number" autocomplete="address-line1">
+            </div>
+            <div class="frow">
+              <div class="field"><label for="city">City</label><input id="city" placeholder="Warsaw" autocomplete="address-level2"></div>
+              <div class="field"><label for="zip">Postal code</label><input id="zip" placeholder="00-001" autocomplete="postal-code"></div>
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <select id="country" autocomplete="country-name">
+                <option>Poland</option><option>Germany</option><option>United Kingdom</option><option>United States</option><option>France</option><option>Spain</option><option>Netherlands</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--muted)">Shipping</label>
+              <div class="shipcard">
+                <span class="shico"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg></span>
+                <span class="sm"><b>Standard &middot; via Gelato</b><small id="shipEta">Printed &amp; shipped &middot; arrives in 5–7 days</small></span>
+                <span class="smp" id="shipMethodPrice">$5.90</span>
+              </div>
+              <p class="shipnote">Final shipping is calculated from your delivery address, per Gelato&rsquo;s live rates.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="sec">
+          <div class="sechead"><span class="secnum" data-n></span><h2>Payment</h2><span class="note"><b>Encrypted</b> &amp; secure</span></div>
+
+          <!-- fast path: pay in one tap with a wallet, or by card below -->
+          <div class="express">
+            <div class="xgrid">
+              <button class="xpay dark brandmark" title="Apple Pay"><svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>Pay</button>
+              <button class="xpay dark" title="Google Pay"><span class="g">G</span>&nbsp;Pay</button>
+            </div>
+            <div class="ordiv">or pay by card</div>
+          </div>
+
+          <div class="fgrid">
+            <div class="field card">
+              <label for="cardnum">Card number</label>
+              <input id="cardnum" inputmode="numeric" placeholder="1234 1234 1234 1234" autocomplete="cc-number">
+              <span class="cardicons"><i></i><i></i><i></i></span>
+            </div>
+            <div class="frow">
+              <div class="field"><label for="exp">Expiry</label><input id="exp" placeholder="MM / YY" autocomplete="cc-exp"></div>
+              <div class="field"><label for="cvc">CVC</label><input id="cvc" inputmode="numeric" placeholder="123" autocomplete="cc-csc"></div>
+            </div>
+          </div>
+
+          <div class="guest on" id="guest">
+            <span class="cbx"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span>
+            <span class="gt"><b>Create an account for faster checkout</b><small>Optional — save your art library &amp; track orders. You can also continue as a guest.</small></span>
+          </div>
+
+          <div class="trust">
+            <span class="ti"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><b>SSL encrypted</b></span>
+            <span class="ti"><svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 0 1 13.7-5.3L21 9"/><path d="M21 4v5h-5"/><path d="M20 13a8 8 0 0 1-13.7 5.3L3 15"/><path d="M3 20v-5h5"/></svg>30-day returns</span>
+            <span class="ti"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Buyer protection</span>
+          </div>
+
+          <button class="pay paymain"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Pay <span id="payTot">$0</span></button>
+          <div class="securenote"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>You&rsquo;ll review your order before it&rsquo;s final</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: order summary — desktop sidebar · mobile collapsible top bar -->
+      <aside class="summary" id="summary">
+        <button class="sumtoggle" id="sumToggle" aria-expanded="false">
+          <span class="stl">Order summary</span>
+          <span class="sttot" id="sumTogTotal">$0</span>
+          <svg class="pchev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="sumbody" id="sumBody">
+        <div class="sumtop">
+          <span class="sumtitle">Order summary</span>
+          <span class="cur"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.5-1M14.5 14.5a2.5 2.5 0 0 1-4.5 1M12 6.5v11"/></svg><select id="curSel"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="PLN">PLN</option></select></span>
+        </div>
+        <div class="sumrows">
+          <div class="srow"><span id="subLbl">Subtotal</span><span class="v" id="subVal">$0</span></div>
+          <div class="srow disc hidden" id="discRow"><span>Discount</span><span class="v" id="discVal">&minus;$0</span></div>
+          <div class="srow hidden" id="shipRow"><span>Shipping</span><span class="v free" id="shipVal">Free</span></div>
+        </div>
+        <div class="promo">
+          <button class="promoToggle" id="promoToggle"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Have a promo code?</button>
+          <div class="promobody" id="promobody">
+            <input id="promoInput" placeholder="Code" maxlength="16">
+            <button class="apply" id="promoApply">Apply</button>
+          </div>
+          <div class="promomsg" id="promoMsg"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span id="promoMsgTxt"></span></div>
+        </div>
+        <div class="sumtotal"><span class="tl">Total</span><span class="tv" id="totVal">$0</span></div>
+        <div class="vatnote" id="vatNote">incl. VAT</div>
+        <div class="paymethods"><i>VISA</i><i>MC</i><i>AMEX</i><i>PP</i><i>PAY</i></div>
+        <div class="dgift" id="digNote"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 21h14"/></svg><span>Your digital files unlock instantly after payment — no shipping needed.</span></div>
+        </div><!-- /sumbody -->
+      </aside>
+    </section>
+
+    <!-- trust band -->
+    <section class="whyband">
+      <div class="why"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></svg><div><b>Museum-grade materials</b><span>Paper, canvas, metal &amp; more, built to last.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><div><b>Made to order</b><span>Shipped in ~5 days, zero waste.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><div><b>Signed certificate</b><span>Verified authenticity, every piece.</span></div></div>
+      <div class="why"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Secure checkout</b><span>Safe payment, 30-day returns.</span></div></div>
+    </section>
+  </main>
+</div>
+
+<!-- mobile sticky pay bar -->
+<div class="paybar">
+  <span class="pbt"><small>Total</small><b id="barTot">$0</b></span>
+  <button class="pay"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Pay now</button>
+</div>
+
+<script>
+  const url=(id,w,h)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+  const boltI='<svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>';
+
+  // ── cart model (prices are USD, matching the Product page tables) ──
+  const CART=[
+    {id:'nebula', title:'Nebula Bloom', artist:'Aria Vela',      art:'photo-1612623753207-96465febeee7', type:'print',   chips:['Poster','50 × 70 cm','White frame'], price:84,  qty:1},
+    {id:'cobalt', title:'Cobalt Flow',  artist:'Elena Kova',     art:'photo-1541961017774-22349e4a1262', type:'print',   chips:['Canvas','70 × 100 cm'],               price:125, qty:1},
+    {id:'ion',    title:'Ion Drift',    artist:'Sora Lindqvist', art:'photo-1618331833071-ce81bd50d300', type:'digital', chips:['Full-res JPG + PNG','All print ratios'], price:12,  qty:1},
+  ];
+
+  // ── currency (multi-currency, future-proof: base USD) ──
+  const CUR={USD:['$',1,'pre'],EUR:['€',0.92,'pre'],GBP:['£',0.79,'pre'],PLN:['zł',4.02,'post']};
+  let cur='USD';
+  function fmt(v){
+    const [sym,rate,pos]=CUR[cur];
+    const n=v*rate;
+    const dec=(cur==='USD'&&Number.isInteger(v))?0:2;
+    const str=n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:2});
+    return pos==='pre'?sym+str:str+' '+sym;
+  }
+
+  // ── state ──
+  let ship=0;            // shipping cost (USD) — from Gelato, per destination
+  let discount=0;        // fraction, e.g. 0.10
+  // simulated Gelato Standard rates per destination — real build pulls these live from the Gelato Quote API
+  const GELATO_SHIP={'Poland':5.9,'Germany':6.9,'United Kingdom':7.9,'United States':12.9,'France':7.9,'Spain':7.9,'Netherlands':6.9};
+
+  const $=id=>document.getElementById(id);
+
+  function hasPhysical(){return CART.some(i=>i.type==='print');}
+  function hasDigital(){return CART.some(i=>i.type==='digital');}
+  function itemsSubtotal(){return CART.reduce((s,i)=>s+i.price*i.qty,0);}
+  function physicalSubtotal(){return CART.filter(i=>i.type==='print').reduce((s,i)=>s+i.price*i.qty,0);}
+
+  // ── render line items ──
+  function renderItems(){
+    $('items').innerHTML=CART.map(i=>{
+      const isDig=i.type==='digital';
+      const badge=isDig
+        ? `<span class="lchip badge">${boltI}Instant download</span>`
+        : `<span class="lchip badge"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>Printed &amp; shipped</span>`;
+      const chips=i.chips.map(c=>`<span class="lchip">${c}</span>`).join('');
+      const ctl=isDig
+        ? `<span class="lchip" style="border-color:transparent;padding-left:0;color:var(--muted)">Single license</span><button class="llink" data-rm="${i.id}">Remove</button>`
+        : `<span class="qty"><button data-dec="${i.id}" title="Less"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button><span class="n">${i.qty}</span><button data-inc="${i.id}" title="More"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></span><a class="llink" href="Latenca-Product.html" title="Change size, material or frame">Edit</a><button class="llink" data-rm="${i.id}">Remove</button>`;
+      const th=isDig?url(i.art,200,200):url(i.art,200,260);
+      return `<div class="litem${isDig?' digital':''}">
+        <img class="lthumb" src="${th}" alt="${i.title}">
+        <div class="lbody">
+          <div class="lt">${i.title}</div>
+          <div class="la">${i.artist}</div>
+          <div class="lchips">${badge}${chips}</div>
+          <div class="lctl">${ctl}</div>
+        </div>
+        <div class="lright"><span class="lp">${fmt(i.price*i.qty)}</span>${i.qty>1?`<span class="lwas">${fmt(i.price)} each</span>`:''}</div>
+      </div>`;
+    }).join('');
+    // bind controls
+    $('items').querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const it=CART.find(x=>x.id===b.dataset.inc);it.qty++;recalc();});
+    $('items').querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const it=CART.find(x=>x.id===b.dataset.dec);if(it.qty>1){it.qty--;recalc();}});
+    $('items').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const idx=CART.findIndex(x=>x.id===b.dataset.rm);if(idx>-1)CART.splice(idx,1);recalc();});
+  }
+
+  // ── shipping: single Standard method, cost from Gelato per destination ──
+  function shipCost(){
+    if(!hasPhysical())return 0;
+    return GELATO_SHIP[$('country').value] ?? 6.9;
+  }
+  function renderShip(){
+    ship=shipCost();
+    $('shipMethodPrice').textContent=fmt(ship);
+  }
+  $('country').addEventListener('change',recalc);
+
+  // ── section numbering (skip hidden Delivery) ──
+  function renumber(){
+    let n=0;
+    document.querySelectorAll('.sec').forEach(sec=>{
+      if(sec.classList.contains('hidden'))return;
+      const badge=sec.querySelector('[data-n]');
+      if(badge){n++;badge.textContent=n;}
+    });
+  }
+
+  // ── totals ──
+  function recalc(){
+    // empty-cart state
+    const empty=CART.length===0;
+    document.querySelector('.co').classList.toggle('hidden',empty);
+    $('emptyState').classList.toggle('hidden',!empty);
+    document.querySelector('.paybar').classList.toggle('hidden',empty);
+    if(empty){$('cartBadge').textContent='0';return;}
+
+    const phys=hasPhysical();
+    // conditional Delivery section
+    $('deliverySec').classList.toggle('hidden',!phys);
+    renderShip();
+
+    const sub=itemsSubtotal();
+    const disc=+(sub*discount).toFixed(2);
+    const total=+(sub-disc+ship).toFixed(2);
+    const vat=+(total-total/1.23).toFixed(2);
+
+    $('subLbl').textContent=`Subtotal (${CART.reduce((s,i)=>s+i.qty,0)} item${CART.reduce((s,i)=>s+i.qty,0)>1?'s':''})`;
+    $('subVal').textContent=fmt(sub);
+    $('discRow').classList.toggle('hidden',disc<=0);
+    $('discVal').textContent='−'+fmt(disc);
+    $('shipRow').classList.toggle('hidden',!phys);
+    if(phys){
+      const sv=$('shipVal');
+      sv.textContent=ship===0?'Free':fmt(ship);
+      sv.classList.toggle('free',ship===0);
+    }
+    $('totVal').textContent=fmt(total);
+    $('payTot').textContent=fmt(total);
+    $('barTot').textContent=fmt(total);
+    $('sumTogTotal').textContent=fmt(total);
+    $('vatNote').textContent=`incl. ${fmt(vat)} VAT (23%)`;
+
+    // header + free-shipping nudge
+    const count=CART.reduce((s,i)=>s+i.qty,0);
+    $('cohSub').innerHTML=`${count} item${count>1?'s':''} &middot; secure checkout`;
+    $('cartBadge').textContent=count;
+    $('freeNote').textContent=phys?'Made to order · shipped by Gelato':'';
+
+    // digital note only when a digital item is present
+    $('digNote').classList.toggle('hidden',!hasDigital());
+
+    renderItems();
+    renumber();
+  }
+
+  // ── currency ──
+  $('curSel').onchange=e=>{cur=e.target.value;recalc();};
+
+  // ── promo code ──
+  const CODES={'LATEN10':0.10,'WELCOME':0.15};
+  $('promoToggle').onclick=()=>{$('promoToggle').classList.toggle('open');$('promobody').classList.toggle('open');};
+  $('promoApply').onclick=()=>{
+    const code=$('promoInput').value.trim().toUpperCase();
+    const msg=$('promoMsg'),txt=$('promoMsgTxt');
+    if(CODES[code]){discount=CODES[code];txt.textContent=`Code ${code} applied — ${Math.round(discount*100)}% off`;msg.classList.add('show');msg.style.color='var(--ok)';msg.querySelector('svg').style.display='';}
+    else{discount=0;txt.textContent='That code isn’t valid';msg.classList.add('show');msg.style.color='#c0553f';msg.querySelector('svg').style.display='none';}
+    recalc();
+  };
+
+  // ── guest / create-account checkbox ──
+  $('guest').onclick=()=>$('guest').classList.toggle('on');
+
+  // ── mobile: collapsible order summary ──
+  $('sumToggle').onclick=()=>{const s=$('summary');const open=s.classList.toggle('open');$('sumToggle').setAttribute('aria-expanded',open);};
+
+  // ── theme + rail (shared chrome) ──
+  const sun='<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>';
+  const moon='<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/>';
+  const root=document.documentElement, icon=$('themeIcon');
+  $('themeBtn').onclick=()=>{const d=root.dataset.theme!=='dark';root.dataset.theme=d?'dark':'light';icon.innerHTML=d?moon:sun;};
+  $('railToggle').onclick=()=>document.querySelector('.app').classList.toggle('rail');
+  const tb=$('topbar');
+  new IntersectionObserver(([e])=>tb.classList.toggle('stuck',e.intersectionRatio<1),{threshold:[1]}).observe(tb);
+
+  recalc();
+</script>
+</body>
+</html>

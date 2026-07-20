@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Latenca — Build your wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ── Latenca design tokens (same system as the store) ── */
+  :root{
+    --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
+    --ink:#1A1917; --muted:#6E695F; --faint:#8C8578; --line:#E7E2D8;
+    --accent:#7C6CF0; --accent-soft:#ECE6FA; --accent-ink:#5F4DE0;
+    --media:#E7E0D3; --on-dark:#fff;
+    --r-tile:2px; --r-sm:4px; --r-ui:6px; --r-full:999px; --r-lg:14px;
+    --fs-2xs:11px; --fs-xs:12px; --fs-sm:13px; --fs-base:14px; --fs-md:16px; --fs-lg:20px; --fs-xl:24px;
+    --w-normal:400; --w-medium:500; --w-semibold:600;
+    --lh-tight:1.2; --lh-base:1.5;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
+    --btn-sm:36px; --btn-md:40px; --btn-lg:48px;
+    --icon:20px; --iconbtn:40px;
+    --dur-fast:.15s; --dur-base:.25s; --dur-slow:.4s; --ease:cubic-bezier(.4,0,.2,1); --ease-out:cubic-bezier(.16,1,.3,1);
+    --focus-ring:2px solid var(--accent);
+    --serif:'Lora',Georgia,serif; --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    --shadow-1:0 6px 16px rgba(20,16,10,.20);
+    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
+    --shadow-bar:0 -8px 24px rgba(15,12,20,.08);
+    --frame-shadow:0 1px 2px rgba(30,22,12,.30),0 4px 6px -2px rgba(30,22,12,.22),0 22px 34px -14px rgba(30,22,12,.40);
+    --frame-shadow-sel:0 1px 2px rgba(30,22,12,.30),0 6px 10px -2px rgba(30,22,12,.26),0 30px 46px -14px rgba(40,30,16,.48);
+  }
+  html[data-theme="dark"]{
+    --bg:#0F0E13; --panel:#17151E; --panel2:#1E1B26;
+    --ink:#F2F0EA; --muted:#9A94A4; --faint:#6E6879; --line:#272432;
+    --accent:#8E7DF3; --accent-soft:#221E33; --accent-ink:#8E7DF3; --media:#1b1826;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  html{overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  svg{fill:none;stroke:currentColor;stroke-width:1.75;flex:none;stroke-linecap:round;stroke-linejoin:round}
+  :focus-visible{outline:var(--focus-ring);outline-offset:2px}
+
+  /* ═══ EDITOR SHELL — focused, app-like · mobile-first ═══ */
+  .ed{display:flex;flex-direction:column;height:100dvh;min-height:100vh}
+
+  /* Top bar */
+  .ebar{display:flex;align-items:center;gap:var(--sp-3);height:56px;padding:0 var(--sp-3);padding-top:env(safe-area-inset-top);
+    border-bottom:1px solid var(--line);background:var(--panel);flex:none;z-index:6}
+  .eback{width:var(--iconbtn);height:var(--iconbtn);border-radius:var(--r-ui);display:grid;place-items:center;color:var(--ink);flex:none}
+  .eback:hover{background:var(--panel2)} .eback svg{width:20px;height:20px}
+  .etitle{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ctx{display:none;gap:var(--sp-2);margin-left:var(--sp-2)}
+  .drop{display:inline-flex;align-items:center;gap:var(--sp-2);padding:8px 13px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);font-size:var(--fs-xs);font-weight:var(--w-medium);color:var(--muted);white-space:nowrap}
+  .drop:hover{border-color:var(--accent);color:var(--accent-ink)} .drop b{color:var(--ink);font-weight:var(--w-semibold)}
+  .drop .li{width:14px;height:14px;stroke:var(--faint)} .drop .cv{width:12px;height:12px;stroke:var(--faint)}
+  .espacer{flex:1}
+  .eprice{display:none;flex-direction:column;line-height:1.1;text-align:right}
+  .eprice small{font-size:var(--fs-2xs);color:var(--muted)} .eprice b{font-size:var(--fs-md);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .eadd{display:none;height:var(--btn-md);padding:0 var(--sp-5);border-radius:var(--r-ui);background:var(--ink);color:var(--bg);font-weight:var(--w-semibold);font-size:var(--fs-sm);white-space:nowrap}
+  .ecartpill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 var(--sp-3);border-radius:var(--r-full);background:var(--panel2);font-weight:var(--w-semibold);font-size:var(--fs-sm);flex:none}
+  .ecartpill svg{width:16px;height:16px;stroke:var(--ink)}
+
+  /* Canvas stage — hero */
+  .estage{position:relative;flex:1;min-height:0;display:grid;place-items:center;padding:var(--sp-4) var(--sp-4) var(--sp-5);
+    background:radial-gradient(130% 90% at 50% -10%, var(--panel) 0%, var(--panel2) 70%, var(--media) 100%)}
+  .estage::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(rgba(120,100,70,.10) 1.1px,transparent 1.1px);background-size:22px 22px}
+  html[data-theme="dark"] .estage::before{background-image:radial-gradient(rgba(255,255,255,.05) 1.1px,transparent 1.1px)}
+  .wallwrap{position:relative;width:100%;max-width:560px}
+  .ruler{position:absolute;bottom:10px;right:10px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--muted);white-space:nowrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-full);padding:4px 10px;box-shadow:var(--shadow-1)}
+  .ruler svg{width:12px;height:12px;stroke:var(--faint)} .ruler b{color:var(--ink);font-weight:var(--w-semibold)}
+  .zoom{position:absolute;left:10px;bottom:10px;display:none;align-items:center;gap:2px;padding:4px;border-radius:var(--r-full);background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow-1);z-index:2}
+  .zoom button{width:28px;height:28px;border-radius:var(--r-full);display:grid;place-items:center;color:var(--muted)} .zoom button:hover{background:var(--panel2);color:var(--ink)}
+  .zoom svg{width:15px;height:15px} .zoom .lvl{font-size:var(--fs-xs);color:var(--muted);min-width:38px;text-align:center}
+
+  /* Room + framed art */
+  .room{position:relative;width:100%;aspect-ratio:240/168;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-pop);background:linear-gradient(178deg,#efe9df,#e4dccd)}
+  html[data-theme="dark"] .room{background:linear-gradient(178deg,#2a2734,#211e2b)}
+  .room .light{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 70% at 22% 6%,rgba(255,252,245,.7),transparent 60%)}
+  .floor{position:absolute;left:0;right:0;bottom:0;height:15%;background:linear-gradient(180deg,#cbb493,#b89c76)}
+  .floor::before{content:"";position:absolute;inset:0;opacity:.35;background:repeating-linear-gradient(90deg,rgba(120,92,58,0) 0 46px,rgba(120,92,58,.18) 46px 47px)}
+  .skirt{position:absolute;left:0;right:0;bottom:15%;height:2.4%;background:linear-gradient(180deg,#f2ece1,#e4dccd);box-shadow:0 2px 4px rgba(30,22,12,.1)}
+  .console{position:absolute;bottom:14.4%;left:50%;transform:translateX(-50%);width:52%;height:8%}
+  .console .ctop{position:absolute;top:0;left:0;right:0;height:26%;border-radius:3px;background:linear-gradient(180deg,#d7c4a4,#c3ab86);box-shadow:0 6px 14px -4px rgba(30,22,12,.28)}
+  .console .cbody{position:absolute;top:26%;left:6%;right:6%;bottom:0;background:linear-gradient(180deg,#cdb994,#bda175)}
+  .tile{position:absolute;transition:box-shadow var(--dur-base) var(--ease)}
+  .frame{position:relative;width:100%;height:100%;padding:2.6%;border-radius:var(--r-tile);box-shadow:var(--frame-shadow)}
+  .frame.black{background:linear-gradient(135deg,#2b2825,#141210 60%,#000)}
+  .frame.white{background:linear-gradient(135deg,#fff,#ece6db);box-shadow:var(--frame-shadow),inset 0 0 0 1px rgba(20,16,10,.06)}
+  .frame.oak{background-image:repeating-linear-gradient(90deg,rgba(120,86,40,0) 0 5px,rgba(120,86,40,.10) 5px 6px),linear-gradient(135deg,#dcb884,#b48a4d)}
+  .frame.walnut{background-image:repeating-linear-gradient(90deg,rgba(20,10,4,0) 0 5px,rgba(20,10,4,.16) 5px 6px),linear-gradient(135deg,#71503a,#3c2517)}
+  .mat{position:relative;width:100%;height:100%;padding:7%;background:linear-gradient(160deg,#f8f5ef,#efeadf)}
+  .artbox{position:relative;width:100%;height:100%;overflow:hidden;box-shadow:0 0 0 1px rgba(20,16,10,.1),inset 0 2px 5px rgba(20,16,10,.16)}
+  .artbox img{width:100%;height:100%;object-fit:cover;display:block}
+  .frame .glass{position:absolute;inset:2.6%;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.16),rgba(255,255,255,0) 22%,rgba(255,255,255,0) 68%,rgba(255,255,255,.06))}
+  .tile.sel .frame{box-shadow:var(--frame-shadow-sel)}
+  .tile.sel::after{content:"";position:absolute;inset:-7px;border:var(--focus-ring);border-radius:6px;pointer-events:none}
+  .tile .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:var(--r-full);background:#b6ab97;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+
+  /* ── Step rail (mobile: bottom tabs · desktop: left rail) ── */
+  .erail{display:flex;gap:2px;padding:6px var(--sp-2);background:var(--panel);border-top:1px solid var(--line);overflow-x:auto;scrollbar-width:none;flex:none;z-index:5}
+  .erail::-webkit-scrollbar{display:none}
+  .rtab{flex:1 0 auto;min-width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 8px 5px;border-radius:var(--r-ui);color:var(--muted);transition:color var(--dur-fast),background var(--dur-fast);position:relative}
+  .rtab svg{width:21px;height:21px} .rtab small{font-size:var(--fs-2xs);font-weight:var(--w-medium);white-space:nowrap}
+  .rtab:hover{color:var(--ink)}
+  .rtab.on{color:var(--accent-ink);background:var(--accent-soft)} .rtab.on small{font-weight:var(--w-semibold)}
+  .rtab .rn{position:absolute;top:5px;right:14px;font-size:9px;font-weight:var(--w-semibold);color:var(--faint)}
+
+  /* ── Options panel ── */
+  .epanel{background:var(--panel);border-top:1px solid var(--line);flex:none;display:flex;flex-direction:column;max-height:36dvh;overflow:hidden}
+  .psec{display:none;flex-direction:column;min-height:0;overflow:hidden}
+  .psec.on{display:flex}
+  .phdr{display:flex;align-items:baseline;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4) var(--sp-1);flex:none}
+  .phdr h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-md);margin:0}
+  .phdr .hint{font-size:var(--fs-xs);color:var(--muted)}
+  .pcont{overflow-y:auto;overflow-x:hidden;padding:var(--sp-2) var(--sp-4) var(--sp-4)}
+  .psub{font-size:var(--fs-xs);font-weight:var(--w-semibold);letter-spacing:.03em;text-transform:uppercase;color:var(--faint);margin:var(--sp-3) 0 var(--sp-2)}
+  .psub:first-child{margin-top:0}
+  .erow{display:flex;gap:var(--sp-2);overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .erow::-webkit-scrollbar{display:none}
+  .erow.wrap{flex-wrap:wrap;overflow:visible}
+
+  /* layout presets */
+  .laylabel{display:flex;flex-direction:column;align-items:center;gap:5px;flex:none}
+  .laylabel small{font-size:var(--fs-2xs);color:var(--muted)}
+  .lay{width:72px;height:54px;flex:none;position:relative;border:1px solid var(--line);border-radius:var(--r-ui);background:var(--panel2);padding:7px;cursor:pointer}
+  .lay.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .lay i{position:absolute;background:var(--faint);border-radius:1px}
+
+  /* framed thumbnails */
+  .ethumb{width:58px;height:58px;flex:none;padding:4px;border-radius:var(--r-sm);background:linear-gradient(135deg,#2b2825,#141210);border:2px solid transparent;cursor:pointer}
+  .ethumb .em{width:100%;height:100%;padding:5%;background:#f7f4ee}
+  .ethumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .ethumb.on{border-color:var(--accent)}
+
+  /* option chips (store .cbtn) */
+  .cbtn{flex:none;display:inline-flex;align-items:center;padding:8px 13px;border:1px solid var(--line);border-radius:var(--r-ui);font-size:var(--fs-sm);color:var(--muted);background:var(--panel);white-space:nowrap;min-height:var(--btn-md)}
+  .cbtn:hover{color:var(--ink)}
+  .cbtn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:var(--w-semibold)}
+  .cbtn .fsw{width:14px;height:14px;border-radius:3px;flex:none;margin-right:7px;box-shadow:inset 0 0 0 1px rgba(20,16,10,.12)}
+  .cbtn .szp{color:var(--muted);margin-left:6px;font-weight:var(--w-normal)} .cbtn.on .szp{color:var(--accent-ink)}
+
+  .efile{display:flex;align-items:center;gap:var(--sp-2);margin-top:var(--sp-3);font-size:var(--fs-sm);color:var(--muted)}
+  .efile .tgl{width:34px;height:20px;border-radius:var(--r-full);background:var(--accent);position:relative;flex:none}
+  .efile .tgl::after{content:"";position:absolute;width:16px;height:16px;border-radius:var(--r-full);background:#fff;top:2px;right:2px}
+  .pactions{display:flex;gap:var(--sp-2);margin-top:var(--sp-4)}
+  .outbtn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:var(--btn-md);border:1px solid var(--line);border-radius:var(--r-ui);background:var(--panel);font-size:var(--fs-sm);font-weight:var(--w-medium);color:var(--ink)}
+  .outbtn:hover{border-color:var(--accent);color:var(--accent-ink)} .outbtn svg{width:16px;height:16px}
+  .previewnote{display:flex;gap:var(--sp-3);align-items:flex-start;font-size:var(--fs-sm);color:var(--muted);line-height:var(--lh-base);margin-bottom:var(--sp-3)}
+  .previewnote svg{width:20px;height:20px;stroke:var(--accent-ink);margin-top:1px}
+
+  /* checkout summary */
+  .sumrow{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-2) 0;border-bottom:1px solid var(--line)}
+  .sumrow .sth{width:38px;height:44px;flex:none;padding:2px;border-radius:2px;background:linear-gradient(135deg,#2b2825,#141210)}
+  .sumrow .sth .em{width:100%;height:100%;padding:6%;background:#f7f4ee}
+  .sumrow .sth img{width:100%;height:100%;object-fit:cover;display:block}
+  .sumrow .si{flex:1;min-width:0} .sumrow .si .n{font-size:var(--fs-sm);font-weight:var(--w-medium)}
+  .sumrow .si .c{font-size:var(--fs-xs);color:var(--muted)}
+  .sumrow .sp{font-size:var(--fs-sm);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .sumtot{display:flex;align-items:baseline;justify-content:space-between;margin-top:var(--sp-3)}
+  .sumtot .l{font-size:var(--fs-sm);color:var(--muted)} .sumtot .v{font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .sumnote{font-size:var(--fs-xs);color:var(--faint);margin-top:var(--sp-1)}
+
+  /* ── Mobile CTA ── */
+  .ecta{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);padding-bottom:calc(var(--sp-3) + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow-bar);flex:none}
+  .ecta .tot{display:flex;flex-direction:column;line-height:1.1}
+  .ecta .tot small{font-size:var(--fs-xs);color:var(--muted)} .ecta .tot b{font-size:var(--fs-md);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .ecta .go{margin-left:auto;height:var(--btn-lg);padding:0 var(--sp-6);border-radius:var(--r-ui);background:var(--ink);color:var(--bg);font-weight:var(--w-semibold);font-size:var(--fs-base)}
+
+  /* ═══ DESKTOP ═══ */
+  @media(min-width:900px){
+    .ed{display:grid;grid-template-columns:96px 348px 1fr;grid-template-rows:60px 1fr;grid-template-areas:"bar bar bar" "rail panel canvas"}
+    .ebar{grid-area:bar;height:60px;padding:0 var(--sp-4)} .ctx{display:flex}
+    .estage{grid-area:canvas;padding:var(--sp-8)}
+    .erail{grid-area:rail;flex-direction:column;gap:var(--sp-1);border-top:none;border-right:1px solid var(--line);overflow-y:auto;padding:var(--sp-3) var(--sp-2)}
+    .rtab{flex:none;min-width:0}
+    .epanel{grid-area:panel;max-height:none;border-top:none;border-right:1px solid var(--line)}
+    .psec.on{flex:1} .pcont{flex:1}
+    .erow{flex-wrap:wrap;overflow:visible}
+    .zoom{display:inline-flex}
+    .eprice{display:flex} .eadd{display:inline-flex} .ecartpill{display:none}
+    .ecta{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="ed">
+
+  <!-- Top bar -->
+  <header class="ebar">
+    <button class="eback" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="etitle">Build your wall</div>
+    <div class="ctx">
+      <button class="drop" data-goto="layout"><svg class="li" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Layout: <b>Salon</b><svg class="cv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+      <button class="drop" data-goto="layout"><svg class="li" viewBox="0 0 24 24"><path d="M3 6h18M3 6v12M21 6v12M3 18h18"/></svg>Wall: <b>240 × 150 cm</b><svg class="cv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+    </div>
+    <div class="espacer"></div>
+    <div class="eprice"><small>Wall · 6 artworks</small><b>$318</b></div>
+    <button class="eadd">Add wall to cart</button>
+    <button class="ecartpill" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>$318</button>
+  </header>
+
+  <!-- Canvas -->
+  <main class="estage">
+    <div class="wallwrap">
+      <span class="ruler"><svg viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg>Wall <b>240 × 150 cm</b></span>
+      <div class="room">
+        <div class="light"></div><div class="floor"></div><div class="skirt"></div>
+        <div class="console"><div class="ctop"></div><div class="cbody"></div></div>
+        <div class="tile" style="left:12%;top:12%;width:20%;height:30%"><div class="frame walnut"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile sel" style="left:35%;top:7%;width:27%;height:40%"><div class="frame black"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1612623753207-96465febeee7?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:66%;top:11%;width:21%;height:31%"><div class="frame oak"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1602464729960-f95937746b68?auto=format&amp;fit=crop&amp;w=400&amp;h=500&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:18%;top:47%;width:19%;height:22%"><div class="frame oak"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:40.5%;top:50%;width:18%;height:22%"><div class="frame white"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+        <div class="tile" style="left:61%;top:47%;width:22%;height:23%"><div class="frame black"><div class="mat"><div class="artbox"><img src="https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&amp;fit=crop&amp;w=400&amp;h=400&amp;q=72" alt=""></div></div><div class="glass"></div></div><span class="pin"></span></div>
+      </div>
+    </div>
+    <div class="zoom">
+      <button aria-label="Zoom out"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      <span class="lvl">100%</span>
+      <button aria-label="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+  </main>
+
+  <!-- Step rail: 4 macro steps -->
+  <nav class="erail" role="tablist">
+    <button class="rtab" data-sec="layout"><span class="rn">1</span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><small>Layout</small></button>
+    <button class="rtab on" data-sec="artwork"><span class="rn">2</span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg><small>Artworks</small></button>
+    <button class="rtab" data-sec="preview"><span class="rn">3</span><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><small>Preview</small></button>
+    <button class="rtab" data-sec="checkout"><span class="rn">4</span><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><small>Checkout</small></button>
+  </nav>
+
+  <!-- Panels -->
+  <aside class="epanel">
+
+    <!-- 1 · Layout (whole wall) -->
+    <section class="psec" data-panel="layout">
+      <div class="phdr"><h3>Layout</h3><span class="hint">Applies to the whole wall</span></div>
+      <div class="pcont">
+        <div class="psub">Arrangement</div>
+        <div class="erow">
+          <div class="laylabel"><button class="lay on"><i style="left:8%;top:12%;width:36%;height:32%"></i><i style="left:52%;top:12%;width:40%;height:24%"></i><i style="left:14%;top:54%;width:30%;height:34%"></i><i style="left:50%;top:46%;width:42%;height:42%"></i></button><small>Salon</small></div>
+          <div class="laylabel"><button class="lay"><i style="left:10%;top:14%;width:35%;height:34%"></i><i style="left:55%;top:14%;width:35%;height:34%"></i><i style="left:10%;top:54%;width:35%;height:34%"></i><i style="left:55%;top:54%;width:35%;height:34%"></i></button><small>Grid</small></div>
+          <div class="laylabel"><button class="lay"><i style="left:6%;top:34%;width:26%;height:34%"></i><i style="left:37%;top:34%;width:26%;height:34%"></i><i style="left:68%;top:34%;width:26%;height:34%"></i></button><small>Row</small></div>
+          <div class="laylabel"><button class="lay"><i style="left:12%;top:22%;width:33%;height:56%"></i><i style="left:55%;top:22%;width:33%;height:56%"></i></button><small>Duo</small></div>
+        </div>
+        <div class="psub">Wall size</div>
+        <div class="erow">
+          <button class="cbtn">180 × 120 cm</button>
+          <button class="cbtn on">240 × 150 cm</button>
+          <button class="cbtn">300 × 180 cm</button>
+          <button class="cbtn">Custom…</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · Artworks (per-tile combined editor) -->
+    <section class="psec on" data-panel="artwork">
+      <div class="phdr"><h3>Center piece</h3><span class="hint">Tap another piece on the wall to edit it</span></div>
+      <div class="pcont">
+        <div class="psub">Artwork</div>
+        <div class="erow">
+          <button class="ethumb on"><div class="em"><img src="https://images.unsplash.com/photo-1612623753207-96465febeee7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+          <button class="ethumb"><div class="em"><img src="https://images.unsplash.com/photo-1602464729960-f95937746b68?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+          <button class="ethumb"><div class="em"><img src="https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+          <button class="ethumb"><div class="em"><img src="https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+          <button class="ethumb"><div class="em"><img src="https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+          <button class="ethumb"><div class="em"><img src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&amp;fit=crop&amp;w=140&amp;h=140&amp;q=72" alt=""></div></button>
+        </div>
+        <div class="psub">Frame</div>
+        <div class="erow">
+          <button class="cbtn on"><span class="fsw" style="background:linear-gradient(135deg,#2b2825,#141210)"></span>Black</button>
+          <button class="cbtn"><span class="fsw" style="background:linear-gradient(135deg,#fff,#ece6db)"></span>White</button>
+          <button class="cbtn"><span class="fsw" style="background:linear-gradient(135deg,#dcb884,#b48a4d)"></span>Oak</button>
+          <button class="cbtn"><span class="fsw" style="background:linear-gradient(135deg,#71503a,#3c2517)"></span>Walnut</button>
+          <button class="cbtn"><span class="fsw" style="background:repeating-linear-gradient(45deg,#ddd,#ddd 3px,#fff 3px,#fff 6px)"></span>No frame</button>
+        </div>
+        <div class="psub">Print size</div>
+        <div class="erow">
+          <button class="cbtn">30 × 40<span class="szp">$39</span></button>
+          <button class="cbtn on">40 × 50<span class="szp">$59</span></button>
+          <button class="cbtn">50 × 70<span class="szp">$79</span></button>
+          <button class="cbtn">70 × 100<span class="szp">$109</span></button>
+        </div>
+        <div class="efile"><span class="tgl"></span>Also add as a downloadable file (+$12)</div>
+        <div class="pactions">
+          <button class="outbtn"><svg viewBox="0 0 24 24"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/></svg>Swap position</button>
+          <button class="outbtn"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Remove</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · Preview -->
+    <section class="psec" data-panel="preview">
+      <div class="phdr"><h3>Preview</h3><span class="hint">See it in your space</span></div>
+      <div class="pcont">
+        <div class="previewnote"><svg viewBox="0 0 24 24"><path d="M3 7l4-3 5 3 5-3 4 3v13l-4 3-5-3-5 3-4-3z"/><path d="M7 4v13M17 7v13"/></svg><span>Upload a photo of your own wall and we'll place your gallery on it — to scale — before you buy.</span></div>
+        <div class="pactions"><button class="outbtn"><svg viewBox="0 0 24 24"><path d="M12 16V4M12 4L8 8M12 4l4 4M4 20h16"/></svg>Upload your wall</button></div>
+      </div>
+    </section>
+
+    <!-- 4 · Checkout summary -->
+    <section class="psec" data-panel="checkout">
+      <div class="phdr"><h3>Your wall</h3><span class="hint">6 pieces</span></div>
+      <div class="pcont">
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1612623753207-96465febeee7?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Center piece</div><div class="c">Poster · 40×50 · Black</div></div><div class="sp">$59</div></div>
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Left tall</div><div class="c">Poster · 30×40 · Walnut</div></div><div class="sp">$39</div></div>
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1602464729960-f95937746b68?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Right upper</div><div class="c">Poster · 40×50 · Oak</div></div><div class="sp">$59</div></div>
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Lower left</div><div class="c">Poster · 30×40 · Oak</div></div><div class="sp">$39</div></div>
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1615184697985-c9bde1b07da7?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Lower center</div><div class="c">Poster · 30×40 · White</div></div><div class="sp">$39</div></div>
+        <div class="sumrow"><div class="sth"><div class="em"><img src="https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&amp;fit=crop&amp;w=90&amp;h=110&amp;q=72" alt=""></div></div><div class="si"><div class="n">Lower right</div><div class="c">Poster · 40×50 · Black</div></div><div class="sp">$59</div></div>
+        <div class="sumtot"><span class="l">Subtotal · 6 artworks</span><span class="v">$318</span></div>
+        <div class="sumnote">incl. VAT · Free shipping over $60 · printed &amp; shipped by Latenca</div>
+      </div>
+    </section>
+
+  </aside>
+
+  <!-- Mobile CTA -->
+  <div class="ecta">
+    <div class="tot"><small>Wall · 6 artworks</small><b>$318</b></div>
+    <button class="go">Add wall to cart</button>
+  </div>
+
+</div>
+
+<script>
+  const tabs=document.querySelectorAll('.rtab'), secs=document.querySelectorAll('.psec');
+  function goStep(sec){
+    tabs.forEach(x=>x.classList.toggle('on',x.dataset.sec===sec));
+    secs.forEach(x=>x.classList.toggle('on',x.dataset.panel===sec));
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>goStep(t.dataset.sec)));
+  document.querySelectorAll('.drop[data-goto]').forEach(d=>d.addEventListener('click',()=>goStep(d.dataset.goto)));
+
+  // tap a framed tile → select it + jump to Artworks step
+  const tiles=document.querySelectorAll('.tile');
+  tiles.forEach(t=>t.addEventListener('click',()=>{
+    tiles.forEach(x=>x.classList.remove('sel')); t.classList.add('sel'); goStep('artwork');
+  }));
+
+  // single-select option rows (artwork / frame / size / layout / wall size)
+  document.querySelectorAll('.erow').forEach(row=>{
+    const opts=row.querySelectorAll('.cbtn,.ethumb,.lay');
+    opts.forEach(b=>b.addEventListener('click',()=>{opts.forEach(x=>x.classList.remove('on'));b.classList.add('on');}));
+  });
+</script>
+</body>
+</html>
