@@ -31,7 +31,20 @@
 | **Gdy analiza zawodzi** | *„We couldn't measure your wall confidently — tell us your wall size for an accurate fit."* |
 | **Czy montują na zdjęciu użytkownika** | W obserwowanej sesji **nie** — tryb `Living Room` pokazywał generyczną scenę, nie piksele użytkownika |
 
-⚠️ **Zastrzeżenie do wiarygodności testu Fy!:** narzędzie jest w becie i miało błędy renderowania, a jako „zdjęcie pokoju" użyto zrzutu sceny z Mixtiles, nie prawdziwej fotografii wnętrza. **Nie można w 100% wykluczyć**, że przy czystym zdjęciu tryb `Living Room` robi dosłowny montaż. Do rozstrzygnięcia jednym testem z prawdziwym zdjęciem.
+### ✅ Domknięcie: Fy! **próbuje** montażu na zdjęciu — i wychodzi katastrofa
+
+Pierwszy test był skażony, więc powtórzono go z czystym zdjęciem wnętrza *(użyto naszej własnej próbki `cupboard.webp` — jednolita ściana, równomierne światło, wyraźny mebel odniesienia, czyli **najłatwiejszy możliwy przypadek**)*.
+
+**Wynik: Fy! faktycznie nakłada grafiki na zdjęcie użytkownika. Efekt jest niezdatny do użytku.** Cztery prace wielkości znaczków pocztowych, rozrzucone losowo po ścianie.
+
+| Co zawiodło | Dlaczego to fatalne |
+|---|---|
+| **Skala całkowicie nietrafiona** — prace ~15×20 cm na ścianie ~3 m | Skala to **jedyne pytanie**, na które podgląd ma odpowiadać. Zawiódł w swojej jedynej funkcji |
+| **Zero logiki kompozycji** — różne wysokości, brak wyrównania i grupowania, brak związku z meblem pod spodem | To ma być narzędzie *projektanckie*; żaden projektant tak by nie powiesił |
+| **Brak obsługi planów** — praca ląduje na roślinie zamiast za nią | Widać, że to montaż |
+| **Podważa własną obietnicę** | Doradca ma dawać pewność; ten render odbiera ją bardziej, niż dawał podgląd na neutralnej ścianie |
+
+**Wniosek kluczowy: montaż na zdjęciu klienta nie jest „trochę mniej ładny" — jest gorszy niż jego brak.** Ta sama grafika na neutralnej ścianie w **poprawnej skali** byłaby bardziej przekonująca niż „w Twoim pokoju" w skali absurdalnej. Traci się zaufanie, żeby zyskać personalizację, o którą nikt nie prosił.
 
 ---
 
@@ -65,18 +78,18 @@ To nie jest już hipoteza. To działający wzorzec, łącznie z **uczciwą degra
 
 | Wniosek | Siła dowodu |
 |---|---|
-| **Nikt nie montuje na zdjęciu użytkownika.** Mixtiles nie daje takiej opcji w ogóle, po latach i milionach zamówień; Fy! prosi o zdjęcie, ale używa go analitycznie | 🟢 **Mocne potwierdzenie D-021.** Zamknięte |
+| **Montaż na zdjęciu klienta zawodzi w praktyce.** Mixtiles nie daje takiej opcji w ogóle po latach i milionach zamówień; Fy! próbuje — i na najłatwiejszym możliwym wejściu produkuje render niezdatny do użytku (zła skala, brak kompozycji) | 🟢 **Bardzo mocne potwierdzenie D-021 — dowód bezpośredni, nie z nieobecności.** Zamknięte |
 | **Nakładka wymiarów to standard kategorii** — obaj liderzy, ta sama mechanika | 🟢 Mocne. Do wdrożenia |
 | **Zdjęcie jako wejście analityczne + uczciwa degradacja** | 🟢 Potwierdzone jako wdrożony wzorzec |
 | **Pokój jest opcjonalny przy pojedynczej pracy** | 🟡 Potwierdzone u Mixtiles, ale ich model (własne zdjęcia klienta) różni się od naszego (nieznana sztuka) |
-| **Czy Fy! renderuje na prawdziwych pikselach użytkownika** | 🔴 Nierozstrzygnięte — test był skażony |
+| **Czy Fy! renderuje na prawdziwych pikselach użytkownika** | 🟢 **Rozstrzygnięte: tak, i wychodzi katastrofa** (patrz §1) |
 
 ### Rekomendacje
 
 1. **Dodać nakładkę wymiarów do podglądu** — przełącznik „linijka", strzałki z centymetrami na ścianie, nie tylko liczba w panelu obok. **Najwyższy stosunek wartości do kosztu z całego badania.**
 2. **Zdjęcie wyłącznie jako wejście analityczne**, z jawną degradacją w stylu Fy!: gdy nie da się czegoś odczytać, doradca mówi to wprost i dopytuje. Nigdy jako tło do montażu.
 3. **Nie budować biblioteki 6–9 pomieszczeń przed walidacją.** Zostawić obecne trzy, dodać **tryb neutralnego tła** (odpowiednik `Flat` u Fy!) i przełącznik — a rozbudowę zestawu uzależnić od tego, czy klienci faktycznie go używają.
-4. **Rozstrzygnąć niedokończony test:** wgrać do Fy! prawdziwe zdjęcie pokoju i sprawdzić, czy `Living Room` montuje na realnych pikselach. To jedyne pytanie, które zostało otwarte.
+4. **Przenieść „montaż na zdjęciu pokoju" z BACKLOGU „trudne, odłożone" do „odrzucone z dowodem".** D-021 opierało się na przewidywaniu, że to zawiedzie. Teraz mamy zaobserwowaną porażkę u konkurenta, na najłatwiejszym wejściu. Warunek ewentualnego powrotu jest konkretny: **dopóki nie potrafimy niezawodnie ustalić wymiarów ściany, montaż jest z definicji niemożliwy** — bo bez skali render kłamie w jedynej rzeczy, która ma znaczenie.
 
 ### Otwarte pytanie produktowe (nierozstrzygnięte badaniem)
 
