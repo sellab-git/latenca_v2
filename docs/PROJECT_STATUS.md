@@ -3,71 +3,88 @@
 > Jedyne źródło prawdy o **bieżącym stanie** projektu — „gdzie jesteśmy teraz". Nadpisywane swobodnie.
 > Czytaj to jako pierwsze każdą sesję.
 
-Ostatnia aktualizacja: 2026-07-19
+Ostatnia aktualizacja: 2026-07-20
 
 ---
 
 ## Czym jest ten projekt (folder 18)
 
-**Połączenie dwóch wcześniejszych projektów Latenca w jeden kierunek:**
-- z **15. Latenca** (prototyp): dojrzały design system + rzemiosło (model danych, cennik, mobile step-flow, customizacja na szynach)
-- z **17. Latenca** (`sellab-git/latenca`): koncept AI-doradcy + strategia + governance + Biblia dokumentów
+**Tu odbywa się praca.** Repo: `sellab-git/latenca_v2`, publiczne, auto-push.
 
-Reguła: **17 rządzi strategią, 15 rządzi rzemiosłem.** Pełne uzgodnienie w [SPEC.md](SPEC.md), decyzja połączenia = D-017 w [DECISIONS.md](DECISIONS.md).
+Linia rozwojowa projektów:
+- **15. Latenca** — **baza UX/UI.** Skończony design system, 11 prototypów, 201 wersji archiwalnych. Każdy nowy ekran startuje stąd. Kopia w `reference/prototype-html-15/`
+- **17. Latenca** — miejsce, gdzie pojawiły się **pomysły na zmianę systemu**: koncept doradcy, governance, briefy ekranów. Kopie w `reference/mockups-17/` i `reference/design-specs-17/`
+- **18. Latenca** — **tutaj** ← praca bieżąca
+- ~~19. Latenca~~ — **to był tylko test. Nic stamtąd nie bierzemy.**
 
-**Źródła (15 i 17) pozostają NIETKNIĘTE** — tu tylko czytamy/kopiujemy do 18.
-
----
-
-## Bieżąca faza
-
-**Faza 0 — szkielet i wiedza (w toku).** Zebranie całej wiedzy obu światów w jednym miejscu, scalony SPEC, governance. Bez rysowania ekranów.
-
-Plan fazowy (każda kończy się akceptacją Artura):
-- **Faza 0** — szkielet + scalony SPEC + wpięcie badań + log decyzji ← TERAZ
-- **Faza 1** — design system z 15 zaadaptowany **mobile-first** (tokeny zostają, układ nowy); decyzja o akcencie
-- **Faza 2** — mapa ekranów i przepływów (na papierze), rozstrzygnięcie „jak wygląda ściana na mobile"
-- **Faza 3** — budowa **mockupów HTML mobile-first**, ekran po ekranie
-- **Faza 4** — (później) przejście na Next.js + backend, dopiero po zamknięciu flow
+Źródła (15 i 17) pozostają nietknięte — tylko czytamy i kopiujemy.
 
 ---
 
-## Zasady stałe (zablokowane 2026-07-19)
-- **Tylko mockupy HTML** teraz — Next.js to Faza 4.
-- **Mobile-first od 390px** — nie portujemy desktopowych układów z 15.
-- **Dotykamy tylko folderu 18.**
-- **Builder z 15 = próba, projektujemy od zera** pod doradcę i flow zakupu.
-- **Artyści = atrybucja (a) teraz; marketplace (b) docelowo** (szew w modelu danych już teraz).
+## Gdzie jesteśmy
+
+**Kierunek produktu jest ustalony i zablokowany** (D-020 … D-033). Skończył się etap „co my w ogóle budujemy" — zaczyna się rzemiosło na jednej, wybranej powierzchni.
+
+**Produkt w jednym zdaniu:** kurowany sklep z jednym momentem AI — sklep jest podłogą, doradca drzwiami frontowymi i **nigdy bramką** (D-022).
+
+**MVP** = Krok 1 (kręgosłup sklepu) + Krok 2 (doradca) — D-030. Doradca to **jedyna** zależność od zewnętrznego AI; rozmiar, format, wykończenie i rama to zwykłe parametry produktu.
+
+**Powierzchnia wyświetlania: płaska ściana** — i **tylko ona** dostaje teraz inwestycje (D-033). Pokoje zostają w prototypie jako przełącznik do porównania, ale bez rozbudowy. Zdjęcia klientów są **czytane, nigdy zamalowywane** (D-031).
 
 ---
 
-## Aktywne zadania (Faza 0)
-- [ ] Struktura folderu + kopie źródeł do `reference/` (governance z 17, prototyp z 15, mockupy z 17) — *czeka na Bash*
-- [x] Scalony `SPEC.md` (strategia 17 + rzemiosło 15 + mobile-first + moje koszty)
-- [x] `PROJECT_STATUS.md` (ten plik), `README.md`
-- [ ] Wpięcie badań: `COSTS.md` (realne Gelato) + `MARKET.md` (mapa rynku) — *czeka na Bash*
-- [ ] `DECISIONS.md`: dopisać **D-017** (połączenie 15+17) — *czeka na Bash*
-- [ ] `git init` (świeże repo, bez powiązania ze starymi) — *czeka na Bash*
+## Zasady stałe
+
+- **Tylko mockupy HTML** teraz — Next.js później
+- **Mobile-first od 390px**; każdy ekran weryfikowany w przeglądarce na 390 i desktopie **zanim** zostanie pokazany (D-032)
+- **Nie wymyślamy komponentów** — używamy prawdziwych klas z 15. Jeśli dobra wersja istnieje, **kopiujemy plik i edytujemy** (D-032)
+- **Nic ważnego nie zostaje w scratchpadzie.** Wersje zamrażamy w `prototypes/mockups/versions/` — Product v56–v59 przepadł, bo tej zasady nie było
+- **Dotykamy tylko folderu 18**
+- Artyści = atrybucja teraz, marketplace docelowo (szew w modelu danych już jest)
 
 ---
 
-## Aktywne hipotezy (z 17 + moje badania, zbieżne)
-- Wąskie gardło = **dystrybucja/ruch**, nie katalog ani konwersja.
-- **Zestawy/ściany = jedyna ekonomia, która się spina** (kolejny druk w paczce ~€0,29; pojedynczy druk na płatnym ruchu jest stratny). 🔬 COSTS.md.
-- **USA ≈ 2× marża Europy.** 🔬 COSTS.md.
-- **Kuracja to fosa** (sztuka AI jest towarem; gust i spójne zestawy — nie).
+## Aktywne zadania — doskonalenie płaskiej ściany (D-033)
+
+Kolejność od najważniejszego. Cała obietnica pewności spoczywa teraz na liczbach i samej pracy, bo nie ma mebla, o który oko może zahaczyć.
+
+- [ ] **Obrys odniesienia w prawdziwej skali** (sofa albo postać) — odzyskuje intuicję rozmiaru bez zdjęcia pokoju
+- [ ] **Porównanie rozmiarów obok siebie** — zamiast przełączania i zgadywania
+- [ ] Siatka (`Grid`) — wyczucie skali bez mebla; ma to Fy!
+- [ ] Faktura i światło ściany — żeby rama czytała się jako *wisząca*, nie naklejona
+- [ ] Ramy i materiały na płaskiej ścianie — **maszyneria już istnieje** w `prototypes/mockups/03-product.html`, nie budujemy od nowa
+- [ ] Układy wieloelementowe (para, tryptyk) — zestawy to jedyna ekonomia, która się spina
+
+## Poza powierzchnią wyświetlania
+
+- [ ] **Ręczny test dystrybucji** — 20–30 materiałów, zero automatyzacji, **równolegle** z budową (D-028). Dotyka ryzyka nr 1 i nie wymaga gotowego produktu
+- [ ] Krok 1: kręgosłup sklepu (katalog → strona produktu → konfigurator → koszyk)
+- [ ] Baza wiedzy projektowej, warstwy A/B/D (D-024) — warunek jakości doradcy od dnia 1
+- [ ] Log decyzji od dnia 1; pętli uczenia nie budujemy do czasu wolumenu
+
+---
 
 ## Ryzyka
-- **CAC ~$55–120 vs ~$40 zysku/zamówienie** → pojedyncza sprzedaż na zimnym ruchu = strata. Dlatego zestawy + rynek USA.
-- **Over-building** — budowanie infrastruktury przed walidacją popytu (🔬 #1 zabójca). Dlatego mockupy HTML, nie apka; jedna ścieżka w v1, nie wszystko naraz.
-- Sztuka AI: platformy tłumią masowe AI-decor; brak ochrony prawnej → marketing na realnych zdjęciach pokoi; fosa = kuracja.
+
+- **Dystrybucja/CAC to ryzyko nr 1**, nie produkt. W formule fosy (D-025) dystrybucja wynosi dziś **~0**. Latenca nie ma jeszcze fosy — ma projekt mechanizmu
+- **CAC ~$55–120 vs ~$40 zysku/zamówienie** → pojedyncza sprzedaż na zimnym ruchu jest stratna. Stąd zestawy i rynek USA
+- **Over-building** — budowa infrastruktury przed walidacją popytu. Stąd mockupy, nie aplikacja
+- **Koszt AI** jest zabezpieczony sześcioma warstwami (`AI_COST_MODEL.md`); maks. ~1 zł za sesję. Sklep działa bez doradcy, więc rachunek za AI nigdy nie zatrzyma sprzedaży
 
 ---
 
-## Następne kroki
-1. Dokończyć Fazę 0 (kopie + D-017 + git — gdy Bash wróci).
-2. Faza 1: design system mobile-first + decyzja o akcencie.
-3. Faza 2: mapa ekranów, rozstrzygnięcie ekranu „ściany".
-
 ## Otwarte pytania
-Patrz [SPEC.md](SPEC.md) sekcja 11. Najważniejsze: **dystrybucja** (do kogo docierasz taniej niż reklamą?), akcent wizualny, ekran „ściany" na mobile, zestaw warstw customizacji.
+
+- **Dystrybucja** — który kanał realnie dowozi pierwszych obcych klientów taniej niż reklama? Pinterest jest **hipotezą do testu**, nie kanałem zatwierdzonym
+- **Czy przy nieznanej sztuce pokój znaczy więcej niż przy własnych zdjęciach klienta?** Mixtiles może pominąć pokój, bo emocja siedzi w treści. U nas treść jest obca. **Rozstrzygną to klienci, nie analiza**
+- Akcent wizualny, zestaw warstw customizacji, marża i rynek docelowy — patrz `PRODUCT_BIBLE.md` sekcja 11
+
+---
+
+## Podgląd makiet
+
+```
+python -m http.server 8099    # uruchom w katalogu 18
+```
+→ **http://localhost:8099/prototypes/index.html** — bieżące makiety, nasze zamrożone wersje, 11 prototypów z 15 i 201 wersji archiwalnych.
+**Zanim zaczniesz projektować panel od zera — sprawdź tam. Najprawdopodobniej już istnieje.**
