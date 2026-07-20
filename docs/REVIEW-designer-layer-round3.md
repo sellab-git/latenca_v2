@@ -1,6 +1,6 @@
 # REVIEW round 3 — konwergencja + gotowe projekty wpisów decyzyjnych
 
-> **Co to jest:** zamknięcie rundy recenzji. Zawiera: wycofanie jednego błędnego zarzutu Claude'a, przyjęcie dwóch korekt ChatGPT, oraz **gotowe brzmienia wpisów D-022 … D-028** do wklejenia w [`DECISIONS.md`](DECISIONS.md).
+> **Co to jest:** zamknięcie rundy recenzji. Zawiera: wycofanie jednego błędnego zarzutu Claude'a, przyjęcie korekt ChatGPT (w tym trzech korekt brzmienia przed lockiem), oraz **gotowe brzmienia wpisów D-022 … D-029** do wklejenia w [`DECISIONS.md`](DECISIONS.md).
 > **Status:** ⚠️ **NIC TU NIE JEST JESZCZE DECYZJĄ.** Zgodnie z D-019 hipoteza nie staje się decyzją po cichu — wpisy poniżej czekają na jedno „tak" Artura.
 > Poprzednie rundy: [`REVIEW-designer-layer.md`](REVIEW-designer-layer.md) → [`REVIEW-designer-layer-round2.md`](REVIEW-designer-layer-round2.md).
 > Data: 2026-07-19.
@@ -51,6 +51,18 @@ Zakup zależy od ceny, dostawy, terminu, zaufania do marki, jakości PDP, checko
 
 Słuszna uwaga: `PROJECT_STATUS.md` ma odzwierciedlać **aktywną pracę**, więc gdy test dystrybucji faktycznie ruszy, trafia tam (liczba materiałów, kanał, status, co mierzymy). `ROADMAP.md` — tylko jeśli test zmieni kolejność prac. `PRODUCT_ARCHITECTURE.md` / `AI_SYSTEM.md` — dopiero przy implementacji.
 
+### B5. Trzy korekty brzmienia przed lockiem ✅
+
+Finalny przebieg recenzji wyłapał trzy sformułowania, które były **szersze niż faktyczna decyzja**. Wszystkie przyjęte i naniesione w sekcji C:
+
+| Wpis | Było (za szerokie) | Jest (precyzyjne) | Dlaczego to ważne |
+|---|---|---|---|
+| **D-022** | „Wszystkie ścieżki muszą kończyć się sprzedażą u nas — nie prowadzimy konsultacji bez zakupu" | Rekomendacje opierają się na katalogu i prowadzą do kupowalnej kompozycji; nie budujemy osobnej usługi konsultacyjnej; **user może zakończyć sesję bez zakupu** | Poprzednie brzmienie dawało się czytać jako „doradca ma wymuszać sprzedaż" — **kolidowało z zablokowanym D-002 (Trust before sales) i D-004 (AI zachowuje się jak projektant, nie sprzedawca)** |
+| **D-024** | „Latenca nie pamięta Ciebie" | „Latenca nie buduje między sesjami **profilu gustu** pojedynczego klienta" | Produkt musi pamiętać zamówienia, zgody i dane operacyjne. Hasło jako obietnica prywatności stworzyłoby przyszłą sprzeczność |
+| **D-027** | „landing pages per problem (**nie** per styl, **nie** per zestaw)" | Per problem w pierwszym teście i MVP; per styl / per zestaw dopuszczalne później jako warstwa merchandisingowa | Chroni priorytet „problem first", nie zamykając przyszłej architektury commerce (SEO, browse) |
+
+Poprawiona też numeracja w nagłówku dokumentu (było D-022…D-028, jest D-022…D-029).
+
 ---
 
 ## C. Gotowe projekty wpisów do `DECISIONS.md`
@@ -61,7 +73,7 @@ Słuszna uwaga: `PROJECT_STATUS.md` ma odzwierciedlać **aktywną pracę**, wię
 **Status:** proponowany
 **Decyzja:** Latenca to kurowany sklep z jednym momentem AI. **Sklep = podłoga** (katalog, strona produktu, konfigurator, koszyk) — istnieje zawsze i każda ścieżka w nim ląduje. **Projektant = drzwi frontowe i twarz marki** — bohater strony głównej i główny wyróżnik. **Zasada rozstrzygająca: projektant nigdy nie jest bramką** — zawsze da się go ominąć i kupić bezpośrednio. W nawigacji to jeden produkt, nie dwa równorzędne: ścieżka szybka (*Browse and buy*) i prowadzona (*Design my wall*) kończą się tym samym katalogiem, PDP i checkoutem.
 **Powód:** obietnicą marki jest pewność decyzji, ale większość kupujących sztukę na ścianę nie prowadzi „projektu" — zamiana zakupu w obowiązkową konsultację zabiłaby konwersję. Weryfikacja Modsy (~250 projektantów-ludzi, całe pokoje, model nieskalowalny) pokazuje, że groźny jest *koszt ludzki na projekt*, a nie sama warstwa doradcza.
-**Implikacje:** reframuje D-001 i D-012 (domyka otwarte pytanie o framing produktu). Wszystkie ścieżki muszą kończyć się sprzedażą u nas — nie prowadzimy konsultacji bez zakupu. Home musi jasno komunikować „możesz kupić bezpośrednio, ale Latenca najlepiej pomaga wybrać" — nie dwa konkurujące CTA o równej wadze.
+**Implikacje:** reframuje D-001 i D-012 (domyka otwarte pytanie o framing produktu). Wszystkie rekomendacje projektanta opierają się na produktach dostępnych w katalogu Latenca i prowadzą do **kupowalnej kompozycji**; nie budujemy osobnej — płatnej ani bezpłatnej — usługi konsultacyjnej niezwiązanej z ofertą sklepu. **Użytkownik może zakończyć sesję bez zakupu.** Home musi jasno komunikować „możesz kupić bezpośrednio, ale Latenca najlepiej pomaga wybrać" — nie dwa konkurujące CTA o równej wadze.
 
 ### D-023 — Jeden Designer Flow; typ projektu jako parametr
 **Status:** proponowany
@@ -71,7 +83,7 @@ Słuszna uwaga: `PROJECT_STATUS.md` ma odzwierciedlać **aktywną pracę**, wię
 
 ### D-024 — Uczenie na poziomie puli, nie pojedynczego klienta
 **Status:** proponowany
-**Decyzja:** Nie budujemy pamięci między sesjami dla pojedynczego klienta. System uczy się z **całej puli projektów**, żeby kolejnym doradzać lepiej. Pamięcią produktu jest **baza wiedzy (KB)**, nie profil użytkownika: *„Latenca nie pamięta Ciebie — Latenca pamięta, co działa."* Stan projektu obowiązuje **w obrębie sesji**. KB budujemy od razu w warstwach **A (zasady) / B (heurystyki) / D (wzorce)**; warstwy **E (case studies) i F (skuteczność)** wymagają wolumenu. **Od dnia 1 logujemy decyzje; automatycznej pętli uczenia nie budujemy**, dopóki nie ma wolumenu.
+**Decyzja:** W MVP **nie budujemy między sesjami pamięci preferencji ani profilu estetycznego pojedynczego klienta.** System uczy się z **całej puli projektów**, żeby kolejnym doradzać lepiej. Pamięcią doradczą produktu jest **baza wiedzy (KB)**, nie profil użytkownika: *„Latenca nie buduje między sesjami profilu gustu pojedynczego klienta — system zachowuje zagregowaną wiedzę o tym, co działa."* Stan projektu obowiązuje **w obrębie sesji**. *(Uwaga: to nie blokuje danych operacyjnych — zamówień, zgód, ani ewentualnego zapisywania projektów w późniejszym etapie.)* KB budujemy od razu w warstwach **A (zasady) / B (heurystyki) / D (wzorce)**; warstwy **E (case studies) i F (skuteczność)** wymagają wolumenu. **Od dnia 1 logujemy decyzje; automatycznej pętli uczenia nie budujemy**, dopóki nie ma wolumenu.
 **Powód:** zgodne z zablokowanym single-session, bez ryzyka prywatności, a efekt uczenia zostaje. Pętla ucząca się na kilkudziesięciu projektach uczy się szumu i utrwala przypadki.
 **Implikacje:** KB jest **warunkiem jakości od dnia 1** i źródłem uzasadnień — uzasadnienie oparte na regule KB jest wiarygodne, wymyślone przez LLM w locie jest konfabulacją. Człowiek pracuje **nad systemem** (KB, katalog, audyty na próbkach), nigdy **nad pojedynczym projektem** — moment, w którym koszt ludzki rośnie z każdą sesją, to powtórzenie błędu Modsy.
 
@@ -89,7 +101,7 @@ Słuszna uwaga: `PROJECT_STATUS.md` ma odzwierciedlać **aktywną pracę**, wię
 
 ### D-027 — Dystrybucja jest częścią produktu
 **Status:** proponowany
-**Decyzja:** Dystrybucja przestaje być „marketingiem na później" i staje się warstwą produktu. Pętla: *katalog + KB → projekt / scenariusz redakcyjny → gotowa ściana + uzasadnienie → kanał → landing konkretnego problemu → sesja doradcy → zakup → log wyników*. Zasady: **treść i landing pages per problem projektowy** (nie per styl, nie per zestaw — bo tak wygląda realne wyszukiwanie: „sztuka nad beżową sofą"); **zakaz automatycznej publikacji danych i zdjęć klientów** (materiał = scenariusze redakcyjne i neutralne mockupy; realizacje klientów wyłącznie za dobrowolną zgodą); **Pinterest = pierwszy kanał do TESTU**, nie zatwierdzony kanał docelowy.
+**Decyzja:** Dystrybucja przestaje być „marketingiem na później" i staje się warstwą produktu. Pętla: *katalog + KB → projekt / scenariusz redakcyjny → gotowa ściana + uzasadnienie → kanał → landing konkretnego problemu → sesja doradcy → zakup → log wyników*. Zasady: **w pierwszym teście dystrybucji i w MVP główne landing pages tworzymy per problem projektowy** — bo tak wygląda realne wyszukiwanie („sztuka nad beżową sofą"). Strony per styl i per zestaw pozostają dopuszczalne jako **późniejsza warstwa merchandisingowa**, ale nie są podstawą pierwszego testu. Dalej: **zakaz automatycznej publikacji danych i zdjęć klientów** (materiał = scenariusze redakcyjne i neutralne mockupy; realizacje klientów wyłącznie za dobrowolną zgodą); **Pinterest = pierwszy kanał do TESTU**, nie zatwierdzony kanał docelowy.
 **Powód:** to najsłabszy czynnik w D-025 i ryzyko nr 1. Treść prowadząca na ogólny home daje ruch, a nie konwersję.
 **Implikacje:** metadane pod wyszukiwanie pracują jednocześnie na SEO i na kanał. Zasięg organiczny Pinteresta nie jest darmowy — kanał pozostaje 🔴 hipotezą.
 
