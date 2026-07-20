@@ -13,7 +13,7 @@
     --bg:#F6F3ED; --panel:#FBF9F5; --panel2:#F1EDE4;
     --ink:#1A1917; --muted:#6E695F; --faint:#8C8578; --line:#E7E2D8;
     --accent:#7C6CF0; --accent-soft:#ECE6FA; --accent-ink:#5F4DE0;
-    --media:#E7E0D3; --on-dark:#fff; --ink-strong:#141018; --glass:rgba(20,16,26,.75);
+    --media:#E7E0D3; --on-dark:#fff; --glass:rgba(20,16,26,.75);
     --ok:#3f9d6d; --err:#c0553f;
     --r-tile:2px; --r-sm:4px; --r-ui:6px; --r-full:999px;
     --shadow-1:0 6px 16px rgba(20,16,10,.20); --shadow-2:0 12px 28px rgba(20,16,10,.30); --shadow-pop:0 16px 40px rgba(15,12,20,.18);
@@ -43,53 +43,27 @@
   :focus-visible{outline:var(--focus-ring);outline-offset:2px}
   button:disabled,input:disabled,.is-disabled{opacity:.5;pointer-events:none}
 
-  /* ===== top bar ===== */
+  /* ===== top bar — the only chrome, and it never changes ===== */
   .jtop{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
   .jtopin{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:var(--sp-4);padding:13px clamp(16px,4vw,32px)}
   .jbrand{font-family:var(--serif);font-size:var(--fs-lg);font-weight:var(--w-semibold);flex:none}
   .jexit{margin-left:auto;display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-sm);color:var(--muted);flex:none;cursor:pointer}
   .jexit:hover{color:var(--ink)}
   .jexit svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8}
-  .ready{display:none;align-items:center;gap:var(--sp-2);flex:none;background:var(--accent-soft);color:var(--accent-ink);padding:6px 12px;border-radius:var(--r-full);font-size:var(--fs-xs);font-weight:var(--w-semibold);max-width:min(46vw,360px)}
-  .ready.show{display:flex}
-  .ready svg{width:14px;height:14px;fill:none;stroke:var(--accent-ink);stroke-width:1.8;flex:none}
+  .ready{display:flex;align-items:center;gap:var(--sp-2);flex:none;background:var(--panel2);color:var(--muted);padding:6px 12px;border-radius:var(--r-full);font-size:var(--fs-xs);font-weight:var(--w-semibold);max-width:min(46vw,360px);transition:background var(--dur-base) var(--ease),color var(--dur-base) var(--ease)}
+  .ready svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;flex:none}
   .ready b{font-weight:var(--w-semibold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .ready.need{background:var(--panel2);color:var(--muted)}
-  .ready.need svg{stroke:var(--muted)}
+  .ready.set{background:var(--accent-soft);color:var(--accent-ink)}
 
-  .stage{display:none}
-  .stage.active{display:block}
+  /* ===== ONE SCREEN: conversation + canvas. Nothing ever swaps out. ===== */
   .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
-
-  .dsay{display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-2xs);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);font-weight:var(--w-semibold);margin-bottom:var(--sp-4)}
-  .mk{display:grid;place-items:center;width:22px;height:22px;border-radius:var(--r-full);background:var(--accent-soft);flex:none}
-  .mk svg{width:13px;height:13px;fill:none;stroke:var(--accent-ink);stroke-width:1.8}
-  .qh{font-family:var(--serif);font-size:clamp(28px,5vw,44px);line-height:var(--lh-tight);font-weight:var(--w-semibold);margin:0 0 var(--sp-3);text-wrap:balance}
-  .qsub{color:var(--muted);font-size:var(--fs-md);margin:0 0 var(--sp-6);max-width:52ch}
-
-  /* ===== ENTRY ===== */
-  #entry{padding:clamp(32px,7vw,72px) 0 120px;animation:rise var(--dur-slow) var(--ease-out) both}
-  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  .entrywrap{max-width:720px}
-  .promptbox{display:flex;align-items:center;gap:var(--sp-3);background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);transition:border-color var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease)}
-  .promptbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-  .promptbox input{flex:1;min-width:0;border:0;background:none;height:var(--btn-lg);font-size:var(--fs-md);outline:none}
-  .promptbox input::placeholder{color:var(--faint)}
-  .go{flex:none;display:inline-flex;align-items:center;gap:var(--sp-2);height:var(--btn-md);padding:0 var(--sp-4);border-radius:var(--r-ui);background:var(--accent);color:var(--on-dark);font-weight:var(--w-semibold);font-size:var(--fs-sm)}
-  .go svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
-  .go:hover{filter:brightness(1.06)}
-  .orline{margin:var(--sp-5) 0 var(--sp-3);font-size:var(--fs-sm);color:var(--faint)}
-  .qchips{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
-  .qchip{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-full);padding:9px 15px;font-size:var(--fs-sm)}
-  .qchip:hover{border-color:var(--accent);background:var(--panel2)}
-
-  /* ===== STUDIO: conversation + live canvas ===== */
   .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(20px,3vw,36px);align-items:start;padding:var(--sp-6) 0 0}
 
   /* -- left: the conversation -- */
   .conv{display:flex;flex-direction:column;height:calc(100vh - 62px - var(--sp-6));position:sticky;top:calc(62px + var(--sp-6))}
   .thread{flex:1;overflow-y:auto;padding-right:var(--sp-2);scroll-behavior:smooth}
   .msg{display:flex;gap:var(--sp-3);margin-bottom:var(--sp-5);animation:rise var(--dur-base) var(--ease-out) both}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .msg .av{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:var(--r-full);background:var(--accent-soft);margin-top:2px}
   .msg .av svg{width:14px;height:14px;fill:none;stroke:var(--accent-ink);stroke-width:1.8}
   .bub{max-width:46ch}
@@ -99,11 +73,17 @@
   .msg.you{justify-content:flex-end}
   .msg.you .bub{background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--r-ui);padding:10px 14px;font-weight:var(--w-medium);max-width:34ch}
 
-  /* an AI turn always lands a concrete result, never only words */
+  /* an AI turn always lands something real, never words alone */
   .res{display:flex;gap:var(--sp-3);align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:var(--sp-2);margin-top:var(--sp-3)}
   .res img{width:52px;height:64px;object-fit:cover;border-radius:var(--r-sm);flex:none;background:var(--media)}
   .res b{display:block;font-size:var(--fs-sm);font-weight:var(--w-semibold)}
   .res span{font-size:var(--fs-xs);color:var(--muted)}
+  /* the alternatives it rejected, shown inside the conversation */
+  .alts{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2);margin-top:var(--sp-3)}
+  .alt{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;text-align:left}
+  .alt img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:grayscale(.35);transition:filter var(--dur-base) var(--ease)}
+  .alt:hover img{filter:none}
+  .alt span{display:block;padding:7px 9px;font-size:var(--fs-2xs);color:var(--muted);line-height:1.35}
 
   .typing{display:flex;gap:5px;padding:6px 0}
   .typing i{width:6px;height:6px;border-radius:var(--r-full);background:var(--faint);animation:bob 1.1s var(--ease) infinite}
@@ -119,16 +99,21 @@
   .composer:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
   .composer input{flex:1;min-width:0;border:0;background:none;height:var(--btn-md);font-size:var(--fs-sm);outline:none}
   .composer input::placeholder{color:var(--faint)}
-  .send{flex:none;display:grid;place-items:center;width:var(--btn-sm);height:var(--btn-sm);border-radius:var(--r-sm);background:var(--accent);}
+  .send{flex:none;display:grid;place-items:center;width:var(--btn-sm);height:var(--btn-sm);border-radius:var(--r-sm);background:var(--accent)}
   .send svg{width:15px;height:15px;fill:none;stroke:var(--on-dark);stroke-width:2}
 
-  /* -- right: the wall, updating as you talk -- */
+  /* -- right: the wall. Empty at first, then it fills in. It never navigates. -- */
   .canvas{position:sticky;top:calc(62px + var(--sp-6))}
   .roomview{position:relative;border-radius:var(--r-ui);overflow:hidden;aspect-ratio:4/3;background:var(--media);box-shadow:var(--shadow-1)}
   .roomview>.bg{width:100%;height:100%;object-fit:cover;display:block}
-  .roomview .art{position:absolute;top:16%;left:50%;transform:translateX(-50%);width:30%;border:6px solid #fff;box-shadow:var(--shadow-2);background:#fff;transition:width var(--dur-slow) var(--ease-out),opacity var(--dur-base) var(--ease)}
+  .roomview .art{position:absolute;top:16%;left:50%;transform:translateX(-50%);width:30%;border:6px solid #fff;box-shadow:var(--shadow-2);background:#fff;opacity:1;transition:width var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out)}
   .roomview .art img{width:100%;display:block}
   .roomview.busy .art{opacity:.35}
+  /* empty state: the sample room reads as "not yours yet" — muted, waiting.
+     (No dashed placeholder: the sample room already has pictures on its walls,
+     so drawing an empty frame labelled "nothing on it yet" contradicts itself.) */
+  .roomview.empty .art{opacity:0}
+  .roomview.empty .bg{filter:grayscale(.5) brightness(1.04);opacity:.72;transition:filter var(--dur-slow) var(--ease),opacity var(--dur-slow) var(--ease)}
   .roomview .rchip{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-2xs);font-weight:var(--w-semibold);color:var(--on-dark);background:var(--glass);backdrop-filter:blur(6px);padding:6px 11px;border-radius:var(--r-sm)}
   .roomview .rchip svg{width:12px;height:12px;fill:none;stroke:var(--on-dark);stroke-width:2}
   .shimmer{position:absolute;inset:0;display:none;background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.45) 50%,transparent 80%);background-size:220% 100%}
@@ -140,49 +125,36 @@
   .mname{font-family:var(--serif);font-size:var(--fs-lg);font-weight:var(--w-semibold);margin:0}
   .mprice{font-weight:var(--w-semibold)}
   .mspec{color:var(--muted);font-size:var(--fs-sm);margin:var(--sp-1) 0 var(--sp-4)}
+  .mhint{color:var(--faint);font-size:var(--fs-sm);margin:0}
   .cta{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;height:var(--btn-lg);border-radius:var(--r-ui);background:var(--accent);color:var(--on-dark);font-weight:var(--w-semibold)}
   .cta:hover{filter:brightness(1.06)}
   .cta svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2}
+  .subtle{display:block;width:100%;text-align:center;color:var(--muted);font-size:var(--fs-sm);margin-top:var(--sp-3)}
+  .subtle:hover{color:var(--ink)}
 
-  /* ===== FINAL ===== */
-  #final{padding:clamp(28px,6vw,56px) 0 120px;animation:rise var(--dur-slow) var(--ease-out) both}
-  .final{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(20px,4vw,40px);align-items:start}
-  .panelcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:var(--card-pad-lg)}
-  .frow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:var(--fs-sm)}
+  /* order state of the same panel — a change of contents, not a change of page */
+  .frow{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:var(--fs-sm)}
   .frow span:first-child{color:var(--muted)}
-  .frow.total{border-bottom:0;padding-top:var(--sp-4);font-size:var(--fs-md);font-weight:var(--w-semibold)}
-  .included{display:flex;flex-direction:column;gap:var(--sp-2);margin:var(--sp-3) 0 var(--sp-5)}
+  .frow.total{border-bottom:0;padding-top:var(--sp-3);font-size:var(--fs-md);font-weight:var(--w-semibold)}
+  .included{display:flex;flex-direction:column;gap:var(--sp-2);margin:var(--sp-3) 0 var(--sp-4)}
   .inc{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-sm);color:var(--muted)}
   .inc svg{width:14px;height:14px;fill:none;stroke:var(--ok);stroke-width:2.2;flex:none}
-  .alabel{font-size:var(--fs-2xs);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold);margin:0 0 var(--sp-2)}
-  .explored{margin-top:clamp(28px,5vw,48px);border-top:1px solid var(--line);padding-top:var(--sp-6)}
-  .exgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);margin-top:var(--sp-4)}
-  .excard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden;text-align:left}
-  .excard img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:grayscale(.35);transition:filter var(--dur-base) var(--ease)}
-  .excard:hover img{filter:none}
-  .excard .exb{padding:var(--sp-3)}
-  .excard b{display:block;font-size:var(--fs-sm);font-weight:var(--w-semibold);margin-bottom:2px}
-  .excard span{font-size:var(--fs-xs);color:var(--muted)}
-  .backlink{display:inline-flex;align-items:center;gap:var(--sp-2);color:var(--muted);font-size:var(--fs-sm);margin-bottom:var(--sp-5)}
-  .backlink:hover{color:var(--ink)}
-  .backlink svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+  [hidden]{display:none !important}
 
-  /* ===== responsive: on a phone the wall pins to the top, the talk runs beneath ===== */
+  /* ===== responsive: wall pins to the top, the talk runs beneath ===== */
   @media(max-width:900px){
     .split{grid-template-columns:1fr;gap:var(--sp-4);padding-top:var(--sp-4)}
     .canvas{order:-1;position:sticky;top:62px;z-index:10;background:var(--bg);padding-bottom:var(--sp-3)}
     .roomview{aspect-ratio:16/10}
     .meta{margin-top:var(--sp-3);padding:var(--card-pad)}
     .conv{height:auto;position:static;padding-bottom:var(--sp-8)}
-    .thread{overflow:visible;max-height:none}
+    .thread{overflow:visible}
     .composer{position:sticky;bottom:var(--sp-3);z-index:12}
-    .final{grid-template-columns:1fr}
-    .exgrid{grid-template-columns:1fr 1fr}
     .ready{max-width:40vw}
   }
   @media(max-width:460px){
-    .exgrid{grid-template-columns:1fr}
     .bub,.msg.you .bub{max-width:100%}
+    .alts{grid-template-columns:repeat(3,1fr)}
   }
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
@@ -195,99 +167,63 @@
 <header class="jtop">
   <div class="jtopin">
     <span class="jbrand">Latenca</span>
-    <span class="ready" id="ready"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg><b id="readyv">Working on it</b></span>
+    <span class="ready" id="ready"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg><b id="readyv">Tell me about the wall</b></span>
     <a class="jexit"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>Save &amp; exit</a>
   </div>
 </header>
 
-<main>
+<main class="wrap">
+  <div class="split">
 
-  <!-- ========== ENTRY — the first thing you say ========== -->
-  <section class="stage active wrap" id="entry">
-    <div class="entrywrap">
-      <div class="dsay"><span class="mk"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg></span>Your Latenca designer</div>
-      <h1 class="qh">Tell me about the wall.<br>I&rsquo;ll design it, then we talk.</h1>
-      <p class="qsub">One line is enough. I&rsquo;ll make the calls I have to make and show you a finished wall &mdash; then you tell me what to change, in your own words.</p>
-
-      <div class="promptbox">
-        <input id="prompt" type="text" placeholder="e.g. big empty wall above my grey sofa" aria-label="Describe your wall">
-        <button class="go" id="goBtn">Start <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-
-      <p class="orline">Or open with one of these:</p>
-      <div class="qchips" id="qchips">
-        <button class="qchip" data-seed="sofa">It&rsquo;s the wall above my sofa</button>
-        <button class="qchip" data-seed="bed">Empty wall in the bedroom</button>
-        <button class="qchip" data-seed="add">I want to add to what I have</button>
-        <button class="qchip" data-seed="narrow">A narrow hallway wall</button>
+    <div class="conv">
+      <div class="thread" id="thread"></div>
+      <div class="qr" id="qr"></div>
+      <div class="composer">
+        <input id="say" type="text" placeholder="Say anything &mdash; &ldquo;empty wall above my sofa&rdquo;&hellip;" aria-label="Talk to your designer">
+        <button class="send" id="sendBtn" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </div>
-  </section>
 
-  <!-- ========== STUDIO — conversation on the left, the wall on the right ========== -->
-  <section class="stage wrap" id="studio">
-    <div class="split">
-
-      <div class="conv">
-        <div class="thread" id="thread"></div>
-        <div class="qr" id="qr"></div>
-        <div class="composer">
-          <input id="say" type="text" placeholder="Say anything &mdash; &ldquo;too busy&rdquo;, &ldquo;the sofa is grey&rdquo;&hellip;" aria-label="Talk to your designer">
-          <button class="send" id="sendBtn" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </div>
+    <div class="canvas">
+      <div class="roomview empty" id="rv">
+        <img class="bg" id="rvRoom" src="" alt="A living room wall">
+        <span class="art"><img id="rvArt" src="" alt="The artwork on the wall"></span>
+        <span class="shimmer"></span>
+        <span class="rchip" id="rvChip"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>A sample wall &mdash; yours goes here</span>
       </div>
 
-      <div class="canvas">
-        <div class="roomview" id="rv">
-          <img class="bg" id="rvRoom" src="" alt="A living room wall">
-          <span class="art"><img id="rvArt" src="" alt="The artwork on the wall"></span>
-          <span class="shimmer"></span>
-          <span class="rchip"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Shown at true scale on a sample wall</span>
+      <div class="meta">
+        <!-- state: nothing designed yet -->
+        <div id="metaEmpty">
+          <h2 class="mname">Nothing hung yet</h2>
+          <p class="mhint">Tell me about your wall and it appears here &mdash; at true scale, with the price.</p>
         </div>
-        <div class="meta">
+        <!-- state: a design exists -->
+        <div id="metaDesign" hidden>
           <div class="mrow"><h2 class="mname" id="pieceName">&mdash;</h2><span class="mprice" id="piecePrice">&mdash;</span></div>
           <p class="mspec" id="pieceSpec">&mdash;</p>
           <button class="cta" id="loveIt">This is the one <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========== FINAL ========== -->
-  <section class="stage wrap" id="final">
-    <button class="backlink" id="backToTalk"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Back to the conversation</button>
-    <div class="dsay"><span class="mk"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg></span>Your Latenca designer</div>
-    <h1 class="qh">Here&rsquo;s your wall.</h1>
-    <p class="qsub">Designed around your room, your light and your taste &mdash; and I can explain every part of it.</p>
-
-    <div class="final">
-      <div class="roomview">
-        <img class="bg" id="finRoom" src="" alt="Your wall">
-        <span class="art"><img id="finArt" src="" alt="The artwork on your wall"></span>
-        <span class="rchip"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Designed for your space &middot; every choice explained</span>
-      </div>
-      <div class="panelcard">
-        <h2 class="mname" id="finName">&mdash;</h2>
-        <div class="frow"><span>Size</span><span id="finSize">&mdash;</span></div>
-        <div class="frow"><span>Frame</span><span>Oak</span></div>
-        <div class="frow"><span>Finish</span><span>Matte paper</span></div>
-        <div class="frow total"><span>Total</span><span id="finTotal">&mdash;</span></div>
-        <div class="included">
-          <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Frame &amp; hanging kit included</span>
-          <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Made to order &middot; ships in ~5 days</span>
-          <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Signed certificate &middot; 30-day returns</span>
+        <!-- state: landed — same panel, different contents -->
+        <div id="metaOrder" hidden>
+          <div class="mrow"><h2 class="mname" id="ordName">&mdash;</h2></div>
+          <p class="mspec" id="ordArtist">&mdash;</p>
+          <div class="frow"><span>Size</span><span id="ordSize">&mdash;</span></div>
+          <div class="frow"><span>Frame</span><span>Oak</span></div>
+          <div class="frow"><span>Finish</span><span>Matte paper</span></div>
+          <div class="frow total"><span>Total</span><span id="ordTotal">&mdash;</span></div>
+          <div class="included">
+            <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Frame &amp; hanging kit included</span>
+            <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Made to order &middot; ships in ~5 days</span>
+            <span class="inc"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Signed certificate &middot; 30-day returns</span>
+          </div>
+          <button class="cta">Make it real <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="subtle" id="keepTalking">Actually, let&rsquo;s change something</button>
         </div>
-        <button class="cta">Make it real <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </div>
 
-    <div class="explored">
-      <p class="alabel">The range I explored before landing here</p>
-      <div class="exgrid" id="exgrid"></div>
-    </div>
-  </section>
-
+  </div>
 </main>
 
 <script>
@@ -305,49 +241,37 @@
     paper:{i:2,name:'Paper Moon',artist:'Yuki Tanabe'}
   };
 
-  /* The designer always holds a complete position — and tracks what you actually
-     told it vs what it assumed, so it only ever asks about the second kind. */
-  const state={placement:'sofa',width:'medium',mood:'calm',piece:PIECES.nebula,told:new Set()};
+  /* The designer holds a complete position once it has one, and tracks what you
+     TOLD it versus what it ASSUMED — so it only ever asks about the second kind. */
+  const state={designed:false,landed:false,placement:'sofa',width:'medium',mood:'calm',piece:PIECES.nebula,told:new Set()};
 
   const LABEL={
     placement:{sofa:'above a sofa',bed:'above a bed',add:'beside what you already own',hallway:'a hallway wall',none:'a wall with nothing under it'},
     width:{small:'narrow (under 1.2 m)',medium:'a middle width (1.2–2.2 m)',large:'wide (over 2.2 m)'},
     mood:{calm:'calm and warm',bold:'bold and graphic',warm:'warm and earthy',cool:'cool and airy'}
   };
-  const SEEDS={
-    sofa:{text:"It's the wall above my sofa",set:{placement:'sofa'},told:['placement']},
-    bed:{text:"Empty wall in the bedroom",set:{placement:'bed'},told:['placement']},
-    add:{text:"I want to add to what I have",set:{placement:'add'},told:['placement']},
-    narrow:{text:"A narrow hallway wall",set:{placement:'hallway',width:'small'},told:['placement','width']}
-  };
-
   const scaleFor=w=>w==='large'?38:w==='small'?22:30;
   const sizeFor=w=>w==='large'?'100×140 cm':w==='small'?'50×70 cm':'70×100 cm';
   const priceFor=w=>w==='large'?189:w==='small'?79:118;
 
   /* ============ elements ============ */
-  const stages=[...document.querySelectorAll('.stage')];
-  const ready=document.getElementById('ready'), readyv=document.getElementById('readyv');
   const thread=document.getElementById('thread'), qrBox=document.getElementById('qr'), rv=document.getElementById('rv');
+  const ready=document.getElementById('ready'), readyv=document.getElementById('readyv');
+  const metaEmpty=document.getElementById('metaEmpty'), metaDesign=document.getElementById('metaDesign'), metaOrder=document.getElementById('metaOrder');
+  const reduced=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrollDown=()=>{thread.scrollTop=thread.scrollHeight;};
 
-  function go(id){
-    stages.forEach(s=>s.classList.toggle('active',s.id===id));
-    if(id==='entry'){ready.classList.remove('show');}
-    else{
-      ready.classList.add('show');
-      const missing=!state.told.has('width');
-      ready.classList.toggle('need',missing);
-      readyv.innerHTML = id==='final' ? 'Everything I need for your wall'
-                        : missing ? 'Tell me the wall width and I&rsquo;ll be sure'
-                        : 'Ready &mdash; keep talking, it keeps changing';
-    }
-    window.scrollTo({top:0,behavior:'smooth'});
+  function setReady(){
+    let text,set=true;
+    if(!state.designed){text='Tell me about the wall';set=false;}
+    else if(state.landed){text='Everything I need for your wall';}
+    else if(!state.told.has('width')){text='Tell me the wall width and I&rsquo;ll be sure';set=false;}
+    else{text='Ready &mdash; keep talking, it keeps changing';}
+    readyv.innerHTML=text; ready.classList.toggle('set',set);
   }
 
   /* ============ the conversation ============ */
   const AVATAR='<span class="av"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg></span>';
-  const reduced=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const scrollDown=()=>{thread.scrollTop=thread.scrollHeight;};
 
   function youSay(text){
     const d=document.createElement('div'); d.className='msg you';
@@ -355,17 +279,22 @@
     thread.appendChild(d); scrollDown();
   }
   function typing(){
-    const d=document.createElement('div'); d.className='msg ai'; d.dataset.typing='1';
+    const d=document.createElement('div'); d.className='msg ai';
     d.innerHTML=AVATAR+'<div class="bub"><div class="typing"><i></i><i></i><i></i></div></div>';
     thread.appendChild(d); scrollDown(); return d;
   }
-  /* an AI turn may carry a result card — the conversation always lands something real */
-  function aiSay(html,withResult){
+  function aiSay(html,opts){
+    opts=opts||{};
     const d=document.createElement('div'); d.className='msg ai';
     let body='<div class="bub">'+html;
-    if(withResult){
+    if(opts.result){
       body+='<div class="res"><img src="'+url(ART[state.piece.i],120,150)+'" alt="">'
           + '<span><b>'+state.piece.name+'</b><span>'+state.piece.artist+' &middot; '+sizeFor(state.width)+' &middot; $'+priceFor(state.width)+'</span></span></div>';
+    }
+    if(opts.alts){
+      const why=['Too quiet once I knew the size','Beautiful, but it fought the room','Right mood, wrong proportion'];
+      body+='<div class="alts">'+Object.values(PIECES).filter(p=>p!==state.piece).slice(0,3)
+        .map((p,i)=>'<span class="alt"><img src="'+url(ART[p.i],200,200)+'" alt=""><span>'+why[i]+'</span></span>').join('')+'</div>';
     }
     body+='</div>';
     d.innerHTML=AVATAR+body;
@@ -379,29 +308,33 @@
     setTimeout(()=>{
       t.remove();
       if(opts.repaint){paint();rv.classList.remove('busy');}
-      aiSay(html,opts.result);
+      aiSay(html,opts);
       setQuickReplies(opts.qr||DEFAULT_QR);
+      setReady();
     }, reduced()?60:850);
   }
-
   function setQuickReplies(list){
     qrBox.innerHTML='';
-    list.forEach(q=>{
-      const b=document.createElement('button'); b.className='qrb'; b.textContent=q;
-      b.onclick=()=>handle(q);
-      qrBox.appendChild(b);
-    });
+    list.forEach(q=>{const b=document.createElement('button');b.className='qrb';b.textContent=q;b.onclick=()=>handle(q);qrBox.appendChild(b);});
   }
+  const OPENERS=['It&rsquo;s the wall above my sofa','Empty wall in the bedroom','A narrow hallway wall','I want to add to what I have']
+    .map(s=>s.replace(/&rsquo;/g,'’'));
   const DEFAULT_QR=['Something calmer','Go bolder','Make it bigger','Why this one?','Show me something else'];
 
   /* ============ the wall ============ */
   function paint(){
-    document.getElementById('rvRoom').src=url(ROOM,900,700);
     document.getElementById('rvArt').src=url(ART[state.piece.i],420,520);
     document.querySelector('#rv .art').style.width=scaleFor(state.width)+'%';
-    document.getElementById('pieceName').textContent=state.piece.name;
-    document.getElementById('piecePrice').textContent='$'+priceFor(state.width);
-    document.getElementById('pieceSpec').textContent=state.piece.artist+' · '+sizeFor(state.width)+' · oak frame';
+    if(state.designed){
+      rv.classList.remove('empty');
+      document.getElementById('rvChip').innerHTML='<svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18 9l-4.1 1.4L12 15l-1.9-4.6L6 9l4.1-1.4z"/></svg>Shown at true scale on a sample wall';
+      document.getElementById('pieceName').textContent=state.piece.name;
+      document.getElementById('piecePrice').textContent='$'+priceFor(state.width);
+      document.getElementById('pieceSpec').textContent=state.piece.artist+' · '+sizeFor(state.width)+' · oak frame';
+    }
+    metaEmpty.hidden=state.designed;
+    metaDesign.hidden=!state.designed||state.landed;
+    metaOrder.hidden=!state.landed;
   }
 
   /* ============ understanding what you said ============ */
@@ -411,34 +344,70 @@
     if(/not sure|you pick|you choose|you decide|your call|dunno|no idea|whatever you think|up to you/.test(s))return{intent:'defer'};
     if(/why|explain|reason|how come/.test(s))return{intent:'why'};
     if(/calm|quiet|soft|less busy|too busy|simpler|subtle/.test(s))return{intent:'calmer'};
-    if(/bold|colour|color|bright|pop|statement|louder/.test(s))return{intent:'bolder'};
+    if(/bold|colour|color|pop|statement|louder/.test(s))return{intent:'bolder'};
     if(/warm|cosy|cozy|earth|wood|oak/.test(s))return{intent:'warmer'};
-    if(/bigger|larger|big|scale up|too small/.test(s))return{intent:'bigger'};
+    if(/bigger|larger|scale up|too small/.test(s))return{intent:'bigger'};
     if(/smaller|too big|too large/.test(s))return{intent:'smaller'};
     if(/different|another|something else|change the subject|not this/.test(s))return{intent:'different'};
-    if(/sofa|couch/.test(s))return{intent:'placement',value:'sofa'};
+    if(/sofa|couch|living/.test(s))return{intent:'placement',value:'sofa'};
     if(/bed/.test(s))return{intent:'placement',value:'bed'};
     if(/hall|corridor/.test(s))return{intent:'placement',value:'hallway'};
-    if(/nothing under|empty under|no furniture/.test(s))return{intent:'placement',value:'none'};
-    if(/narrow|small wall|under 1|1 ?m\b/.test(s))return{intent:'width',value:'small'};
-    if(/wide|large wall|over 2|3 ?m\b|2\.5/.test(s))return{intent:'width',value:'large'};
-    if(/medium|middle|about 2 ?m|1\.5/.test(s))return{intent:'width',value:'medium'};
+    if(/add to|already (have|own)|next to/.test(s))return{intent:'placement',value:'add'};
+    if(/nothing under|no furniture/.test(s))return{intent:'placement',value:'none'};
+    if(/narrow|under 1|small wall/.test(s))return{intent:'width',value:'small'};
+    if(/wide|over 2|big empty|large wall|2\.5|3 ?m\b/.test(s))return{intent:'width',value:'large'};
+    if(/medium|middle|1\.5|about 2 ?m/.test(s))return{intent:'width',value:'medium'};
     return{intent:null};
   }
 
   const REPLY={
     calmer:{piece:'muted',mood:'calm',say:'Toned it down &mdash; softer palette, less contrast. It sits in the room instead of announcing itself. <em>Better?</em>'},
-    bolder:{piece:'cobalt',mood:'bold',say:'More contrast and colour. Now the wall is the first thing you notice when you walk in &mdash; which works if the rest of the room is quiet.'},
+    bolder:{piece:'cobalt',mood:'bold',say:'More contrast and colour. Now the wall is the first thing you notice walking in &mdash; which works if the rest of the room stays quiet.'},
     warmer:{piece:'ember',mood:'warm',say:'Warmer tones, so it agrees with wood and brass rather than fighting them.'},
     bigger:{piece:'meridian',width:'large',say:'Scaled up. At this width bigger reads deliberate &mdash; <em>small would look like an accident.</em>'},
     smaller:{width:'small',say:'Brought it down a size. Honestly I&rsquo;d go back up &mdash; but it&rsquo;s your wall, and this still works.'},
     different:{piece:'paper',say:'Different subject, same restraint &mdash; so the room keeps its calm.'}
   };
 
+  /* the first substantive thing you say produces a finished design, not a follow-up question */
+  function firstDesign(text){
+    const s=text.toLowerCase();
+    if(/bed/.test(s))state.placement='bed';
+    else if(/hall|corridor/.test(s))state.placement='hallway';
+    else if(/add to|already (have|own)/.test(s))state.placement='add';
+    else state.placement='sofa';
+    if(/sofa|couch|bed|hall|corridor|add to|already/.test(s))state.told.add('placement');
+
+    if(/big|large|wide|huge/.test(s)){state.width='large';state.told.add('width');}
+    else if(/narrow|small|tiny/.test(s)){state.width='small';state.told.add('width');}
+    else state.width='medium';
+
+    if(/bold|colou?rful|statement|striking/.test(s))state.mood='bold';
+    else if(/warm|earth|cosy|cozy/.test(s))state.mood='warm';
+    else if(/calm|quiet|minimal|soft/.test(s))state.mood='calm';
+
+    state.piece = state.mood==='bold'?PIECES.cobalt : state.mood==='warm'?PIECES.ember : PIECES.nebula;
+    state.designed=true;
+
+    aiTurn('<p>Right &mdash; I&rsquo;ll take it from there. I&rsquo;m assuming <em>'+LABEL.placement[state.placement]+'</em>, '
+          +'<em>'+LABEL.width[state.width]+'</em>, leaning <em>'+LABEL.mood[state.mood]+'</em>.</p>'
+          +'<p>Here&rsquo;s what I&rsquo;d hang. One piece rather than a gallery &mdash; above furniture a single work reads calmer than a cluster.</p>',
+      {repaint:true,result:true});
+
+    /* one earned question, only about something you never said */
+    if(!state.told.has('width')){
+      setTimeout(()=>{
+        aiTurn('<p>One thing would make me certain: <em>how wide is that wall?</em> It&rsquo;s the difference between this size and going properly large.</p>',
+               {qr:['Under 1.2 m','About 1.5&ndash;2 m','Over 2.2 m','Not sure &mdash; you pick'].map(s=>s.replace(/&ndash;/g,'–').replace(/&mdash;/g,'—'))});
+      }, reduced()?200:2100);
+    }
+  }
+
   function handle(text){
     youSay(text);
-    const {intent,value}=interpret(text);
+    if(!state.designed){ firstDesign(text); return; }
 
+    const {intent,value}=interpret(text);
     if(intent==='why'){
       const because = state.width==='large' ? 'the wall is wide, so anything small floats and looks accidental'
         : state.width==='small' ? 'the wall is narrow, so one confident piece beats a crowded cluster'
@@ -448,26 +417,26 @@
       return;
     }
     if(intent==='defer'){
-      state.width='large'; state.told.add('width'); state.piece=PIECES.meridian;
+      state.width='large'; state.told.add('width'); state.piece=PIECES.meridian; state.landed=false;
       aiTurn('<p>Then I&rsquo;ll call it. Going <em>large</em> &mdash; above a sofa that&rsquo;s almost always the right answer, and if I&rsquo;m wrong you&rsquo;ll see it immediately and we go back down.</p>',
              {repaint:true,result:true});
-      go('studio'); return;
+      return;
     }
     if(intent==='placement'||intent==='width'){
-      state[intent]=value; state.told.add(intent);
+      state[intent]=value; state.told.add(intent); state.landed=false;
       aiTurn('<p>Good &mdash; that changes things. Working with <em>'+LABEL[intent][value]+'</em> now, so I resized and re-reasoned it.</p>',
              {repaint:true,result:true});
-      go('studio'); return;
+      return;
     }
     const r=REPLY[intent];
     if(r){
       if(r.piece)state.piece=PIECES[r.piece];
       if(r.mood)state.mood=r.mood;
       if(r.width){state.width=r.width;state.told.add('width');}
+      state.landed=false;
       aiTurn('<p>'+r.say+'</p>',{repaint:true,result:true});
       return;
     }
-    /* didn't parse it — a designer says so and offers a way forward, it doesn't pretend */
     aiTurn('<p>I&rsquo;m not sure I follow &mdash; say it another way and I&rsquo;ll act on it. Do you want it <em>quieter</em>, <em>bolder</em>, <em>bigger</em>, or a different subject altogether?</p>',
            {qr:['Quieter','Bolder','Bigger','A different subject']});
   }
@@ -476,77 +445,32 @@
   document.getElementById('say').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
   function send(){const i=document.getElementById('say'),t=i.value.trim();if(!t)return;i.value='';handle(t);}
 
-  /* ============ opening the conversation ============ */
-  function readSeedFromText(t){
-    const s=t.toLowerCase(); const out={set:{},told:[]};
-    if(/sofa|couch|living/.test(s)){out.set.placement='sofa';out.told.push('placement');}
-    else if(/bed/.test(s)){out.set.placement='bed';out.told.push('placement');}
-    else if(/hall|corridor/.test(s)){out.set.placement='hallway';out.told.push('placement');}
-    if(/big|large|wide|huge/.test(s)){out.set.width='large';out.told.push('width');}
-    else if(/small|narrow|tiny/.test(s)){out.set.width='small';out.told.push('width');}
-    if(/bold|colou?rful|statement|striking/.test(s))out.set.mood='bold';
-    else if(/warm|earth|cosy|cozy/.test(s))out.set.mood='warm';
-    else if(/calm|quiet|minimal|soft/.test(s))out.set.mood='calm';
-    return out;
-  }
-
-  function start(opening){
-    Object.assign(state,{placement:'sofa',width:'medium',mood:'calm',piece:PIECES.nebula});
-    state.told=new Set(opening.told||[]);
-    Object.assign(state,opening.set||{});
-    if(state.mood==='bold')state.piece=PIECES.cobalt;
-    else if(state.mood==='warm')state.piece=PIECES.ember;
-
-    thread.innerHTML=''; qrBox.innerHTML='';
-    paint(); go('studio');
-    youSay(opening.text);
-
-    /* first turn: it commits to a design and says why — it does not interview you */
-    aiTurn('<p>Right &mdash; I&rsquo;ll take it from there. I&rsquo;m assuming <em>'+LABEL.placement[state.placement]+'</em>, '
-          +'<em>'+LABEL.width[state.width]+'</em>, leaning <em>'+LABEL.mood[state.mood]+'</em>.</p>'
-          +'<p>Here&rsquo;s what I&rsquo;d hang. One piece rather than a gallery &mdash; above furniture a single work reads calmer than a cluster.</p>',
-      {repaint:true,result:true});
-
-    /* second turn: ONE earned question, and only about something you never told it */
-    if(!state.told.has('width')){
-      setTimeout(()=>{
-        aiTurn('<p>One thing would make me certain: <em>how wide is that wall?</em> It&rsquo;s the difference between this size and going properly large.</p>',
-               {qr:['Under 1.2 m','About 1.5–2 m','Over 2.2 m','Not sure — you pick']});
-      }, reduced()?200:2100);
-    }
-  }
-
-  document.getElementById('goBtn').onclick=()=>{
-    const v=document.getElementById('prompt').value.trim();
-    if(!v)return;
-    const s=readSeedFromText(v); s.text=v; start(s);
-  };
-  document.getElementById('prompt').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('goBtn').click();});
-  document.querySelectorAll('#qchips .qchip').forEach(b=>b.onclick=()=>start(SEEDS[b.dataset.seed]));
-
-  /* ============ landing ============ */
+  /* ============ landing — the panel changes contents, the screen does not change ============ */
   document.getElementById('loveIt').onclick=()=>{
-    document.getElementById('finRoom').src=url(ROOM,900,700);
-    document.getElementById('finArt').src=url(ART[state.piece.i],420,520);
-    document.querySelector('#final .art').style.width=scaleFor(state.width)+'%';
-    document.getElementById('finName').textContent=state.piece.name;
-    document.getElementById('finSize').textContent=sizeFor(state.width);
-    document.getElementById('finTotal').textContent='$'+priceFor(state.width);
-
-    const ex=document.getElementById('exgrid'); ex.innerHTML='';
-    Object.values(PIECES).filter(p=>p!==state.piece).slice(0,3).forEach((p,i)=>{
-      const why=['Too quiet once I knew the size','Beautiful, but it fought the room','Right mood, wrong proportion'][i];
-      const c=document.createElement('button'); c.className='excard';
-      c.innerHTML='<img src="'+url(ART[p.i],300,300)+'" alt=""><span class="exb"><b>'+p.name+'</b><span>'+why+'</span></span>';
-      c.onclick=()=>{state.piece=p;go('studio');paint();
-        aiTurn('<p>Switched to <em>'+p.name+'</em>. I still think the other one fits better &mdash; but it&rsquo;s your wall.</p>',{result:true});};
-      ex.appendChild(c);
-    });
-    go('final');
+    state.landed=true;
+    document.getElementById('ordName').textContent=state.piece.name;
+    document.getElementById('ordArtist').textContent=state.piece.artist;
+    document.getElementById('ordSize').textContent=sizeFor(state.width);
+    document.getElementById('ordTotal').textContent='$'+priceFor(state.width);
+    paint();
+    aiTurn('<p>Good call. It&rsquo;s on the right &mdash; framed, sized and priced, nothing charged yet.</p>'
+          +'<p>For what it&rsquo;s worth, here&rsquo;s the range I went through before landing on it:</p>',
+      {alts:true,qr:['Actually, something calmer','Why not the second one?','I&rsquo;m happy with this'].map(s=>s.replace(/&rsquo;/g,'’'))});
   };
-  document.getElementById('backToTalk').onclick=()=>go('studio');
+  document.getElementById('keepTalking').onclick=()=>{
+    state.landed=false; paint(); setReady();
+    document.getElementById('say').focus();
+    setQuickReplies(DEFAULT_QR);
+  };
 
-  go('entry');
+  /* ============ open the conversation — same screen, AI speaks first ============ */
+  document.getElementById('rvRoom').src=url(ROOM,900,700);
+  paint(); setReady();
+  setTimeout(()=>{
+    aiSay('<p>I&rsquo;m your Latenca designer. Tell me about the wall &mdash; <em>one line is enough</em> &mdash; and I&rsquo;ll make the calls I have to make and hang something on it.</p>'
+         +'<p>Then you tell me what to change, in your own words.</p>');
+    setQuickReplies(OPENERS);
+  }, reduced()?0:350);
 </script>
 </body>
 </html>
