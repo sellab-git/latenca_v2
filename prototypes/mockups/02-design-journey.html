@@ -106,7 +106,10 @@
   .canvas{position:sticky;top:calc(62px + var(--sp-6))}
   .roomview{position:relative;border-radius:var(--r-ui);overflow:hidden;aspect-ratio:4/3;background:var(--media);box-shadow:var(--shadow-1)}
   .roomview>.bg{width:100%;height:100%;object-fit:cover;display:block}
-  .roomview .art{position:absolute;top:16%;left:50%;transform:translateX(-50%);width:30%;border:6px solid #fff;box-shadow:var(--shadow-2);background:#fff;opacity:1;transition:width var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out)}
+  /* --wall-top is set per room, because each sample wall has a different amount
+     of free wall above the furniture */
+  .roomview{--wall-top:12%}
+  .roomview .art{position:absolute;top:var(--wall-top);left:50%;transform:translateX(-50%);width:30%;border:6px solid #fff;box-shadow:var(--shadow-2);background:#fff;opacity:1;transition:width var(--dur-slow) var(--ease-out),top var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out)}
   .roomview .art img{width:100%;display:block}
   .roomview.busy .art{opacity:.35}
   /* empty state: the sample room reads as "not yours yet" — muted, waiting.
@@ -229,8 +232,17 @@
 <script>
   /* ============ data ============ */
   const ART=["photo-1615184697985-c9bde1b07da7","photo-1618331833071-ce81bd50d300","photo-1541961017774-22349e4a1262","photo-1533158388470-9a56699990c6","photo-1552250575-e508473b090f","photo-1462331940025-496dfbfc7564","photo-1444703686981-a3abbc4d4fe3","photo-1502134249126-9f3755a50d78","photo-1465101162946-4377e57745c3"];
-  const ROOM="photo-1600210491369-e753d80a41f3";
   const url=(id,w,h)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+
+  /* The project's three sample walls (from project 15, assets/rooms) — all three
+     have genuinely EMPTY wall above the furniture, which is what this screen needs.
+     `top` differs because each one leaves a different amount of free wall. */
+  const ROOMS={
+    living:{file:'assets/rooms/cupboard.webp',    top:'11%', label:'a living-room wall'},
+    side:  {file:'assets/rooms/dresser-zoom.webp',top:'9%',  label:'the wall above a sideboard'},
+    studio:{file:'assets/rooms/office.webp',      top:'8%',  label:'a studio wall'}
+  };
+  const roomFor=p=>p==='bed'||p==='add'?ROOMS.side : p==='hallway'||p==='none'?ROOMS.studio : ROOMS.living;
 
   const PIECES={
     nebula:{i:0,name:'Nebula Bloom',artist:'Sora Lindqvist'},
@@ -250,7 +262,9 @@
     width:{small:'narrow (under 1.2 m)',medium:'a middle width (1.2–2.2 m)',large:'wide (over 2.2 m)'},
     mood:{calm:'calm and warm',bold:'bold and graphic',warm:'warm and earthy',cool:'cool and airy'}
   };
-  const scaleFor=w=>w==='large'?38:w==='small'?22:30;
+  /* tuned to these three walls: the free wall above the furniture is shallower
+     than a full-room photo, so the frame has to sit smaller to stay believable */
+  const scaleFor=w=>w==='large'?28:w==='small'?18:23;
   const sizeFor=w=>w==='large'?'100×140 cm':w==='small'?'50×70 cm':'70×100 cm';
   const priceFor=w=>w==='large'?189:w==='small'?79:118;
 
@@ -323,6 +337,9 @@
 
   /* ============ the wall ============ */
   function paint(){
+    const room=roomFor(state.placement);
+    document.getElementById('rvRoom').src=room.file;
+    rv.style.setProperty('--wall-top',room.top);
     document.getElementById('rvArt').src=url(ART[state.piece.i],420,520);
     document.querySelector('#rv .art').style.width=scaleFor(state.width)+'%';
     if(state.designed){
@@ -358,6 +375,20 @@
     if(/wide|over 2|big empty|large wall|2\.5|3 ?m\b/.test(s))return{intent:'width',value:'large'};
     if(/medium|middle|1\.5|about 2 ?m/.test(s))return{intent:'width',value:'medium'};
     return{intent:null};
+  }
+
+  /* pull every fact a sentence contains, not just the first one that matched */
+  function extractFacts(t){
+    const s=t.toLowerCase(), f={};
+    if(/sofa|couch|living/.test(s))f.placement='sofa';
+    else if(/bed/.test(s))f.placement='bed';
+    else if(/hall|corridor/.test(s))f.placement='hallway';
+    else if(/add to|already (have|own)|next to/.test(s))f.placement='add';
+    else if(/nothing under|no furniture/.test(s))f.placement='none';
+    if(/narrow|under 1|small wall/.test(s))f.width='small';
+    else if(/wide|over 2|big empty|large wall|2\.5|3 ?m\b/.test(s))f.width='large';
+    else if(/medium|middle|1\.5|about 2 ?m/.test(s))f.width='medium';
+    return f;
   }
 
   const REPLY={
@@ -423,8 +454,13 @@
       return;
     }
     if(intent==='placement'||intent==='width'){
-      state[intent]=value; state.told.add(intent); state.landed=false;
-      aiTurn('<p>Good &mdash; that changes things. Working with <em>'+LABEL[intent][value]+'</em> now, so I resized and re-reasoned it.</p>',
+      /* one sentence can carry both facts ("narrow hallway wall") — take them all,
+         otherwise the designer looks like it only half-listened */
+      const facts=extractFacts(text);
+      Object.keys(facts).forEach(k=>{state[k]=facts[k];state.told.add(k);});
+      state.landed=false;
+      const said=Object.keys(facts).map(k=>'<em>'+LABEL[k][facts[k]]+'</em>').join(' and ');
+      aiTurn('<p>Good &mdash; that changes things. Working with '+said+' now, so I resized and re-reasoned it.</p>',
              {repaint:true,result:true});
       return;
     }
@@ -464,7 +500,6 @@
   };
 
   /* ============ open the conversation — same screen, AI speaks first ============ */
-  document.getElementById('rvRoom').src=url(ROOM,900,700);
   paint(); setReady();
   setTimeout(()=>{
     aiSay('<p>I&rsquo;m your Latenca designer. Tell me about the wall &mdash; <em>one line is enough</em> &mdash; and I&rsquo;ll make the calls I have to make and hang something on it.</p>'
