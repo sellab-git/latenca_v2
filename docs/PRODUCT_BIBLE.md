@@ -67,7 +67,7 @@ Dwa wcześniejsze projekty opisywały to samo z dwóch stron i **teraz się scho
 ## 4. Skąd bierze się sztuka (17 rządzi)
 
 ✅ **Katalog źródłowo-agnostyczny** (każde dzieło ma `source` + `collection`). v1 wypełniony z:
-1. **Muzealne public-domain (CC0)** — legalne do sprzedaży, darmowe, **w rozdzielczości do dużego druku** (rozwiązuje naraz prawo autorskie I rozdzielczość, których czysty AI nie ma). Proof: `reference/catalog-demo-17/`. 🔬 17 D-011.
+1. **Muzealne public-domain (CC0)** — legalne do sprzedaży, darmowe, **w rozdzielczości do dużego druku** (rozwiązuje naraz prawo autorskie I rozdzielczość, których czysty AI nie ma). 🔬 17 D-011.
 2. **AI kurowane przez operatora** — grafika AI, którą operator sam generuje/wybiera (nie generacja przez klienta).
 
 **Artysta:**
@@ -168,4 +168,4 @@ Marketplace/upload twórców (faza 2) · canvas-builder · generatywna warstwa A
 - [`MARKET.md`](MARKET.md) + [`market-map.html`](market-map.html) — mapa rynku, konkurencja, prawo AI
 - [`DECISIONS.md`](DECISIONS.md) — log decyzji (z 17, + D-017 = to połączenie)
 - [`PRODUCT_ARCHITECTURE.md`](PRODUCT_ARCHITECTURE.md), [`AI_SYSTEM.md`](AI_SYSTEM.md), [`USER_RESEARCH.md`](USER_RESEARCH.md), [`BUSINESS.md`](BUSINESS.md), [`WALL_DESIGN_KNOWLEDGE.md`](WALL_DESIGN_KNOWLEDGE.md) — Biblia z 17
-- [`reference/`](reference/) — kopie źródeł (15 prototyp HTML, 17 mockupy/specs/catalog-demo) tylko do czytania
+- [`reference/`](reference/) — kopie źródeł (15 prototypy HTML + archiwum wersji, 17 mockupy/specs) tylko do czytania
