@@ -572,3 +572,30 @@ Zmierzony fakt zostaje: efektywne proporcje wychodzą `0,74 / 1 / 1,29` zamiast 
 **Te dwa podejścia nie są sprzeczne.** Kamerę i prawdziwą skalę można mieć naraz: `--zoom` skaluje tło i ramkę **razem**, więc stosunek obrazu do ściany zostaje nienaruszony niezależnie od pozycji kamery. Nasze przeliczenie cm→px liczy od wyrenderowanej szerokości zdjęcia, więc jest odporne na zoom. Znaczy to, że **ruch kamery Printly da się nałożyć na naszą kalibrację bez utraty żadnej z tych dwóch rzeczy.** Ustawiłem zoom na 1 tylko dlatego, że stare zaczepienie przy prawdziwej skali wypychało obraz poza kadr — nie dlatego, że kamera przeszkadza.
 
 **Zakres — decyzja Artura:** dalsze pogłębianie skalowania w pokojach **jest wstrzymane**. Jesteśmy w makietach HTML i teraz liczy się ogólny wygląd. Printly ma znacznie więcej dorobku niż obecna makieta: ruch kamery, pełny system ram, obsługa formatów i materiałów (papier, płótno itd.). **Analiza Printly i decyzja „kopiować / zaadaptować / napisać od nowa" należy do etapu prawdziwego kodu, nie do makiet.** To, co jest teraz, wystarcza jako makieta i jest uczciwe — dalej nie drążymy.
+
+---
+
+# D-036
+## Title
+Digital downloads leave the offer, and there is exactly one place to talk to the AI on any screen.
+### Status
+LOCKED
+### Decision
+**Digital files are removed from the product page.** Latenca sells printed objects. The `Format` choice (print / digital file) disappears entirely.
+
+**One conversation per screen.** On the product/advisor screen that place is the right-hand column. The top search field stays a **search field** and does not become a chat. Anything else on a screen that looks like a second chat is a defect.
+### Reason
+The digital tier was designed for the v15 marketplace, where an artist supplied a file they owned. Sourcing artwork from mixed and partly public-domain material breaks that: selling a download of something the buyer can obtain free at source is weak commercially and unclear legally. With a print, the customer pays for a manufactured object — the value is unambiguous. *(Artur, 2026-07-20.)*
+
+On the AI surfaces, Artur's own framing: *"żeby za chwilę nie było tak, że mamy na 1 stronie 3 różne okna do rozmowy z AI i nie wiadomo w co i dlaczego klikać."* Correct, and it follows from the locked primitive. Search and the advisor do different jobs:
+
+- **Search is the door when the screen is still empty** — you have to describe what you want.
+- **The advisor is the conversation once something is on the wall** — you react to what you see.
+
+We locked **react-don't-specify** precisely because describing is the hard part. Turning the search field into a chat would create a second conversation that does the same job worse. The link between them is a **handoff**: a search phrase lands on a piece, and the conversation starts there already knowing the phrase.
+### Implications
+- The `Format` block, the digital option and `DIGITAL_PRICE` are gone from `04-advisor.html`. Digital pricing stays out of `PRODUCT_BIBLE.md` pricing work until someone reopens it with a rights model that supports it.
+- Removing digital also removes a rights question we would otherwise have had to answer per artwork.
+- The search field keeps its AI-phrasing placeholder — it *is* AI-assisted search. That is not a chat.
+- Rejected in the same pass, and why: **reviews and save counts** (we have no customers, and on a curated brand curation is the stronger proof — a fabricated number is the one thing on the page that can be caught as a lie); **Follow on the artist** (promises a social layer that is not in the MVP, and public-domain sources have nobody to follow); **the duplicated selection summary** (the panel already shows the selection by what is highlighted); **the twenty-tile grid** (it competed with the advisor, which is a better answer to "not this one" — reduced to six, and its button now opens the conversation).
+- **Not changed, after checking:** the material list stays at six, and the order stays material → size → frame. I had recommended cutting to two on a Mixtiles comparison, which was the wrong reference — Mixtiles sells photo tiles, not art prints, and material choice is standard at Desenio, Fy!, Society6 and King & McGaw. The order is also correct as it stands, because material determines which sizes and prices exist. Both recommendations withdrawn. The one real cost stands and is accepted: each material is a separate Gelato line, quality check and complaint surface.
