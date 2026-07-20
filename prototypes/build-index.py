@@ -1,4 +1,4 @@
-import os, re, io, html
+import os, re, io, html, json
 from collections import defaultdict
 
 ROOT = r"C:\AI biznes\18. Latenca"
@@ -6,6 +6,11 @@ MOCK = os.path.join(ROOT, "prototypes", "mockups")
 REF  = os.path.join(ROOT, "reference", "prototype-html-15")
 ARCH = os.path.join(REF, "archiwum-wersji")
 OUT  = os.path.join(ROOT, "prototypes", "index.html")
+# co ktora wersja zmienila - bez tego "v1 v2 v3" nic nie mowi
+LABELS = {}
+_lp = os.path.join(MOCK, "versions", "labels.json")
+if os.path.isfile(_lp):
+    LABELS = json.load(io.open(_lp, encoding="utf-8"))
 
 def htmls(d):
     return sorted(f for f in os.listdir(d) if f.lower().endswith(".html")) if os.path.isdir(d) else []
@@ -42,13 +47,15 @@ def links(files, base):
 ourrows = []
 for screen in sorted(ours):
     items = ours[screen]
-    chips = "\n".join(
-        '<a class="v" href="mockups/versions/{f}" title="{f}">{label}</a>'
-        .format(f=html.escape(f), label=("v%d" % n if n else "—"))
-        for n, f in items)
+    rows_ = "\n".join(
+        '<a class="vrow" href="mockups/versions/{f}"><span class="vn">{label}</span>'
+        '<span class="vd">{desc}</span></a>'
+        .format(f=html.escape(f), label=("v%d" % n if n else "-"),
+                desc=html.escape(LABELS.get(f, "")))
+        for n, f in reversed(items))          # najnowsza na gorze
     ourrows.append(
-        '<section class="grp"><h3>{}<span class="n">{} wersji</span></h3><div class="vs">{}</div></section>'
-        .format(html.escape(screen), len(items), chips))
+        '<section class="grp"><h3>{}<span class="n">{} wersji</span></h3><div class="vlist">{}</div></section>'
+        .format(html.escape(screen), len(items), rows_))
 
 rows = []
 for screen in sorted(groups, key=lambda s: -len(groups[s])):
@@ -89,6 +96,12 @@ doc = """<!doctype html>
   .v{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:999px;
      padding:4px 11px;font-size:12px;color:var(--muted);text-decoration:none}
   .v:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .vlist{display:flex;flex-direction:column;gap:4px}
+  .vrow{display:flex;align-items:baseline;gap:12px;background:var(--panel);border:1px solid var(--line);
+        border-radius:var(--r);padding:9px 13px;text-decoration:none;transition:.15s}
+  .vrow:hover{border-color:var(--accent);background:#fff}
+  .vn{color:var(--accent-ink);font-weight:600;font-size:12px;min-width:32px;font-variant-numeric:tabular-nums}
+  .vd{color:var(--muted);font-size:13px}
   .note{background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--r);
         padding:12px 15px;font-size:13px;margin:0 0 28px}
 </style></head><body><div class="wrap">

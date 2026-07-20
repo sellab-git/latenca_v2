@@ -39,6 +39,7 @@ Linia rozwojowa projektów:
 - **Mobile-first od 390px**; każdy ekran weryfikowany w przeglądarce na 390 i desktopie **zanim** zostanie pokazany (D-032)
 - **Nie wymyślamy komponentów** — używamy prawdziwych klas z 15. Jeśli dobra wersja istnieje, **kopiujemy plik i edytujemy** (D-032)
 - **Nic ważnego nie zostaje w scratchpadzie.** Wersje zamrażamy w `prototypes/mockups/versions/` — Product v56–v59 przepadł, bo tej zasady nie było
+- 🔁 **Każdy commit zmieniający bieżącą makietę dodaje wersję do `versions/` + opis do `versions/labels.json`.** Nie na koniec sesji — **przy każdej zmianie.** Bez opisu „v1 v2 v3" nic nie mówi i nie da się wybrać, do której wrócić. *(2026-07-20: robiłem to nieregularnie i stan po kalibracji nie istniał jako plik — dało się go odzyskać z gita, ale tylko dlatego, że był w osobnym commicie.)*
 - **Dotykamy tylko folderu 18**
 - Artyści = atrybucja teraz, marketplace docelowo (szew w modelu danych już jest)
 

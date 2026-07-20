@@ -25,6 +25,12 @@
   .v{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:999px;
      padding:4px 11px;font-size:12px;color:var(--muted);text-decoration:none}
   .v:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .vlist{display:flex;flex-direction:column;gap:4px}
+  .vrow{display:flex;align-items:baseline;gap:12px;background:var(--panel);border:1px solid var(--line);
+        border-radius:var(--r);padding:9px 13px;text-decoration:none;transition:.15s}
+  .vrow:hover{border-color:var(--accent);background:#fff}
+  .vn{color:var(--accent-ink);font-weight:600;font-size:12px;min-width:32px;font-variant-numeric:tabular-nums}
+  .vd{color:var(--muted);font-size:13px}
   .note{background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--r);
         padding:12px 15px;font-size:13px;margin:0 0 28px}
 </style></head><body><div class="wrap">
@@ -41,20 +47,21 @@ oraz pełna historia wersji. Zanim zaczniesz projektować panel od zera, sprawd�
 <a class="f" href="mockups/04-advisor.html">04-advisor</a></div>
 
 <h2>Nasze wersje</h2>
-<p class="hint">12 zamrożonych migawek z tego repo — widać, jak każdy ekran dochodził do obecnej postaci.
+<p class="hint">13 zamrożonych migawek z tego repo — widać, jak każdy ekran dochodził do obecnej postaci.
 Otwórz starszą obok bieżącej, żeby zobaczyć, co dokładnie się zmieniło.</p>
-<section class="grp"><h3>01-home<span class="n">3 wersji</span></h3><div class="vs"><a class="v" href="mockups/versions/01-home-v1.html" title="01-home-v1.html">v1</a>
-<a class="v" href="mockups/versions/01-home-v2.html" title="01-home-v2.html">v2</a>
-<a class="v" href="mockups/versions/01-home-v3.html" title="01-home-v3.html">v3</a></div></section>
-<section class="grp"><h3>02-design-journey<span class="n">6 wersji</span></h3><div class="vs"><a class="v" href="mockups/versions/02-design-journey-v1.html" title="02-design-journey-v1.html">v1</a>
-<a class="v" href="mockups/versions/02-design-journey-v2.html" title="02-design-journey-v2.html">v2</a>
-<a class="v" href="mockups/versions/02-design-journey-v3.html" title="02-design-journey-v3.html">v3</a>
-<a class="v" href="mockups/versions/02-design-journey-v4.html" title="02-design-journey-v4.html">v4</a>
-<a class="v" href="mockups/versions/02-design-journey-v5.html" title="02-design-journey-v5.html">v5</a>
-<a class="v" href="mockups/versions/02-design-journey-v6.html" title="02-design-journey-v6.html">v6</a></div></section>
-<section class="grp"><h3>03-product<span class="n">1 wersji</span></h3><div class="vs"><a class="v" href="mockups/versions/03-product-v59.html" title="03-product-v59.html">v59</a></div></section>
-<section class="grp"><h3>04-advisor<span class="n">2 wersji</span></h3><div class="vs"><a class="v" href="mockups/versions/04-advisor-v1.html" title="04-advisor-v1.html">v1</a>
-<a class="v" href="mockups/versions/04-advisor-v2.html" title="04-advisor-v2.html">v2</a></div></section>
+<section class="grp"><h3>01-home<span class="n">3 wersji</span></h3><div class="vlist"><a class="vrow" href="mockups/versions/01-home-v3.html"><span class="vn">v3</span><span class="vd">home po przeniesieniu z 15</span></a>
+<a class="vrow" href="mockups/versions/01-home-v2.html"><span class="vn">v2</span><span class="vd"></span></a>
+<a class="vrow" href="mockups/versions/01-home-v1.html"><span class="vn">v1</span><span class="vd"></span></a></div></section>
+<section class="grp"><h3>02-design-journey<span class="n">6 wersji</span></h3><div class="vlist"><a class="vrow" href="mockups/versions/02-design-journey-v6.html"><span class="vn">v6</span><span class="vd">ostatnia wersja osobnego doradcy, zanim scalił się z produktem</span></a>
+<a class="vrow" href="mockups/versions/02-design-journey-v5.html"><span class="vn">v5</span><span class="vd"></span></a>
+<a class="vrow" href="mockups/versions/02-design-journey-v4.html"><span class="vn">v4</span><span class="vd"></span></a>
+<a class="vrow" href="mockups/versions/02-design-journey-v3.html"><span class="vn">v3</span><span class="vd"></span></a>
+<a class="vrow" href="mockups/versions/02-design-journey-v2.html"><span class="vn">v2</span><span class="vd"></span></a>
+<a class="vrow" href="mockups/versions/02-design-journey-v1.html"><span class="vn">v1</span><span class="vd">pierwsze podejście — formularz</span></a></div></section>
+<section class="grp"><h3>03-product<span class="n">1 wersji</span></h3><div class="vlist"><a class="vrow" href="mockups/versions/03-product-v59.html"><span class="vn">v59</span><span class="vd">strona produktu sprzed doradcy (odtworzona z v55)</span></a></div></section>
+<section class="grp"><h3>04-advisor<span class="n">3 wersji</span></h3><div class="vlist"><a class="vrow" href="mockups/versions/04-advisor-v3.html"><span class="vn">v3</span><span class="vd">panel obcięty — bez plików cyfrowych, opinii i „Follow”</span></a>
+<a class="vrow" href="mockups/versions/04-advisor-v2.html"><span class="vn">v2</span><span class="vd">prawdziwa skala w centymetrach w pokojach</span></a>
+<a class="vrow" href="mockups/versions/04-advisor-v1.html"><span class="vn">v1</span><span class="vd">doradca i strona produktu stają się jednym ekranem</span></a></div></section>
 
 <h2>Finalne prototypy z projektu 15</h2>
 <p class="hint">Zamknięty design system — punkt wyjścia do każdego nowego ekranu.</p>

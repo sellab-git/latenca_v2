@@ -730,29 +730,11 @@
         <div class="creatorline">
           <span class="av"></span>
           <span class="nm">Aria Vela <small>&middot; 84 works</small></span>
-          <button class="follow"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Follow</button>
         </div>
 
         <h1 class="ptitle">Nebula Bloom</h1>
-        <div class="pmeta">
-          <span class="rev"><svg class="star" viewBox="0 0 24 24"><path d="M12 3l2.5 5.3 5.5.7-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.5-.7z"/></svg>4.8 <small>(128)</small></span>
-          <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>1,240 saves</span>
-        </div>
 
-        <div class="priceblock"><span class="now" id="price">$59</span><span class="from" id="fromnote">incl. VAT</span></div>
-        <div class="deliver" id="deliver"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><span>Free shipping over $60 &middot; arrives <b id="delivDate">soon</b></span></div>
 
-        <div class="blabel">Format</div>
-        <div class="fmt" id="fmt">
-          <button class="on" data-fmt="print">
-            <span class="ft"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><rect x="8" y="7" width="8" height="10"/></svg>Print</span>
-            <span class="fs">Made &amp; shipped &middot; from $39</span>
-          </button>
-          <button data-fmt="digital">
-            <span class="ft"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 21h14"/></svg>Digital file</span>
-            <span class="fs">Instant download &middot; $12</span>
-          </button>
-        </div>
 
         <!-- PRINT config -->
         <div id="printOpts">
@@ -773,20 +755,10 @@
           </div>
         </div>
 
-        <!-- DIGITAL config -->
-        <div id="digitalOpts" class="hidden">
-          <div class="blabel">What you get</div>
-          <div class="digital">
-            <ul>
-              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Full-resolution files<small>JPG + PNG, up to 8000&times;10000 px — upscaled on purchase</small></span></li>
-              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Every print ratio<small>One ZIP, ready for 30&times;40 up to 70&times;100 cm</small></span></li>
-              <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg><span>Personal-use license<small>Print at home or a local lab, as many as you like</small></span></li>
-            </ul>
-          </div>
-        </div>
 
-        <div class="summ" id="summ"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span id="summText">Poster · 50 × 70 cm · No frame</span></div>
 
+        <div class="priceblock"><span class="now" id="price">$59</span><span class="from" id="fromnote">incl. VAT</span></div>
+        <div class="deliver" id="deliver"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><span>Free shipping over $60 &middot; arrives <b id="delivDate">soon</b></span></div>
         <div class="buyrow">
           <button class="addcart"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span id="ctaText">Add to cart</span><span class="cp" id="ctaPrice">&middot; $59</span></button>
         </div>
@@ -842,12 +814,12 @@
         <button class="gtab" data-t="1">Popular</button>
         <button class="gtab" data-t="2">Bestselling</button>
       </div>
-      <span class="gcount">240 works</span>
+      <span class="gcount">More from this collection</span>
     </div>
     <section class="grid" id="grid"></section>
     <div class="loadmore">
-      <div class="txt">Showing <span id="galShown">20</span> of 240 works</div>
-      <button class="more" id="galMore">Load more</button>
+      <div class="txt">Not quite right?</div>
+      <button class="more" id="galMore">Ask for something different</button>
     </div>
 
   </main>
@@ -1006,8 +978,7 @@
   const FRAMES=[{n:'None',c:null,ex:0},{n:'White',c:'#f4f2ec',ex:25},{n:'Black',c:'#1c1b19',ex:25},{n:'Natural',c:'#c8a26a',ex:29},{n:'Dark',c:'#5a3d28',ex:29}];
   const MATS=[{n:'None',v:'None'},{n:'3 cm',v:'3 cm'},{n:'6 cm',v:'6 cm'}];
   const MATDESC=[['Poster','matte fine-art paper, framing optional'],['Canvas','gallery-wrapped cotton, ready to hang'],['Metal','HD print on aluminium — vivid & durable'],['Acrylic','glossy acrylic glass, real depth'],['Wood','printed on real birch plywood'],['Foam','lightweight foam board, easy to hang']];
-  const DIGITAL_PRICE=12;
-  let st={fmt:'print',material:'Poster',size:1,frame:0,mat:0,unit:'cm'};
+  let st={material:'Poster',size:1,frame:0,mat:0,unit:'cm'};
 
   document.getElementById('mats').innerHTML=MATERIALS.map(m=>`<button class="mat${m==='Poster'?' on':''}" data-m="${m}">${m}</button>`).join('');
   function drawSizes(){
@@ -1019,26 +990,31 @@
   document.getElementById('mats2').innerHTML=MATS.map((m,i)=>`<button data-i="${i}"${i===0?' class="on"':''}>${m.n}</button>`).join('');
 
   const priceEl=document.getElementById('price'), barPrice=document.getElementById('barPrice'), ctaPrice=document.getElementById('ctaPrice'), ctaText=document.getElementById('ctaText'), fromnote=document.getElementById('fromnote');
-  const printOpts=document.getElementById('printOpts'), digitalOpts=document.getElementById('digitalOpts'), frameGroup=document.getElementById('frameGroup');
+  const frameGroup=document.getElementById('frameGroup');
   const deliver=document.getElementById('deliver');
   const framedMaterial=()=>st.material==='Poster'; // frame + mat only for Poster
   const truckI='<svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg>';
   const boltI='<svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>';
   function deliveryStr(){const a=new Date(Date.now()+6*864e5),b=new Date(Date.now()+9*864e5);const mo=d=>d.toLocaleDateString('en-US',{month:'short'});return a.getMonth()===b.getMonth()?`${mo(a)} ${a.getDate()}–${b.getDate()}`:`${mo(a)} ${a.getDate()} – ${mo(b)} ${b.getDate()}`;}
   function total(){
-    if(st.fmt==='digital')return DIGITAL_PRICE;
     let t=PRICE[st.material][st.size];
     if(framedMaterial())t+=FRAMES[st.frame].ex;
     return t;
   }
+  // one source for "what am I buying" — the panel shows it by what is
+  // selected, so restating it in a line underneath was pure duplication
+  function summaryText(){
+    const p=[st.material,(st.unit==='cm'?SIZES[st.size].vcm:SIZES[st.size].vin)];
+    if(framedMaterial()){
+      p.push(FRAMES[st.frame].n==='None'?'no frame':FRAMES[st.frame].n+' frame');
+      if(st.mat>0)p.push(MATS[st.mat].v+' mat');
+    }
+    return p.join(' · ');
+  }
   function render(){
-    const t=total(), dig=st.fmt==='digital';
+    const t=total();
     priceEl.textContent='$'+t; barPrice.textContent='$'+t; ctaPrice.textContent='· $'+t;
-    fromnote.textContent=dig?'one-time':'incl. VAT';
-    deliver.innerHTML=dig?`${boltI}<span>Instant download after purchase</span>`:`${truckI}<span>Free shipping over $60 &middot; to Poland by <b>${deliveryStr()}</b></span>`;
-    printOpts.classList.toggle('hidden',dig);
-    digitalOpts.classList.toggle('hidden',!dig);
-    ctaText.textContent=dig?'Buy & download':'Add to cart';
+    deliver.innerHTML=`${truckI}<span>Free shipping over $60 &middot; to Poland by <b>${deliveryStr()}</b></span>`;
     frameGroup.classList.toggle('hidden',!framedMaterial());
     // framing expander hint
     const fs=document.getElementById('frameSmall');
@@ -1050,17 +1026,7 @@
     ai.style.setProperty('--mw',showFrame?(st.mat===0?'0px':st.mat===1?'18px':'32px'):'0px');
     document.querySelector('.frameOnWall').style.background=showFrame?FRAMES[st.frame].c:'#fff';
     roomScale();
-    // selection summary
-    let summ;
-    if(dig){summ='Digital file · full-res, all print ratios';}
-    else{
-      const p=[st.material, (st.unit==='cm'?SIZES[st.size].vcm:SIZES[st.size].vin)];
-      if(framedMaterial()){p.push(FRAMES[st.frame].n==='None'?'no frame':FRAMES[st.frame].n+' frame');if(st.mat>0)p.push(MATS[st.mat].v+' mat');}
-      summ=p.join(' · ');
-    }
-    document.getElementById('summText').textContent=summ;
     // active states
-    document.querySelectorAll('.fmt button').forEach(b=>b.classList.toggle('on',b.dataset.fmt===st.fmt));
     document.querySelectorAll('.mat').forEach(b=>b.classList.toggle('on',b.dataset.m===st.material));
     document.querySelectorAll('#sizes button').forEach((b,i)=>b.classList.toggle('on',i===st.size));
     document.querySelectorAll('.frm').forEach((b,i)=>b.classList.toggle('on',i===st.frame));
@@ -1069,7 +1035,6 @@
   const frameToggle=document.getElementById('frameToggle'), framebody=document.getElementById('framebody');
   const closeFraming=()=>{framebody.classList.add('hidden');frameToggle.classList.remove('open');};
   frameToggle.onclick=()=>{const open=framebody.classList.contains('hidden');framebody.classList.toggle('hidden',!open);frameToggle.classList.toggle('open',open);};
-  document.querySelectorAll('.fmt button').forEach(b=>b.onclick=()=>{st.fmt=b.dataset.fmt;render();});
   document.querySelectorAll('.mat').forEach(b=>b.onclick=()=>{st.material=b.dataset.m;if(!framedMaterial()){st.frame=0;st.mat=0;closeFraming();}drawSizes();render();});
   document.querySelectorAll('.frm').forEach(b=>b.onclick=()=>{st.frame=+b.dataset.i;render();});
   document.querySelectorAll('#mats2 button').forEach(b=>b.onclick=()=>{st.mat=+b.dataset.i;render();});
@@ -1113,18 +1078,21 @@
   const heartI='<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>';
   const shareI='<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
   const moreI='<svg class="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
-  let galTab=0, galN=20;
+  let galTab=0, galN=6;
   function renderGrid(){
     const off=galTab;
     document.getElementById('grid').innerHTML=Array.from({length:galN},(_,i)=>{
       const w=works[(i+off*3)%works.length];const[t,c,ri]=w;const[iw,ih]=R[(i+ri)%R.length];
       return `<a class="tile"><img src="${url(ART[(i+2+off)%ART.length],iw,ih)}" alt=""><span class="tgrad"></span><button class="fav" title="Save">${heartI}</button><span class="acts"><button class="tbtn" title="More">${moreI}</button><button class="tbtn" title="Share">${shareI}</button></span><span class="info"><span class="t">${t}</span><span class="a"><span class="dot"></span><span>${c}</span></span></span></a>`;
     }).join('');
-    document.getElementById('galShown').textContent=galN;
   }
   renderGrid();
   document.querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.gtab').forEach(x=>x.classList.toggle('on',x===b));galTab=+b.dataset.t;galN=20;renderGrid();});
-  document.getElementById('galMore').onclick=()=>{galN=Math.min(galN+20,60);renderGrid();};
+  // the advisor is a better answer to "not this one" than twenty more tiles
+  document.getElementById('galMore').onclick=()=>{
+    setMode('chat');
+    document.querySelector('.chat').scrollIntoView({block:'center',behavior:'smooth'});
+  };
 
   // ── drawers (cart + size guide) — reuse Explore's right-panel pattern ──
   const scrim=document.getElementById('scrim'), cartDrawer=document.getElementById('cartDrawer'), sizeDrawer=document.getElementById('sizeDrawer'), matDrawer=document.getElementById('matDrawer');
@@ -1137,12 +1105,9 @@
   const XSELL=[['Ion Drift','$49',4],['Violet Hour','$59',6]];
   document.getElementById('cartXsell').innerHTML=XSELL.map((x,i)=>`<div class="cxrow"><img src="${url(ART[(x[2])%ART.length],120,120)}" alt=""><span class="n">${x[0]}<small>${x[1]}</small></span><button class="addx">Add</button></div>`).join('');
   function openCart(){
-    const t=total(), dig=st.fmt==='digital';
+    const t=total();
     document.getElementById('cartThumb').src=url(HERO,200,260);
-    let cfg;
-    if(dig)cfg='Digital file · full-res, all ratios';
-    else{const p=[st.material,(st.unit==='cm'?SIZES[st.size].vcm:SIZES[st.size].vin)];if(framedMaterial()&&st.frame>0)p.push(FRAMES[st.frame].n+' frame');cfg=p.join(' · ');}
-    document.getElementById('cartConfig').textContent=cfg;
+    document.getElementById('cartConfig').textContent=summaryText();
     document.getElementById('cartItemPrice').textContent='$'+t;
     document.getElementById('cartSubtotal').textContent='$'+t;
     document.getElementById('cartFootPrice').textContent='$'+t;
@@ -1303,7 +1268,7 @@
 
   function syncStrips(){
     stripLast.textContent=lastAi;
-    stripCfg.textContent=document.getElementById('summText').textContent;
+    stripCfg.textContent=summaryText();
     stripPrice.textContent='$'+total();
   }
 
