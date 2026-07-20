@@ -509,3 +509,32 @@ It also removes every failure mode catalogued in `RESEARCH-wall-display.md` — 
 - Identified work on the flat surface, most important first: **(1)** a true-scale reference outline (sofa or figure) so size can be judged without a room; **(2)** side-by-side size comparison instead of switch-and-guess; (3) a grid toggle, as Fy! has; (4) wall texture and light so the frame reads as hanging rather than pasted; (5) frames and materials — reuse the machinery already built in `03-product.html`, per D-032; (6) multi-piece layouts, since sets are the only economics that work.
 - Does not reverse **D-021** or **D-031**; it sharpens their sequencing. Uploads remain an analytical input (D-031) — the wall colour read from a photo tints this flat surface.
 - Supersedes the earlier working recommendation to keep both surfaces on an equal footing.
+
+---
+
+# D-034
+## Title
+The advisor and the product page are one screen in two states, not two screens.
+### Status
+LOCKED
+### Decision
+There is **one shell**: the artwork occupies the main area, and the right-hand column holds either the **conversation** or the **buy panel**. Whichever is not open collapses to a single line and stays reachable — the conversation never closes to buy, and the price is never hidden while talking. The entry point decides only which state opens first:
+
+- **from the catalogue, search or a shared link** → buy state, with the conversation offered on one line
+- **from "help me choose"** → conversation, with the price and configuration on one line
+
+The stage does not show "the product". It shows **what is currently being discussed**, so a request like *"not this one — something warmer"* swaps the piece in place.
+### Reason
+Both screens had independently converged on the same layout, and the advisor mockup was re-inventing a poorer version of machinery the product page already had (frames, materials, sizes, room toggle, zoom). Building a third thing would have meant maintaining two answers to every question. Reusing the real page is also what D-032 requires.
+
+The stronger reason is behavioural: a hard jump from advisor to product page ends the conversation exactly when the customer is closest to deciding. One screen removes the jump.
+
+Keeping the chat **offered rather than open** on the catalogue entry protects two things at once — D-022, since a customer who already knows what they want must be able to buy without talking, and the cost model, since the product page is the highest-traffic page in the shop and a click is what keeps AI spend bound to intent.
+### Implications
+- **The chat is a new, much higher-traffic entry point to the AI than `AI_COST_MODEL.md` assumed.** The click gate bounds it, but the limits need recalculating against two entry points rather than one.
+- **The conversation state must live *above* the product page in the component tree**, not inside it. Otherwise even a soft navigation unmounts it and the whole idea collapses. This is the one hard technical constraint of this decision.
+- The address follows the stage (so bookmarks and shared links stay honest) but **adds no history entry** — six proposals must not mean six taps of Back. Back returns to the catalogue; the trail of seen pieces is the way back within the session. This is where the locked **closing overview** actually lands.
+- **Size, material and frame survive an artwork swap.** They describe the wall, not the piece.
+- Swaps are **sequential** — one proposal at a time, per the locked stance. Alternatives stay available but are not the primary move.
+- The stage still holds **one** frame. Multi-piece walls remain the one genuine structural gap (D-033, item 6).
+- Implemented in `prototypes/mockups/04-advisor.html`; `03-product.html` is left untouched as the reference. They converge into one file once the pattern is proven.
