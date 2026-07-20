@@ -35,6 +35,21 @@ Doświadczenie łączy trzy rzeczy, których konkurencja ma tylko po kawałku:
 
 **Ważne (D-020):** „inteligencja" Latenki = **orkiestracja + kuracja + prowadzone doświadczenie** (dyrygent), a nie własny wytrenowany model. Modele AI (vision, LLM, generacja) **wynajmujemy** z zewnątrz, za wymienialną warstwą — możemy „wypiąć i wpiąć coś mądrzejszego". **Nasza przewaga to wykonanie, doświadczenie, kuracja, marka i bycie naprawdę dobrym pierwszym — nie model.**
 
+### Fosa — mechanizm docelowy, nie stan obecny (D-025)
+
+> **Moat = Curated Catalog × Designer System × Outcome Data × Distribution**
+
+Zapis mnożenia jest celowy: **brak jednego czynnika zeruje całość.** I trzeba to powiedzieć wprost — **Latenca nie ma dziś fosy.** Ma projekt mechanizmu, który może ją zbudować:
+
+| Czynnik | Stan dziś |
+|---|---|
+| Curated Catalog | częściowo istnieje |
+| Designer System | hipoteza / projekt |
+| Outcome Data | praktycznie 0 |
+| Distribution | praktycznie 0 |
+
+Same reguły projektowe (145 cm, 60–80% szerokości mebla) są **wiedzą publiczną** — baza wiedzy sama w sobie nie jest przewagą. Unikalne staje się dopiero mapowanie reguł na **nasz** katalog, formaty i realne wyniki: publiczna wiedza to ziarno, specjalizacja pod nas to produkt.
+
 ---
 
 ## 3. Co nas realnie wyróżnia od dnia 1
@@ -74,7 +89,7 @@ Wizja rośnie „ilością AI" i mapuje się 1:1 na mocne strony czwórki. Każd
 
 **Ideał (Kroki 0–4) = mapa. MVP = pierwszy spójny wycinek, który już się wyróżnia.**
 
-> **MVP = Krok 1 (sklep) + Krok 2 (doradca).**
+> **MVP = Krok 1 (sklep) + Krok 2 (doradca).** — zablokowane jako **D-030**
 > Jedyny moment AI w MVP to **doradca**. Wszystko inne (rozmiar/format/rama) to zwykłe parametry produktu, nie AI.
 
 Dlaczego tu, a nie dalej:
@@ -98,19 +113,44 @@ To rozstrzyga otwarte „lean vs platforma": **ani goły lean, ani 8-miesięczna
 
 ## 8. Największe ryzyko (nie zapominać)
 
-**Ryzykiem numer 1 NIE jest produkt — jest dystrybucja / CAC** (dotarcie do klienta taniej, niż wynosi marża). Możemy zbudować najpiękniejszy system i nikt go nie zobaczy. Dlatego:
+**Ryzykiem numer 1 NIE jest produkt — jest dystrybucja / CAC** (dotarcie do klienta taniej, niż wynosi marża). Możemy zbudować najpiękniejszy system i nikt go nie zobaczy.
+
+Dlatego **dystrybucja przestaje być „marketingiem na później" i staje się warstwą produktu (D-027).** Pętla:
+
+```
+katalog + baza wiedzy
+   ↓
+projekt / scenariusz redakcyjny
+   ↓
+gotowa ściana + uzasadnienie („dlaczego to działa")
+   ↓
+kanał (Pinterest — pierwszy do TESTU, nie kanał docelowy)
+   ↓
+landing konkretnego problemu („sztuka nad beżową sofą")
+   ↓
+sesja doradcy → zakup → log wyników
+```
+
+Zasady: **treść i landing pages per problem projektowy** (per styl / per zestaw dopuszczalne później jako merchandising); **zero automatycznej publikacji danych i zdjęć klientów** — materiał to scenariusze redakcyjne i neutralne mockupy, realizacje klientów wyłącznie za zgodą.
+
 - Wyróżnik („sprzedajemy pewność") jest też **hakiem dystrybucyjnym** — o commodity-sklepie nie ma o czym opowiadać, o „doradcy dobierającym sztukę na ścianę" — jest.
-- Dyskusja o kanałach (Pinterest / TikTok / IG, produkt-jako-fabryka-treści) musi iść **równolegle** z budową, nie po niej.
+- **Ręczny test dystrybucji (20–30 materiałów, zero automatyzacji) idzie równolegle z budową Kroku 1** (D-028). Nie jest to wyjątek od D-010, tylko jego wykonanie — D-010 wprost wymaga, by discovery/traffic były adresowane wcześnie w trakcie budowy.
 
 ---
 
-## 9. Otwarte pytania do ChatGPT
+## 9. Pytania — rozstrzygnięte (runda recenzji zamknięta 2026-07-19)
 
-1. **Granica MVP:** czy Krok 1 + 2 to właściwy zakres na start, czy dołożyć jeszcze coś, żeby wyróżnienie było mocniejsze od dnia 1?
-2. **Moment AI (doradca):** czy „pewność" da się wiarygodnie dowieźć zewnętrznym LLM/vision w prostym flow, czy potrzeba czegoś więcej, by to nie było „quiz z ładnym UI"?
-3. **Dystrybucja:** który kanał realnie dowozi pierwszych obcych klientów taniej niż płatna reklama — i jak produkt sam ma produkować treść do tego kanału?
-4. **Kolejność:** budować równolegle sklep (Krok 1) i doradcę (Krok 2), czy sklep w pełni najpierw?
-5. **Ryzyko generatora:** czy słusznie trzymamy „nie jesteśmy generatorem", skoro rynek (Ideogram) idzie w stronę generacji — czy to szansa, którą oddajemy?
+Pięć pytań otwartych z pierwszej wersji tego dokumentu przeszło przez pełną rundę recenzji (Claude ↔ ChatGPT ↔ Artur) i zostało zamkniętych decyzjami:
+
+| Pytanie | Rozstrzygnięcie | Gdzie |
+|---|---|---|
+| Granica MVP | Krok 1 + Krok 2; reszta to późniejsze szczeble drabiny | **D-030** |
+| Czy „pewność" da się dowieźć uczciwie | Tak, ale **bez procentu** — wewnętrzny `readiness`, dla usera stan jakościowy + brakująca dana | **D-026** |
+| Dystrybucja | Część produktu: treść per problem → landing per problem → sesja; Pinterest jako pierwszy kanał **do testu**; test ręczny równolegle z budową | **D-027**, **D-028** |
+| Kolejność prac | Sklep i doradca w kolejności Krok 1 → Krok 2, ale **test dystrybucji równolegle**, nie po | **D-028**, **D-030** |
+| Czy oddajemy szansę, nie będąc generatorem | Nie — moment AI to **doradztwo**, nie generacja; personalizacja treści czeka na realną funkcję edycji | **D-030**, D-020 |
+
+Pełny ślad rozumowania: [`REVIEW-designer-layer.md`](REVIEW-designer-layer.md) → [`-round2`](REVIEW-designer-layer-round2.md) → [`-round3`](REVIEW-designer-layer-round3.md).
 
 ---
 

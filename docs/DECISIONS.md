@@ -301,3 +301,127 @@ LOCKED
 - `ai/DESIGN_INTELLIGENCE.md` and `docs/PRODUCT-BLUEPRINT-single-session.md` need simplification to match (their photo-centric parts) — flagged, not yet rewritten.
 - Differentiation narrows to composition-intelligence + curation + art selection; **distribution/CAC remains the primary risk** (unchanged).
 - **Room-aware compositing → BACKLOG.**
+
+---
+
+# D-022
+## Title
+Product shape: the shop is the floor, the designer is the front door — never a gate.
+### Status
+LOCKED
+### Decision
+Latenca is a curated shop with one AI moment. The **shop is the floor** (catalog, product page, configurator, cart) — it always exists and every path lands in it. The **designer is the front door and the face of the brand** — the hero of the home page and the differentiator. **Decisive rule: the designer is never a gate** — it can always be skipped and bought around. In navigation this is one product, not two equals: the fast path (*Browse and buy*) and the guided path (*Design my wall*) end in the same catalog, PDP and checkout.
+### Reason
+The brand promise is confidence in the decision, but most people buying wall art are not running a "project" — turning a purchase into a mandatory consultation would kill conversion. The verified Modsy case (~250 human designers, whole rooms, a model that did not scale) shows the danger is *human cost per project*, not the advisory layer itself.
+### Implications
+Reframes D-001 and D-012 and closes the open product-framing question in PROJECT_STATUS. Every designer recommendation is built from products available in the Latenca catalog and leads to a **buyable composition**; we do not build a separate consulting service — paid or free — detached from the shop's offer. **A user may end a session without buying** (this preserves D-002 *trust before sales* and D-004 *AI behaves like a designer, not a salesperson*). The home must clearly say "you can buy directly, but Latenca is best at helping you choose" — not two competing CTAs of equal weight.
+
+---
+
+# D-023
+## Title
+One Designer Flow; project type is a parameter, not a separate path.
+### Status
+LOCKED
+### Decision
+We do not build separate flows per user situation. One flow with a shared skeleton (set the goal → collect minimum data → hypothesis → proposal → feedback → refine → product and purchase), in which the **project type is a parameter** chosen with a single tap at the start. **MVP = two types: (a) empty wall, (b) add / replace.** Input material (photo, dimensions, inspiration) and context (moving in, renovation) are **fields in the project state**, not separate paths. Data and reasoning differ by type; the engine is one.
+### Reason
+The eight "entry points" mixed three different layers — only project type branches the logic. Building many paths is the funded-team trap. We ask for the type rather than guessing, because a misread at step 1 poisons the whole session.
+### Implications
+"Whole room" → v2 (needs coherence across walls and pushes the product toward a full interior-design service). Entry points that do not end in a purchase with us ("hang the one I bought elsewhere", "just pick a size") are out of MVP.
+
+---
+
+# D-024
+## Title
+Learning happens at pool level, not per customer.
+### Status
+LOCKED
+### Decision
+In the MVP we **do not build cross-session preference memory or an aesthetic profile of an individual customer.** The system learns from the **whole pool of projects** in order to advise the next customer better. The product's advisory memory is the **knowledge base (KB)**, not a user profile: *"Latenca does not build a cross-session taste profile of an individual customer — the system keeps aggregate knowledge of what works."* Project state applies **within a session**. The KB is built immediately in layers **A (rules) / B (heuristics) / D (patterns)**; layers **E (case studies) and F (effectiveness)** require volume. **From day 1 we log decisions; we do not build an automatic learning loop** until there is volume.
+### Reason
+Consistent with the locked single-session constraint, with no privacy exposure, while keeping the learning effect. A loop trained on a few dozen projects learns noise and hardens accidents.
+### Implications
+This does **not** block operational data — orders, consent, or possibly saved projects later. The KB is a **day-1 quality condition** and the source of rationales: a rationale grounded in a KB rule is credible, one invented by the LLM on the fly is confabulation. Humans work **on the system** (KB, catalog, sampled quality audits), never **on an individual project** — the moment human cost grows with each session is the moment we repeat the Modsy mistake.
+
+---
+
+# D-025
+## Title
+The moat is a target mechanism, not a current asset.
+### Status
+LOCKED
+### Decision
+The target mechanism for building advantage: **Curated Catalog × Designer System × Outcome Data × Distribution**. The multiplicative form is deliberate — a missing factor zeroes the whole. **Latenca does not have a moat today:** Outcome Data and Distribution are practically 0, the Designer System is a design, and the catalog exists only partly.
+### Reason
+Design rules (145 cm centre height, 60–80% of furniture width) are public knowledge — the KB alone is not an advantage. What becomes unique is mapping rules onto **our** catalog, formats and real outcomes. Writing "the Latenca moat is…" would be a false claim of advantage.
+### Implications
+Distribution is an **unsolved problem, not an asset**, and remains business risk #1. No traffic → no projects → no data → the KB never specializes. Supersedes the earlier framing of "Design Intelligence as *the* moat" (already corrected by D-020).
+
+---
+
+# D-026
+## Title
+No visible confidence percentage.
+### Status
+LOCKED
+### Decision
+The MVP **does not show the user a percentage "confidence score"**. Internally we compute `readiness` from the completeness of key data (wall geometry, anchor context, project goal, aesthetic signal) **and from whether the recommendation is covered by the catalog and KB rules** — not merely a count of filled fields. The user sees a **qualitative state and the missing input**, e.g. *"I just need your wall width to size the art."*
+### Reason
+A percentage implies statistical precision the system does not have — that is exactly the "fake AI" we ruled out. The qualitative version is simultaneously honest and useful, because it tells the user what to do next.
+### Implications
+Applied to `prototypes/mockups/02-design-journey.html`: the 72% → 95% meter was replaced with readiness states (a quieter "still missing an input" variant and an accent "ready" variant).
+
+---
+
+# D-027
+## Title
+Distribution is part of the product.
+### Status
+LOCKED
+### Decision
+Distribution stops being "marketing for later" and becomes a product layer. The loop: *catalog + KB → project / editorial scenario → finished wall + rationale → channel → landing page for that specific problem → designer session → purchase → outcome log*. Rules: **in the first distribution test and in the MVP the main landing pages are built per design problem** — because that is how real search behaves ("art above a beige sofa"). Per-style and per-set pages remain permissible later as a **merchandising layer**, but are not the basis of the first test. Also: **no automatic publishing of customer data or photos** (material = editorial scenarios and neutral mockups; customer results only with explicit consent); **Pinterest is the first channel to TEST**, not an approved long-term main channel.
+### Reason
+Distribution is the weakest factor in D-025 and risk #1. Content pointing at a generic home page produces traffic, not conversion.
+### Implications
+Search metadata works for SEO and the channel at once. Pinterest organic reach is neither free nor easy — the channel stays a hypothesis.
+
+---
+
+# D-028
+## Title
+A manual distribution test runs in parallel with Krok 1 — this executes D-010.
+### Status
+LOCKED
+### Decision
+In parallel with building Krok 1 we run a **manual, editorial distribution test: 20–30 assets, zero automation.** The test answers three questions: do problem-framed wall-art posts earn attention · which problems generate saves/clicks/visits · does the user move from inspiration to intent to solve a wall. It **does not attempt to prove CAC or purchase conversion** — without a finished product that is not honestly measurable. A content-pack generator is built only if the channel works.
+### Reason
+**This executes D-010 rather than excepting it.** The Implications of D-010 require discovery/traffic to be addressed early during the build ("Pinterest anchor, content-as-factory, not deferred"). The test does not replace the build, does not block it, and is not a go/no-go gate.
+### Implications
+D-010 needs **no supersede and no unlocking**. Once the test starts it is recorded in `PROJECT_STATUS.md` (asset count, channel, status, what is measured). Automating a channel that does not yet work would be pure waste.
+
+---
+
+# D-029
+## Title
+Metrics: design outcome is separate from commercial outcome.
+### Status
+LOCKED
+### Decision
+Two measurement layers. **Design outcome** (advisor quality): accepted in session · accepted after iteration · elements swapped · direction rejected. **Commercial outcome** (business): add to cart · purchase · basket value · return. **Primary business signal = purchase. Primary observable signal of recommendation fit = acceptance in session.** A return is a negative signal but not proof of a design error. **"No later change" is rejected as unmeasurable.** Automatic learning on this data stays deferred until volume.
+### Reason
+Purchase depends on price, shipping, lead time, brand trust, PDP quality, checkout, availability and the finances of the customer. A good recommendation may go unbought; a weak one may be bought for other reasons — measuring advisor quality by purchase would train the system on a noisy signal.
+
+---
+
+# D-030
+## Title
+MVP boundary: shop spine (Krok 1) + advisor (Krok 2).
+### Status
+LOCKED
+### Decision
+The MVP is **Krok 1 (shop spine) + Krok 2 (advisor)**, per the ladder in `VISION.md`. Krok 1 = curated catalog + product page + simple configurator (size/format/finish/frame, live price — **no AI**) + neutral-wall preview + Gelato checkout. Krok 2 = the advisor front door, **the only AI moment in the MVP**, powered by external LLM/vision. Everything else is a later rung: **content personalization** ("use this image but change the flowers") → only when a real content-editing feature exists; **open generation**, **room-photo compositing**, **creator marketplace** → later.
+### Reason
+This was described in `VISION.md` but never recorded as a decision. It resolves the open "lean vs platform" question: neither a bare lean shop nor an ~8-month platform, but a differentiated MVP with one clear spine. Size, format, finish and frame are ordinary product parameters, not AI — so the MVP carries **only one external-AI dependency** (the advisor, which is orchestration), making it realistic for one person plus AI assistants.
+### Implications
+We are not a generator — open prompt-to-image is the Ideogram role, not ours (D-020 still governs: we orchestrate external models, we do not build our own). Benchmarks map onto the ladder: Displate and Mixtiles → Krok 1, Fy! → Krok 2, Ideogram → the deferred rung.

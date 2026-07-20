@@ -16,6 +16,14 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | **Latenca = an intelligent FRONT orchestrating external AI; models are rented behind a swap-able vendor-abstraction layer** (D-020) — we do NOT build our own model | `docs/DECISIONS.md` D-020 | Solo team; keeps us able to plug in a better backend later |
 | **Design Intelligence = our orchestration + curation + guided-experience logic** (the conductor: evaluate the room-*after* not the object; diagnose → thesis → intervention → compose → products) — NOT a trained model | `ai/DESIGN_INTELLIGENCE.md` | Makes the guided experience feel coherent & "intelligent" |
 | **Surprising-yet-inevitable** as the quality/delight target | DESIGN_INTELLIGENCE, RETHINK-v5 | Reconciles delight + confidence |
+| **Shop is the floor, designer is the front door — never a gate** (D-022); a session may end without a purchase | `docs/DECISIONS.md` D-022 | Reframes D-001/D-012; keeps D-002 (trust before sales) intact |
+| **MVP boundary = Krok 1 (shop spine) + Krok 2 (advisor)** (D-030); the advisor is the MVP's only AI moment | `docs/DECISIONS.md` D-030, `docs/VISION.md` | Resolves "lean vs platform"; one external-AI dependency keeps it solo-buildable |
+| **One Designer Flow; project type is a parameter** (D-023) — MVP = 2 types (empty wall / add-replace); input material + context are project-state fields | `docs/DECISIONS.md` D-023 | Prevents multiplying flows (the funded-team trap) |
+| **Pool-level learning; no cross-session taste profile per customer** (D-024) — the KB is the advisory memory | `docs/DECISIONS.md` D-024 | Keeps the learning effect without breaking single-session or privacy |
+| **Moat is a target mechanism, not a current asset** (D-025): Curated Catalog × Designer System × Outcome Data × Distribution | `docs/DECISIONS.md` D-025 | Prevents turning strategic aspiration into a false claim of advantage |
+| **No visible confidence percentage** (D-026) — internal `readiness`, qualitative user-facing state naming the missing input | `docs/DECISIONS.md` D-026 | A percentage would be the "fake AI" we ruled out |
+| **Distribution is part of the product** (D-027) — content and landing pages per design problem; no automatic publishing of customer data | `docs/DECISIONS.md` D-027 | The weakest factor in D-025 and business risk #1 |
+| **Design outcome ≠ commercial outcome** (D-029) — acceptance measures the advisor, purchase measures the business | `docs/DECISIONS.md` D-029 | Purchase is too noisy to measure recommendation quality |
 
 ## 🟡 ACTIVE (evolving now — improve freely this milestone)
 | Item | Where | Note |
@@ -33,7 +41,8 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | Item | Status | Why not locked |
 |---|---|---|
 | `Resolution × Revelation` as *the* objective function | Hypothesis | Correction #1: used only as a reviewer question; the pilot tests it |
-| "Taste Critic **alone** is the whole moat" | Hypothesis | Correction #4: moat is plural (diagnosis discipline, curated supply, render fidelity, the pilot dataset, taste critic) |
+| "Taste Critic **alone** is the whole moat" | Superseded by D-025 | Correction #4: moat is plural. D-025 now settles the framing: `Curated Catalog × Designer System × Outcome Data × Distribution`, and states Latenca has **no moat yet** |
+| **Pinterest as the long-term main channel** | Hypothesis | D-027 locks distribution-as-product but locks Pinterest only as the **first channel to test**; organic reach is neither free nor easy — D-028 tests it |
 | Any numeric scoring weights | Not yet | Correction #2: no numbers until the study earns them |
 | Bold-resolved > safe **for buyers** | Hypothesis | Study B tests it; business-critical falsifier if false |
 
@@ -47,6 +56,11 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | Mirror / shelf / moulding / lighting as **sellable** (close the design-vs-sell gap) | DESIGN_INTELLIGENCE-operational | Supply expansion decision |
 | Room-aware compositing (upload wall → analyze → composite art in perspective/light) | D-021 | Hard to do reliably; best-effort v2 only |
 | AR real-room preview | PRODUCT-BLUEPRINT | Beyond v1 |
+| **"Whole room" project type** (multi-wall coherence) | D-023 | After the MVP proves the single-wall promise |
+| **Content personalization** ("use this image but change the flowers") via external image AI | D-030 | Only when a real content-editing feature exists — not before |
+| **Open generation** (prompt-to-image for the customer) | D-030 | Not our role; we are not a generator |
+| **Per-style / per-set landing pages** (merchandising layer) | D-027 | After per-problem pages are shown to work |
+| **Automatic learning loop on outcome data** | D-024, D-029 | Needs volume — until then we only log |
 
 ---
 *To change any row: add a `DECISIONS.md` entry (what moved, from→to, why), ideally via a PR. Promoting BACKLOG→ACTIVE/LOCKED or unlocking a LOCKED item is itself an architectural decision.*

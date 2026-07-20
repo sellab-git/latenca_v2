@@ -41,7 +41,7 @@ Wszystkie trzy drzwi schodzą się w tym samym produkcie/projekcie/koszyku → j
 1. **AI prowadzi, TY decydujesz** — pewność ponad szybkość.
 2. **Jedna najlepsza rekomendacja, wytłumaczona** — nie lista. „Curated, not crowded."
 3. **Zaufanie NA POCZĄTKU** — AI pokazuje, jak myśli (Analiza) i co zrozumiał (Style Profile), ZANIM pokaże produkt.
-4. **Confidence score jako element UI** — rośnie przez podróż (68%→92%→93%).
+4. **Rosnąca gotowość jako element UI** — ale **bez procentu** (D-026): wewnętrzny `readiness`, a dla użytkownika stan jakościowy nazywający brakującą daną („brakuje mi tylko szerokości ściany, żeby dobrać rozmiar"). *(Mockupy 17 pokazywały tu Confidence score 68%→92%→93% — odrzucone, bo procent sugeruje precyzję statystyczną, której system nie ma.)*
 5. **Max 3 opcje na decyzję.** Naturalny język.
 6. **Podgląd przed zakupem** — Wall View (v1) / AR Preview (później).
 7. **Produkt to często ZESTAW/ściana** — silnik koszyka (COSTS.md).
@@ -61,11 +61,11 @@ Wszystkie trzy drzwi schodzą się w tym samym produkcie/projekcie/koszyku → j
 **2A. AI Start (intencja)** — „What would you like help with?": *I have a blank wall / I already have artwork / I'm looking for inspiration / I'm not sure — surprise me* (z 01.06–08, miniatury).
 **2B. Upload Wall** — „Let's see your wall" + zdjęcie (opcjonalnie) / Skip.
 **2C. AI Analysis** — „Analyzing your space… 68%" (Understanding room / Analyzing style / Considering goals / Preparing). ~20s.
-**2D. Style Profile** — „Here's your style: **Japandi** — Warm·Minimal·Natural·Calm. Is this right? Yes / Not quite." (confidence 87%)
-**2E. Best Recommendation** — „I think this will look best" + **why** (perfect size / complements colors / creates calm) + *This is perfect / Show another / Feedback*. (confidence 92%)
+**2D. Style Profile** — „Here's your style: **Japandi** — Warm·Minimal·Natural·Calm. Is this right? Yes / Not quite." (stan gotowości: „wystarczy, żeby zaproponować kierunek" — bez procentu, D-026)
+**2E. Best Recommendation** — „I think this will look best" + **why** (perfect size / complements colors / creates calm) + *This is perfect / Show another / Feedback*. (stan gotowości: „gotowe do rekomendacji kompozycji" — bez procentu, D-026)
 **2F. Iterate** — „What would you like to change?": Brighter / More colorful / Larger / More minimal / Different style / Different mood + wolny tekst.
 **2G. Customize** — „Let's make it perfect": **Layout / Size / Frames / Spacing** + suwak odstępu (8cm). Prowadzone dostrajanie, **NIE canvas**.
-**2H. Preview** — Wall View / AR Preview + „Looks amazing! **Confidence 93%**".
+**2H. Preview** — Wall View / AR Preview + „Looks amazing!" + stan gotowości **„wszystko, czego potrzebuję"** (bez procentu — D-026).
 → Produkt.
 
 ### C. ŚCIEŻKA PRZEGLĄDANIA + INSPIRACJI
@@ -99,7 +99,7 @@ Wszystkie trzy drzwi schodzą się w tym samym produkcie/projekcie/koszyku → j
 
 ## Kolejność budowy (Faza 3, propozycja)
 1. **Home** (trzy drzwi, przeframowany) — pokazuje cały koncept
-2. **Ścieżka doradcy 2A→2H** (rdzeń, największy wyróżnik, z confidence)
+2. **Ścieżka doradcy 2A→2H** (rdzeń, największy wyróżnik, ze stanami gotowości — D-026)
 3. **Product Detail** (+ Set)
 4. **Your Project → Cart → Checkout** (zakup)
 5. **Browse / Collections / Get Inspired**
