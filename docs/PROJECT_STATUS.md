@@ -64,23 +64,30 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 
 ---
 
-## Aktywne zadania — doskonalenie płaskiej ściany (D-033)
+## Aktywne zadania — etap 1: system (makiety)
 
-Kolejność od najważniejszego. Cała obietnica pewności spoczywa teraz na liczbach i samej pracy, bo nie ma mebla, o który oko może zahaczyć.
+Gotowe: **`01-home`**, **`03-product`** (stan sprzed doradcy, nietknięty jako punkt odniesienia), **`04-advisor`** (strona produktu + doradca, D-034; skala w cm, D-035; obcięty panel, D-036).
 
-- [ ] **Obrys odniesienia w prawdziwej skali** (sofa albo postać) — odzyskuje intuicję rozmiaru bez zdjęcia pokoju
-- [ ] **Porównanie rozmiarów obok siebie** — zamiast przełączania i zgadywania
-- [ ] Siatka (`Grid`) — wyczucie skali bez mebla; ma to Fy!
-- [ ] Faktura i światło ściany — żeby rama czytała się jako *wisząca*, nie naklejona
-- [ ] Ramy i materiały na płaskiej ścianie — **maszyneria już istnieje** w `prototypes/mockups/03-product.html`, nie budujemy od nowa
-- [ ] Układy wieloelementowe (para, tryptyk) — zestawy to jedyna ekonomia, która się spina
+Brakujące ekrany MVP — istnieją w projekcie 15, ale bez nowej nawigacji i bez spójności z doradcą:
+- [ ] **Katalog (Explore)** — `reference/prototype-html-15/Latenca-Explore.html`
+- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, zasady w `docs/` (zasady koszyka i checkoutu są zablokowane)
+- [ ] Kolekcje i Artyści — dopiero jeśli MVP ich naprawdę potrzebuje (artyści = sama atrybucja)
 
-## Poza powierzchnią wyświetlania
+Do decyzji po drodze:
+- [ ] Wymienić `dresser-zoom.webp` albo ograniczyć ten pokój do ≤50×70 (D-035 — kadr nie mieści 70×100)
+- [ ] Uzupełnić opisy wersji `01-home` i `02-design-journey` w `versions/labels.json` (dziś puste wiersze w indeksie)
 
-- ⏸ ~~Ręczny test dystrybucji (D-028)~~ — **wstrzymane do czasu MVP** decyzją Artura. Patrz „Kolejność prac" wyżej
-- [ ] Krok 1: kręgosłup sklepu (katalog → strona produktu → konfigurator → koszyk)
+## Etap 2: właściwy kod (jeszcze nie zaczynamy)
+
+- [ ] Analiza `12. Printly` i decyzja **kopiować / zaadaptować / napisać od nowa** — ruch kamery, system ram, formaty i materiały (te same trzy zdjęcia pokoi)
+- [ ] Krok 1: kręgosłup sklepu (katalog → produkt → konfigurator → koszyk)
 - [ ] Baza wiedzy projektowej, warstwy A/B/D (D-024) — warunek jakości doradcy od dnia 1
-- [ ] Log decyzji od dnia 1; pętli uczenia nie budujemy do czasu wolumenu
+- [ ] ⚠️ **Log kosztu każdej sesji od pierwszej rozmowy** — jedyna rzecz, której nie da się odtworzyć wstecz
+- [ ] Przeliczyć limity kosztów na **dwa** wejścia do AI, nie jedno (`AI_COST_MODEL.md` §9)
+
+## Etap 3: dystrybucja
+
+- ⏸ ~~Ręczny test dystrybucji (D-028)~~ — **zamknięte do czasu MVP.** Patrz „Kolejność prac" wyżej
 
 ---
 
