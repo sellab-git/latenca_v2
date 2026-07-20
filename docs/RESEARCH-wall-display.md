@@ -44,7 +44,21 @@ Pierwszy test był skażony, więc powtórzono go z czystym zdjęciem wnętrza *
 | **Brak obsługi planów** — praca ląduje na roślinie zamiast za nią | Widać, że to montaż |
 | **Podważa własną obietnicę** | Doradca ma dawać pewność; ten render odbiera ją bardziej, niż dawał podgląd na neutralnej ścianie |
 
-**Wniosek kluczowy: montaż na zdjęciu klienta nie jest „trochę mniej ładny" — jest gorszy niż jego brak.** Ta sama grafika na neutralnej ścianie w **poprawnej skali** byłaby bardziej przekonująca niż „w Twoim pokoju" w skali absurdalnej. Traci się zaufanie, żeby zyskać personalizację, o którą nikt nie prosił.
+### ⚠️ Korekta po trzecim teście — wniosek powyżej był przedwczesny
+
+Po dłuższej zabawie z narzędziem Fy! wyprodukowało render **dobrej jakości**: cztery prace 100×70, **wyrównane na jednej wysokości, równo rozstawione, w poprawnej skali** względem komody. To nie jest ta sama jakość co przy pierwszej próbie.
+
+**Rewizja wniosku: bramką jakości nie jest technologia montażu, tylko jedna informacja — wymiary ściany.**
+
+- **Bez wymiarów** system zgaduje skalę i produkuje śmieci (znaczki pocztowe, patrz wyżej)
+- **Z wymiarami** produkuje wiarygodny render
+- Potwierdza to ich **własny komunikat**: *„We couldn't measure your wall confidently — tell us your wall size for an accurate fit."* Oni sami znają ten warunek
+
+**Ciekawe dla nas:** szerokość ściany to dokładnie **nasze „jedno zasłużone pytanie"** w doradcy (D-023). Kluczowy input mielibyśmy więc już w ręku.
+
+**Co nadal zawodzi — i to jest ta droga część:** Fy! **edytuje zdjęcie pokoju**, wycinając rośliny na pierwszy plan, żeby grafiki mogły się za nimi chować. To realna praca na obrazie (segmentacja, plany głębi) i **widocznie jeszcze glitchuje** — prace niepoprawnie znikają za roślinami. Samo nałożenie prostokąta na płaską ścianę jest łatwe; **wiarygodne wpasowanie w scenę z planami — nie.**
+
+> **Uczciwa uwaga metodologiczna:** wniosek „gorsze niż brak" postawiony po pierwszym, nieudanym renderze był **za mocny na podstawie jednego przypadku**. Drugi test go obalił w ciągu kilkunastu minut. Zapis zostawiony celowo — jako przypomnienie, żeby nie hartować wniosków na pojedynczej obserwacji.
 
 ---
 
@@ -78,7 +92,7 @@ To nie jest już hipoteza. To działający wzorzec, łącznie z **uczciwą degra
 
 | Wniosek | Siła dowodu |
 |---|---|
-| **Montaż na zdjęciu klienta zawodzi w praktyce.** Mixtiles nie daje takiej opcji w ogóle po latach i milionach zamówień; Fy! próbuje — i na najłatwiejszym możliwym wejściu produkuje render niezdatny do użytku (zła skala, brak kompozycji) | 🟢 **Bardzo mocne potwierdzenie D-021 — dowód bezpośredni, nie z nieobecności.** Zamknięte |
+| **Montaż na zdjęciu klienta jest wykonalny, ale zabramkowany na wymiarach ściany.** Bez nich — render niezdatny do użytku; z nimi — wiarygodny. Mixtiles nie oferuje tego w ogóle; Fy! oferuje, z widocznymi problemami przy planach (rośliny) | 🟡 D-021 **stoi** (neutralna ściana domyślnie), ale uzasadnienie się zmienia: nie „to nie działa", tylko **„to wymaga danych i pracy na obrazie, których na MVP nie mamy"** |
 | **Nakładka wymiarów to standard kategorii** — obaj liderzy, ta sama mechanika | 🟢 Mocne. Do wdrożenia |
 | **Zdjęcie jako wejście analityczne + uczciwa degradacja** | 🟢 Potwierdzone jako wdrożony wzorzec |
 | **Pokój jest opcjonalny przy pojedynczej pracy** | 🟡 Potwierdzone u Mixtiles, ale ich model (własne zdjęcia klienta) różni się od naszego (nieznana sztuka) |
@@ -89,7 +103,12 @@ To nie jest już hipoteza. To działający wzorzec, łącznie z **uczciwą degra
 1. **Dodać nakładkę wymiarów do podglądu** — przełącznik „linijka", strzałki z centymetrami na ścianie, nie tylko liczba w panelu obok. **Najwyższy stosunek wartości do kosztu z całego badania.**
 2. **Zdjęcie wyłącznie jako wejście analityczne**, z jawną degradacją w stylu Fy!: gdy nie da się czegoś odczytać, doradca mówi to wprost i dopytuje. Nigdy jako tło do montażu.
 3. **Nie budować biblioteki 6–9 pomieszczeń przed walidacją.** Zostawić obecne trzy, dodać **tryb neutralnego tła** (odpowiednik `Flat` u Fy!) i przełącznik — a rozbudowę zestawu uzależnić od tego, czy klienci faktycznie go używają.
-4. **Przenieść „montaż na zdjęciu pokoju" z BACKLOGU „trudne, odłożone" do „odrzucone z dowodem".** D-021 opierało się na przewidywaniu, że to zawiedzie. Teraz mamy zaobserwowaną porażkę u konkurenta, na najłatwiejszym wejściu. Warunek ewentualnego powrotu jest konkretny: **dopóki nie potrafimy niezawodnie ustalić wymiarów ściany, montaż jest z definicji niemożliwy** — bo bez skali render kłamie w jedynej rzeczy, która ma znaczenie.
+4. **Montaż na zdjęciu pokoju zostaje w BACKLOGU — ale z jasno nazwanym warunkiem odblokowania.** *(Wcześniejsza rekomendacja w tym dokumencie, żeby przenieść go do „odrzucone z dowodem", została **wycofana** po trzecim teście — patrz §1.)*
+   Warunek nie jest już mglisty („trudne"), tylko rozbity na dwa mierzalne składniki:
+   - **(a) Wymiary ściany** — bez nich skala zgaduje i render kłamie w jedynej rzeczy, która ma znaczenie. **Ten składnik już mamy** — pytamy o szerokość ściany w doradcy (D-023)
+   - **(b) Obsługa planów sceny** — wycinanie mebli i roślin na pierwszy plan. To realna praca na obrazie, **u Fy! wciąż glitchuje**, i to jest ta droga część. **Tego nie mamy i na MVP nie budujemy**
+
+   Czyli: nie „może kiedyś", tylko **„gdy (b) stanie się niezawodne i tanie"**.
 
 ### Otwarte pytanie produktowe (nierozstrzygnięte badaniem)
 
