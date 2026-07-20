@@ -42,6 +42,15 @@ Linia rozwojowa projektów:
 - **Dotykamy tylko folderu 18**
 - Artyści = atrybucja teraz, marketplace docelowo (szew w modelu danych już jest)
 
+### Dwa warunki wiążące przy prawdziwym kodzie (Artur, 2026-07-20)
+
+Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu nie da się dokleić później.
+
+1. **Model musi być wymienialny w dowolnym momencie.** D-020 to zakłada, ale zapis jest łatwy do złamania przypadkiem. W praktyce: żadnych cech charakterystycznych dla jednego dostawcy na ścieżce głównej, prompty w jednym miejscu, format odpowiedzi nasz a nie ich, przełączenie dostawcy = zmiana konfiguracji, nie przepisywanie.
+2. **Limity rozmów i kosztów mają być zaprojektowane, nie doklejone** — i pod stałą kontrolą. Szczegóły w `AI_COST_MODEL.md` §9–10.
+
+⚠️ **Jedyny element, który nie może czekać: logowanie kosztu każdej sesji od pierwszej rozmowy.** Wszystkie limity w modelu kosztowym to dziś szacunki do dostrojenia na pierwszych 100 sesjach (§7). Bez logu od dnia zerowego nie będzie czym ich dostroić — a tego jednego nie da się odtworzyć wstecz.
+
 ---
 
 ## Aktywne zadania — doskonalenie płaskiej ściany (D-033)
