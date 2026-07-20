@@ -77,6 +77,26 @@ Cztery próby, jeden sukces. Bilans i warunki:
 3. **Perspektywa** → grafika nie leży w płaszczyźnie ściany *(trudne — estymacja płaszczyzny i homografia)*
 4. *(pochodna 3.)* **Istniejące obrazy na ścianie** — wklejane „po wierzchu", nie wykrywane
 
+### 💡 Najlepsze odkrycie: `Flat` to **ściana w kolorze Twojej ściany**, nie neutralna biel
+
+Bliższe oględziny panelu `Flat` u Fy! pokazują coś, czego nie widać na pierwszy rzut oka:
+
+- **Tło płaskiej planszy jest przefarbowane na kolor ściany z wgranego zdjęcia** (szałwiowa zieleń — ta sama, co w pokoju). Nie jest to neutralna biel ani szarość
+- W lewym panelu: **„FROM YOUR ROOM — Palette"** (5 próbek) oraz **„Dimensions 1.2 × 1.9m"** — czyli **odczytali wymiary ściany ze zdjęcia**
+- Oraz uczciwy komunikat ograniczenia: *„The visible wall sections are too narrow to meet the m[inimum]…"* — system sam wykrył, że użyteczna ściana jest za wąska na kompozycję
+- **`Flat` jest powierzchnią roboczą** — prace można przesuwać i skalować. Tryb `Living Room` jest tylko podglądem, nieedytowalnym
+
+**To rozdziela produkt na dwie warstwy o zupełnie różnej jakości:**
+
+| Warstwa | Ocena |
+|---|---|
+| **Analityczna** — paleta, wymiary ściany, walidacja ograniczeń, uczciwe komunikaty o niepowodzeniu | 🟢 **Działa dobrze** |
+| **Renderująca** — nałożenie na fotografię z perspektywą i planami | 🔴 **Zawodzi** (trzy tryby awarii wyżej) |
+
+> **To jest dokładnie podział „zdjęcie jako wejście analityczne, nie jako tło" — potwierdzony obserwacją działającego produktu, a nie tylko rozumowaniem.**
+
+**Do przejęcia:** płaska plansza **przefarbowana kolorem ściany klienta** to sprytny środek pomiędzy. Dostajesz sporą część efektu personalizacji („to moja ściana") **przy zerowym ryzyku renderu** — brak perspektywy, brak planów, brak przesłaniania. Tania i bezpieczna.
+
 ### 🔑 Wniosek praktyczny: okno warunków, w którym to działa, jest wąskie
 
 Montaż zadziałał **wyłącznie** przy: zdjęciu **frontalnym**, **dobrze oświetlonym**, ściana **pusta**, bez przedmiotów na pierwszym planie, **plus podane wymiary**.
@@ -129,7 +149,8 @@ To nie jest już hipoteza. To działający wzorzec, łącznie z **uczciwą degra
 
 1. **Dodać nakładkę wymiarów do podglądu** — przełącznik „linijka", strzałki z centymetrami na ścianie, nie tylko liczba w panelu obok. **Najwyższy stosunek wartości do kosztu z całego badania.**
 2. **Zdjęcie wyłącznie jako wejście analityczne**, z jawną degradacją w stylu Fy!: gdy nie da się czegoś odczytać, doradca mówi to wprost i dopytuje. Nigdy jako tło do montażu.
-3. **Nie budować biblioteki 6–9 pomieszczeń przed walidacją.** Zostawić obecne trzy, dodać **tryb neutralnego tła** (odpowiednik `Flat` u Fy!) i przełącznik — a rozbudowę zestawu uzależnić od tego, czy klienci faktycznie go używają.
+3. **Nie budować biblioteki 6–9 pomieszczeń przed walidacją.** Zostawić obecne trzy i dodać **tryb płaskiej ściany** (odpowiednik `Flat`) jako **powierzchnię roboczą** — u Fy! to właśnie tam się pracuje, a pokój jest tylko podglądem.
+   **Wersja rozszerzona, gdy klient wgra zdjęcie:** przefarbować płaską planszę **kolorem jego ściany** wyciągniętym z fotografii. Duża część efektu „to mój pokój" przy **zerowym ryzyku renderu**. To najlepszy stosunek wartości do kosztu z całego badania.
 4. **Montaż na zdjęciu pokoju zostaje w BACKLOGU — ale z jasno nazwanym warunkiem odblokowania.** *(Wcześniejsza rekomendacja w tym dokumencie, żeby przenieść go do „odrzucone z dowodem", została **wycofana** po trzecim teście — patrz §1.)*
    Warunek nie jest już mglisty („trudne"), tylko rozbity na dwa mierzalne składniki:
    - **(a) Wymiary ściany** — bez nich skala zgaduje i render kłamie w jedynej rzeczy, która ma znaczenie. **Ten składnik już mamy** — pytamy o szerokość ściany w doradcy (D-023)
