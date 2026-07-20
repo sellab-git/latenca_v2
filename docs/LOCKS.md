@@ -24,6 +24,8 @@ Legend: **LOCKED** = change needs an explicit architectural decision · **ACTIVE
 | **No visible confidence percentage** (D-026) — internal `readiness`, qualitative user-facing state naming the missing input | `docs/DECISIONS.md` D-026 | A percentage would be the "fake AI" we ruled out |
 | **Distribution is part of the product** (D-027) — content and landing pages per design problem; no automatic publishing of customer data | `docs/DECISIONS.md` D-027 | The weakest factor in D-025 and business risk #1 |
 | **Design outcome ≠ commercial outcome** (D-029) — acceptance measures the advisor, purchase measures the business | `docs/DECISIONS.md` D-029 | Purchase is too noisy to measure recommendation quality |
+| **Uploads are an analytical input, never a canvas** (D-031) — any taste-revealing image (room, liked art, inspiration); we never composite onto a customer photo | `docs/DECISIONS.md` D-031, `docs/RESEARCH-wall-display.md` | Observed: Fy!'s analysis layer works, its render layer fails three ways; Mixtiles never asks for a room photo |
+| **The working surface is a flat wall** (D-031) — tinted with the customer's wall colour when known; sample rooms are a preview, not the workspace | `docs/DECISIONS.md` D-031 | Personalisation at zero render risk; matches what Fy! actually does (`Flat` is editable, the room render is not) |
 
 ## 🟡 ACTIVE (evolving now — improve freely this milestone)
 | Item | Where | Note |

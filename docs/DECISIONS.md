@@ -425,3 +425,42 @@ The MVP is **Krok 1 (shop spine) + Krok 2 (advisor)**, per the ladder in `VISION
 This was described in `VISION.md` but never recorded as a decision. It resolves the open "lean vs platform" question: neither a bare lean shop nor an ~8-month platform, but a differentiated MVP with one clear spine. Size, format, finish and frame are ordinary product parameters, not AI — so the MVP carries **only one external-AI dependency** (the advisor, which is orchestration), making it realistic for one person plus AI assistants.
 ### Implications
 We are not a generator — open prompt-to-image is the Ideogram role, not ours (D-020 still governs: we orchestrate external models, we do not build our own). Benchmarks map onto the ladder: Displate and Mixtiles → Krok 1, Fy! → Krok 2, Ideogram → the deferred rung.
+
+---
+
+# D-031
+## Title
+Uploaded images are an analytical input, never a canvas. The working surface is a flat wall.
+### Status
+LOCKED
+### Decision
+**Anything a customer uploads is read, never painted on.** We extract signal from it and recommend from our own catalog; we never composite artwork onto a customer photograph.
+
+**What may be uploaded is deliberately broad** — not only a photo of the wall, but **any image that reveals taste**: artwork they like, an inspiration shot, a fabric, a room they admire. The room photo turns out to be the *less* valuable upload: a room describes **constraints** (colour, size, what sits below), and those can be recovered with two or three questions. A liked artwork describes **taste**, which people cannot put into words — this is exactly the locked "taste is recognized, not described" principle. "Show me something you like" is also a far lower barrier than "photograph your home": less friction, less privacy exposure, and no implied promise to render their room.
+
+**What we extract, and what each is for:**
+
+| Extracted | Used for |
+|---|---|
+| Wall colour | Tinting the flat working surface — the "this is my wall" effect at zero render risk |
+| Palette / dominant tones | Narrowing catalog selection (warm/cool, muted/bold) |
+| Wall dimensions | The size answer + the dimension overlay |
+| What already hangs there | Avoiding a clash with existing pieces |
+| Style signals (furniture, materials) | Choosing which sample room to present in |
+| Taste signal (from liked art / inspiration) | The direction of the recommendation itself |
+
+**The working surface is a flat wall** — a plain plane, tinted with the customer's wall colour when we have it. Sample rooms are a *preview*, not the place where work happens. This mirrors what Fy! actually does: their `Flat` mode is editable (pieces move and resize) while the room render is a non-editable preview.
+
+**Communication promise — binding.** We promise exactly what we deliver, and never more:
+
+> *"Send a photo — I'll read the colours, the wall size and the style from it. I'll show the art on a clean wall in your colour so you can see it properly."*
+
+The words "see it in your room" must never appear. Fy! promises *"SEE THE ART HANG IN YOUR SPACE"* and does not deliver it; that gap is what turns a feature into a bait-and-switch.
+### Reason
+Direct observation of Fy! across four tests (`docs/RESEARCH-wall-display.md`): the **analysis layer works** — palette extraction, wall dimensions, constraint validation, honest failure messages — while the **render layer fails** in three independent ways (missing scale, foreground depth, perspective). Mixtiles, the category leader, never asks for a room photo at all. Compositing succeeded only under near-studio conditions, which is what a curated sample room already provides. Reproducing the failing layer would mean building image work (segmentation, plane estimation) rather than orchestrating external AI — a different kind of undertaking from the one D-020 describes.
+### Implications
+- Reinforces **D-021**; the backlog item "room-aware compositing" keeps its three-part unlock condition (wall dimensions ✅ / scene depth ❌ / perspective ❌).
+- **IP guardrail:** an uploaded image is used **only to read taste**, and recommendations come **from our own catalog**. We never reproduce, imitate or derive from an uploaded work. Basic moderation applies to uploads.
+- **Cost:** uploads consume vision tokens (a high-resolution image can cost more than a whole text turn). The per-session image cap in `AI_COST_MODEL.md` applies to **all** uploads, whatever their type — not just room photos.
+- The path **without** any upload must remain fully-featured, not a degraded fallback: ~80% of customers will not upload, and two or three questions recover most of the constraint signal.
+- 🟡 **Open, not decided here:** whether upload ships in the MVP or as a fast-follow. The case for deferring is that questions duplicate ~80% of the value while upload adds vision cost, privacy surface and expectation risk; the case for shipping it is that the wall-colour tint and the taste signal are the parts questions cannot replace.
