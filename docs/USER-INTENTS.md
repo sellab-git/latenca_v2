@@ -208,3 +208,12 @@ To rozwija pomysł „strona produktu = ściana" w pełny przepływ. **Rozstrzyg
 Zasada: max 4–5 kafli, opisane konkretnie (NN/g G3/G4). Wejście z katalogu na konkretną pracę **pomija chooser** → od razu ścieżka 1.
 
 **Małe do dogrania (później):** kiedy pali się upsell „dodaj 2gą" (po akceptacji pracy? po rozmiarze?); jak dokładnie działa klik w pusty slot; jak rząd się „sam przesuwa" na fokus (Mixtiles).
+
+### Mechanika ściany + prawy panel (Artur, 2026-07-21)
+- **Katalog i designer = ta sama powierzchnia i ten sam PROJEKT.** Wejście z katalogu ląduje na 1 pracy, ale ma identyczne możliwości (pomija tylko chooser). Jedna praca → dodawanie → układy = **kolejne fazy jednego projektu ściany**.
+- **Układy = biblioteka presetów per liczba prac** (np. 10 układów dla 4 prac, 10 dla 5…). Zmiana układu dynamiczna. Zejście z N na N‑1 → nadmiarowa praca ląduje **w zapasie** (nie znika). **Zero przeciągania prac po ścianie** — układ trzyma system (D‑033‑safe, tanie: układ = dane).
+- **Rozmiary należą do UKŁADU** (slot = pozycja + rozmiar; „1 duża + 4 małe" definiuje układ). Praca wrzucona w slot bierze rozmiar slotu. „Inny rozmiar" = „inny układ", nie dowolne skalowanie → brak wybuchu kombinatoryki. *(Do potwierdzenia: czy rozmiar pojedynczej pracy można zmieniać niezależnie od układu — rek.: NIE; per praca zmieniasz materiał/ramę i którą grafikę.)*
+- **Prawy panel = dwa poziomy** (naturalne rozszerzenie model D):
+  - **Poziom PRACY (fokus):** klik w pracę na ścianie → panel pokazuje jej config (materiał, rama, podmiana grafiki). Config zawsze dotyczy 1 zaznaczonej pracy.
+  - **Poziom ŚCIANY (zawsze):** czat (o całej ścianie), **łączna cena**, **„dodaj ścianę do koszyka"**, **przełącznik układu**, liczba prac + zapas.
+  - Mapowanie na model D: dzisiejszy header/config = poziom pracy; czat + dok (total + add) = poziom ściany, tylko rozszerzony o total całości i przełącznik układu.
