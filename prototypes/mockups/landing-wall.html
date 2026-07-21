@@ -619,6 +619,9 @@
       0 12px 22px hsl(35deg 30% 13% / .08),
       0 26px 46px hsl(35deg 30% 13% / .10);
   }
+  /* sticky filter bar spans the FULL wall (like the top bar) with a solid ground,
+     so art shadows scrolling under it don't peek past its sides */
+  .filterzone{margin-left:calc(var(--mainpad) * -1);margin-right:calc(var(--mainpad) * -1);padding-left:var(--mainpad);padding-right:var(--mainpad);background:var(--bg)}
   /* panels FLOAT over the wall — same layered, warm-tinted language */
   .chero .startwall{
     box-shadow:
