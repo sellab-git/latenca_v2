@@ -14,5 +14,6 @@
   "01-home-v8.html": "szkielet (sidebar+pasek+tabbar) z jednego źródła shared/shell.js — drift niemożliwy (D-040)",
   "04-advisor-v5.html": "szkielet z jednego źródła shared/shell.js (identyczny nagłówek jak landing); logika doradcy nietknięta (D-040)",
   "01-home-v9.html": "CSS szkieletu z jednego źródła shared/app.css; usunięta zbędna reguła przesuwająca pole (D-041)",
-  "04-advisor-v6.html": "CSS szkieletu z shared/app.css — naprawione etykiety nav i pozycja pola; zmierzone identycznie z home (D-041)"
+  "04-advisor-v6.html": "CSS szkieletu z shared/app.css — naprawione etykiety nav i pozycja pola; zmierzone identycznie z home (D-041)",
+  "01-home-v10.html": "landing prowadzi doradcą — kompaktowy hero na górze, katalog od razu pod spodem (wariant C, D-042)"
 }

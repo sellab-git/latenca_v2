@@ -714,3 +714,20 @@ The design tokens, base styles, shell component styles and the shared systems (i
 
 ### Diagnosis method (for next time)
 The drift was invisible to eyeballing and to a naive markup diff (markup was identical via `shell.js`). It was caught by **measuring computed styles at an identical viewport** — that is the tool to reach for when two pages "look different" but the HTML matches. Sweep a fixed list of shared selectors on both pages and diff the JSON; aim for literally 0 differences.
+
+---
+
+# D-042
+## Title
+The landing leads with the advisor hero on top; the catalogue sits right below (variant C, compact).
+### Status
+LOCKED
+### Decision
+The landing (`01-home`) opens with a **compact advisor hero** — the "AI wall designer" invitation with a `Start designing` CTA — and the **full catalogue immediately below** under an "Or browse thousands of works" heading. Chosen from an A/B/C exploration: A = catalogue-first (advisor a text link), B = advisor card + catalogue, **C = advisor hero on top + catalogue below (chosen)**. The hero is deliberately **short** so the first row of catalogue art already appears near the fold.
+### Reason
+The UX critique (`UX-CRITIQUE-landing-product.md`) found our differentiator — the advisor — was nearly invisible on the catalogue-first landing, so we read as a generic art shop. Leading with the advisor sells what we actually are (an AI wall designer), the way Ideogram/Midjourney lead with their create field. Artur chose **C** over B — bolder, advisor unmistakably the hero — and asked to shorten the hero so browsing still starts fast. It does **not** gate (D-022): the search field is in the top bar and the catalogue is one short scroll (or peeks above the fold).
+### Implications
+- Refines D-037/D-038: the landing lead is no longer a slim text line + link — it is the advisor hero. Search stays in the top bar; the advisor CTA is now the primary invitation.
+- Exploration files `landing-B.html` (rejected) and `landing-C.html` (folded into `01-home`) can be deleted at cleanup.
+- Still open from the critique: the **product-page measure/dimension overlay** (critique #2, the "will it fit" blocker) — next task.
+- Frozen as `01-home` v10.
