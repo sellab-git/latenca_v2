@@ -609,16 +609,8 @@
       0 2px 4px   hsl(35deg 30% 13% / .07),
       0 6px 12px  hsl(35deg 30% 13% / .06),
       0 14px 26px hsl(35deg 30% 13% / .06);    /* soft ambient cast */
-    transition:transform var(--dur-base) var(--ease-out),box-shadow var(--dur-base) var(--ease-out);
   }
-  .tile:hover{
-    transform:translateY(-4px);
-    box-shadow:
-      0 1px 1.5px hsl(35deg 30% 13% / .11),
-      0 4px 8px   hsl(35deg 30% 13% / .08),
-      0 12px 22px hsl(35deg 30% 13% / .08),
-      0 26px 46px hsl(35deg 30% 13% / .10);
-  }
+  /* hover = zoom (base .tile img scale) + subtle tint (base .tgrad) — no lift */
   /* sticky filter bar spans the FULL wall (like the top bar) with a solid ground,
      so art shadows scrolling under it don't peek past its sides */
   .filterzone{margin-left:calc(var(--mainpad) * -1);margin-right:calc(var(--mainpad) * -1);padding-left:var(--mainpad);padding-right:var(--mainpad);background:var(--bg);border-bottom:0}
