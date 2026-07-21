@@ -71,13 +71,19 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 **Cała aplikacja = „ściana"** (`CONCEPT-the-wall.md`): wspólny grunt‑ściany w `app.css`, grafiki „zawieszone" (cień), panele pływają. Szkielet z JEDNEGO źródła: `shared/shell.js` (markup, D-040) + `shared/app.css` (design‑system + cienie, D-041). Jeden system cieni (D-043).
 
 Gotowe:
-- **`01-home` = katalog‑landing** (v13). Doradca‑hero na górze (wariant C, D-042) + pełny Explore wciągnięty (D-038: pole + siatka + panel filtrów/kolory/wybrane filtry). Na „ścianie".
-- **`04-advisor` = produkt + doradca** (v14). **MODEL D (D-046):** jeden trwały panel — doradca to główna powierzchnia, tytuł+cena przypięte u góry, dok „Options + Add to cart" na dole, konfiguracja rozwija się jako arkusz nad rozmową. **Zastąpił przełącznik trybów (D-034).** Pełny ekran, tylko panel scrolluje wewnętrznie (D-045), skala cm (D-035), bez similar/whyband (D-044). Ugruntowane na Figma/Ideogram/Fy! + Rufus/NN-g (`RESEARCH-advisor-buy-panel-2026.md`). Na „ścianie".
-- **`03-product`** — stan sprzed doradcy, nietknięty jako punkt odniesienia.
+- **`01-home` = katalog‑landing** (v13). Doradca‑hero na górze (wariant C, D-042) + pełny Explore wciągnięty (D-038). Na „ścianie".
+- **`04-advisor` = produkt + doradca** (v16). **MODEL D (D-046):** jeden trwały panel — doradca główną powierzchnią, tytuł+cena u góry, dok „Options + Add to cart" na dole, konfiguracja jako accordion nad rozmową. Zastąpił przełącznik trybów (D-034). Ugruntowane na Figma/Ideogram/Fy! + Rufus/NN-g.
+- **`05-wall` = powierzchnia ŚCIANY** (v1) — **strona produktu JEST ścianą.** Chooser 4 intencji → stan ściany; N prac (1..5) w układach z biblioteki presetów per liczba; fokus; panel dwupoziomowy (praca + ściana); N→N‑1 → zapas; zero przeciągania (D-033). Pierwszy prototyp kierunku „zmienne N".
+- **`03-product`** — stan sprzed doradcy, punkt odniesienia.
 
-Brakujące na ścieżce głównej:
-- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, na shell.js + app.css + w języku ściany; zasady koszyka/checkoutu zablokowane w `docs/`. **To jest następny krok.**
-- [ ] Kolekcje i Artyści — poza ścieżką główną, dopiero jeśli MVP ich potrzebuje (artyści = sama atrybucja)
+### ⚡ ZMIANA KIERUNKU (2026‑07‑21) — czytaj `docs/USER-INTENTS.md` (żywa mapa)
+Artur zapytał o realny plan „Design my wall" → wyszła głęboka praca nad intencjami (178 scenariuszy → 5 podróży, recenzja ChatGPT, feasibility‑engine). **Reframe: jednostka = jedna praca; „ściana" = ZMIENNA liczba prac (1..N) kupowanych razem** (nie sztywna para); dwie drogi (gotowe układy + składanie), wzorzec Mixtiles; **strona produktu = ściana**; układy z biblioteki presetów; rozmiar należy do układu; panel dwupoziomowy. Modsy jako analogia — **zbanowane**.
+
+Następne (po reakcji na `05-wall`):
+- [ ] **Decyzja D‑047: rozszerzyć MVP z „pojedyncza grafika" na „N prac"?** (zmienia D‑023/D‑030/D‑033) — czeka na Artura.
+- [ ] Iteracja ściany: klik w pusty slot = dodaj tu; materiał/rama na żywo na podglądzie; więcej realnych układów; wpięcie „gotowych ścian" (droga A).
+- [ ] **Koszyk + checkout** — po ustaleniu modelu ściany (był „następnym ekranem", teraz PO ścianie). `reference/prototype-html-15/Latenca-Cart.html`.
+- [ ] Kolekcje i Artyści — poza ścieżką główną, tylko jeśli MVP ich potrzebuje.
 
 Odłożone / do posprzątania:
 - [ ] **Nakładka wymiarów na produkcie** („50×70 cm" ze strzałkami) — Artur: „temat na bardzo później". Reszta ulepszeń w `UX-CRITIQUE-landing-product.md`
