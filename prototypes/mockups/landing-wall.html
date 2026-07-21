@@ -604,11 +604,7 @@
   .grid{column-gap:20px}
   .tile{
     margin-bottom:20px;border-radius:1px;   /* prints on a wall = crisp corners, not app cards */
-    box-shadow:
-      0 1px 1.5px hsl(35deg 30% 13% / .11),   /* contact — piece near the wall */
-      0 2px 4px   hsl(35deg 30% 13% / .07),
-      0 6px 12px  hsl(35deg 30% 13% / .06),
-      0 14px 26px hsl(35deg 30% 13% / .06);    /* soft ambient cast */
+    box-shadow:var(--art-shadow);           /* one shared shadow language (app.css) */
   }
   /* hover = zoom (base .tile img scale) + subtle tint (base .tgrad) — no lift */
   /* sticky filter bar spans the FULL wall (like the top bar) with a solid ground,

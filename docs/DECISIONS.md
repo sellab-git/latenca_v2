@@ -731,3 +731,19 @@ The UX critique (`UX-CRITIQUE-landing-product.md`) found our differentiator — 
 - Exploration files `landing-B.html` (rejected) and `landing-C.html` (folded into `01-home`) can be deleted at cleanup.
 - Still open from the critique: the **product-page measure/dimension overlay** (critique #2, the "will it fit" blocker) — next task.
 - Frozen as `01-home` v10.
+
+---
+
+# D-043
+## Title
+One layered, warm-tinted shadow language for art on the wall (`--art-shadow` tokens).
+### Status
+LOCKED
+### Decision
+Shadows for "art hung on the wall" are defined **once** in `shared/app.css` as `--art-shadow` (catalogue tiles) and `--art-shadow-lg` (the large product image + the framed room piece). Both use the 2026 layered technique: **4 low-opacity layers, hue matched to the warm wall (not black), a tight contact layer, light from above.** Every screen uses these tokens.
+### Reason
+Three inconsistent shadows existed: the catalogue had a cheap single dark drop-shadow (read as stickers on a grid); the product image used a decent-but-single `--shadow-2`; the framed room piece used a pure-black `rgba(0,0,0,.4)` (the worst kind). The layered warm-tinted approach is the current best practice (Comeau / Stripe / Apple), and as **shared tokens** it gives one shadow language across the whole "wall". Founder liked the product's delicate shadow — `--art-shadow-lg` is tuned to preserve that look while fixing the technique and unifying it.
+### Implications
+- `04-advisor` `.stageArt img` and `.frameOnWall` now use `--art-shadow-lg`; catalogue tiles use `--art-shadow`. Verified: layered warm shadow renders on both (computed styles + screenshots).
+- Light-theme tuned; on dark theme the warm-dark shadow recedes (realistic on a dark wall).
+- Part of the "the wall" concept (`CONCEPT-the-wall.md`). The full wall-treatment (lit ground, hung art, floating panels) still lives in `landing-wall.html` pending the fold into `01-home`.

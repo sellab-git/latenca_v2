@@ -26,6 +26,9 @@
     --shadow-pop:0 16px 40px rgba(15,12,20,.18);
     --shadow-drawer:-14px 0 40px rgba(15,12,20,.18); /* side drawers/panels (directional) */
     --shadow-bar:0 -8px 24px rgba(15,12,20,.08);      /* sticky bottom bars */ /* overlays: dropdown / panel */
+    /* ART ON THE WALL — one layered, warm-tinted shadow language (2026 technique). Use --art-shadow on catalogue tiles, --art-shadow-lg on the big product image / framed piece. */
+    --art-shadow:0 1px 1.5px hsl(35deg 30% 13% / .11),0 2px 4px hsl(35deg 30% 13% / .07),0 6px 12px hsl(35deg 30% 13% / .06),0 14px 26px hsl(35deg 30% 13% / .06);
+    --art-shadow-lg:0 1px 2px hsl(35deg 30% 13% / .10),0 3px 6px hsl(35deg 30% 13% / .08),0 8px 18px hsl(35deg 30% 13% / .09),0 20px 40px hsl(35deg 30% 13% / .10);
     --ring:0 0 0 3px var(--accent-soft);         /* focus ring */
     /* Fonts */
     --icon:20px; --iconbtn:40px;   /* icon system — touch-first; Ideogram = 18/36 */
