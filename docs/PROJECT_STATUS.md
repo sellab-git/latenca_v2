@@ -72,7 +72,7 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 
 Gotowe:
 - **`01-home` = katalog‑landing** (v13). Doradca‑hero na górze (wariant C, D-042) + pełny Explore wciągnięty (D-038: pole + siatka + panel filtrów/kolory/wybrane filtry). Na „ścianie".
-- **`04-advisor` = produkt + doradca** (v11). Pełny ekran: strona się nie przewija, tylko prawy panel (D-045). Usunięte similar/whyband (D-044). D-034 (jeden ekran/dwa stany), skala cm (D-035). Na „ścianie".
+- **`04-advisor` = produkt + doradca** (v14). **MODEL D (D-046):** jeden trwały panel — doradca to główna powierzchnia, tytuł+cena przypięte u góry, dok „Options + Add to cart" na dole, konfiguracja rozwija się jako arkusz nad rozmową. **Zastąpił przełącznik trybów (D-034).** Pełny ekran, tylko panel scrolluje wewnętrznie (D-045), skala cm (D-035), bez similar/whyband (D-044). Ugruntowane na Figma/Ideogram/Fy! + Rufus/NN-g (`RESEARCH-advisor-buy-panel-2026.md`). Na „ścianie".
 - **`03-product`** — stan sprzed doradcy, nietknięty jako punkt odniesienia.
 
 Brakujące na ścieżce głównej:
