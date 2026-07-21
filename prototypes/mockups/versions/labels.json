@@ -26,5 +26,6 @@
   "04-advisor-v11.html": "cień panelu nie jest już przycięty na bokach (usunięty overflow:hidden z .pdp/.col; blokada scrolla trzyma się na .main); token cienia wrócił do wersji ciepłej",
   "04-advisor-v12.html": "akcje obrazu (serce/share/zoom) przeniesione z pływającego pionowego paska na obrazie do jednego paska na górze prawego menu (w wierszu autora), styl jasnych przycisków menu; usunięta etykieta 'Actual artwork'",
   "04-advisor-v13.html": "usunięty przycisk powiększenia — jak w Ideogram klik w sam obraz otwiera lightbox (kursor zoom-in); w menu zostają serce + share",
-  "04-advisor-v14.html": "MODEL D (D-046): jeden trwały panel zamiast przełącznika trybów — doradca główną powierzchnią, cena/tytuł przypięte u góry, dok 'Options + Add to cart' na dole, konfiguracja rozwija się jako arkusz nad rozmową; ugruntowane na Figma/Ideogram/Fy + Rufus/NN-g"
+  "04-advisor-v14.html": "MODEL D (D-046): jeden trwały panel zamiast przełącznika trybów — doradca główną powierzchnią, cena/tytuł przypięte u góry, dok 'Options + Add to cart' na dole, konfiguracja rozwija się jako arkusz nad rozmową; ugruntowane na Figma/Ideogram/Fy + Rufus/NN-g",
+  "04-advisor-v15.html": "poprawki modelu D: 'Add to cart' wrócił do pełnej wysokości (48px — dok nadawał mu flex:1 i spłaszczał do 17px); panel dostał tę samą wysokość co scena (clamp), więc dolna krawędź panelu równa się z dolną krawędzią obrazka"
 }
