@@ -783,3 +783,20 @@ Reinforces the **wall** feeling (D-042/CONCEPT-the-wall): the artwork stays put 
 
 ### D-045 fix (2026-07-21)
 First cut of the full-viewport lock forced `.stage{height:100%}` and `.chat{flex:1}`, which blew up the artwork (much larger, wrong apparent size) and stretched the chat into a tall empty card. Corrected: the artwork keeps its own clamp size (just centred vertically), the chat keeps its own bounded height + internal `.msgs` scroll. The page-lock and the buy-panel internal scroll stay. Verified at 1440 and 1900 wide: page not scrollable, stage 720, chat 720.
+
+---
+
+# D-046
+## Title
+The product page is ONE persistent panel — advisor is the main surface; buy is a docked, expandable strip. Supersedes the two-state toggle (D-034).
+### Status
+LOCKED
+### Decision
+The right panel is no longer two states that hide each other (chat XOR buy). It is **one persistent panel** with three always-present zones: (1) a pinned **product header** — title, artist, live price, config summary; (2) the **advisor conversation** as the dominant, always-visible body; (3) a **buy dock** at the bottom — "Options" + "Add to cart", always reachable. The full configurator (material/size/frame/details) is a **sheet that slides up over the conversation** from the dock and closes with a chevron. Nothing is hidden; the advisor is visible most of the time.
+### Reason
+Artur flagged the old toggle as broken: different heights (buy panel flexed tall, chat capped short), a non-intuitive switch, and two mismatched markers (accent strip top vs grey strip bottom). Research (`RESEARCH-advisor-buy-panel-2026.md`) grounded the fix: **Amazon Rufus keeps the buy box on-page and the assistant is opened/closed from one entry point; NN/g G1 = a single consolidated entry; G2 = keep it persistent.** But Latenca's advisor is more central than Rufus (it is the front door, D-022, and it swaps the artwork), so it must be **primary**, not a corner widget. The reference class Artur named — **Figma, Ideogram, Fy!** — all use a persistent panel beside the canvas, organised in stacked/collapsible sections, never a mode-switch that hides one surface. Model D applies exactly that: canvas = the wall (left), persistent panel = advisor-forward (right), config as a collapsible sheet.
+### Implications
+- Removed the mode-switch entirely: `data-mode`, `.chatstrip`, `.buystrip`, `setMode`, and the two strips' handlers. Added `.phead` (zone 1), kept `.chat` as a transparent flex body (zone 2), added `.buydock` + `.cfgtoggle` + `.cfgsheet` (zone 3). `.col` is now the single card (fixed viewport height on desktop); `.msgs` and `.cfgsheetbody` scroll internally.
+- `?mode=buy` now **opens the config sheet on arrival** (from catalogue/search); otherwise the advisor leads. Header price + both summaries stay live via `render`→`syncStrips`.
+- Verified at 1440: header 127 / advisor 511 (dominant) / dock 94; config sheet covers exactly the conversation with header above + dock (Add to cart) below; advisor swap still works ("something warmer" → new piece, header updates live). Verified at 390: zero horizontal overflow, dock CTA hidden (sticky `.buybar` carries it), sheet overlays the bounded chat. Frozen `04-advisor` v14.
+- Balance chosen by Artur: advisor dominant, config compact-in-dock, expands on demand (not the "even more dominant" nor the "config half-and-half" variants).

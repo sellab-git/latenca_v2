@@ -62,9 +62,15 @@ Oba warianty, które najpierw dałem — **zakładki `[Kup | Zapytaj]`** i **com
 
 **Co zostawiamy (bo już jest zgodne z 2026):** opening nazywający dzieło (G3), quick-replies jako przyciski (G4), cena niesiona do rozmowy. **Co naprawiamy:** dwa paski → jedno wejście; jedna wysokość; jeden nagłówek.
 
-## 5. Otwarte do decyzji Artura
-- Czy domyślny stan na wejściu z katalogu = konfigurator (a doradca przypięty, gotowy) — a wejście z „pomóż mi wybrać" otwiera warstwę doradcy od razu? (oba wejścia dalis­tnieją przez `?mode=`)
-- Ile miejsca warstwa doradcy zabiera po rozwinięciu: nad konfiguratorem (pełna wysokość karty) vs bottom-sheet do ~⅔.
+## 5. Rozstrzygnięcie (2026-07-21) — po dopytaniu Artura
+
+Artur doprecyzował: to nie ma być doradca „przywoływany" (Rufus/otwierana warstwa = wzorzec dla *dodatkowego* asystenta), tylko **panel pierwszoplanowy widoczny przez większość czasu** — jak trwały panel w **Figmie / Ideogramie / Fy!**. Te trzy trzymają dużą powierzchnię wizualną po jednej stronie i **trwały panel** po drugiej (poukładany w sekcje, progresywne ujawnianie) — nigdy przełącznik chowający jedną powierzchnię.
+
+**Zbudowany model D (D-046):** lewa = ściana z grafiką (canvas). Prawa = jeden trwały panel: (1) przypięty nagłówek produktu (tytuł/autor/cena/skrót), (2) **doradca = główna powierzchnia** (widoczny przez większość czasu), (3) dok „Options + Add to cart" na dole; pełna konfiguracja = **arkusz wysuwany nad rozmową**, zamykany szewronem. Proporcje: doradca dominuje, konfiguracja kompaktowa w doku, rozwijana na żądanie (Artur wybrał to wyważenie, nie „jeszcze bardziej dominujący" ani „konfiguracja pół na pół"). Zamrożone `04-advisor` v14.
+
+Dodatkowe źródła tej rundy:
+- Figma — prawy sidebar (trwały, zakładki + rozwijane sekcje): https://help.figma.com/hc/en-us/articles/360039832014-Design-prototype-and-explore-layer-properties-in-the-right-sidebar
+- Fy! (iamfy) — podgląd na ścianie + trwałe sterowanie: https://www.iamfy.co/products/my-cozy-room
 
 ## Źródła
 - Amazon — How to use Rufus: https://www.aboutamazon.com/news/retail/how-to-use-amazon-rufus
