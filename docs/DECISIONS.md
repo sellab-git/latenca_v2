@@ -765,3 +765,18 @@ The advisor (D-034) is already **where you move to other pieces** ("something wa
 ### Implications
 - Removed `.whyband`, the `.gtabs` tabs, the related `#grid` and its loadmore from `04-advisor.html`, plus their JS (`renderGrid`, gtab handlers, `galMore`). Verified: no console errors; page collapses to a single-screen PDP.
 - If "you might also like" ever proves needed, it belongs **inside** the advisor (as proposals), not as a separate grid.
+
+---
+
+# D-045
+## Title
+The product page is a full-viewport app layout — the page never scrolls; only the right panel scrolls.
+### Status
+LOCKED
+### Decision
+On desktop (≥821px) the product page **fills the viewport and the page itself does not scroll.** The artwork fills the available height; the **right column scrolls internally** — the buy panel (`overflow-y:auto`) in buy state, the conversation (its `.msgs` already scroll) in chat state. On mobile (≤820) the page scrolls normally (stacked layout).
+### Reason
+Reinforces the **wall** feeling (D-042/CONCEPT-the-wall): the artwork stays put on the wall like a fixed surface while the tools float and scroll beside it (Figma/Stitch-like). Artur: only the right menu should scroll at most; the page shouldn't move up/down. Bonus: the artwork now fills the height, so it reads larger.
+### Implications
+- `.app` height:100vh; `.main` is a flex column (topbar / crumb / pdp); `.pdp` fills; `.col` bounded with `.buy` scrolling (buy) or `.chat` filling + internal `.msgs` scroll (chat). Desktop-only (`@media min-width:821px`); mobile keeps page scroll.
+- Verified: page not scrollable in either state; buy panel scrolls internally. Frozen `04-advisor` v8.
