@@ -750,3 +750,18 @@ Three inconsistent shadows existed: the catalogue had a cheap single dark drop-s
 
 ### D-043 addendum — panels + drawer folded into the same shadow system (2026-07-21)
 The floating-panel shadows now share the warm-layered language: `--shadow-pop` (advisor/buy panel, search dropdown, lightbox), `--shadow-drawer` (side drawer), and `--shadow-bar` (mobile bottom bar) are layered + warm-tinted in `app.css`, same hue family as `--art-shadow`. Legacy `--shadow-1/2` alias to the art tokens. **Bug fixed:** off-screen (closed) `.drawer`s were casting their left-pointing `--shadow-drawer` onto the viewport's right edge — the shadow now applies only on `.drawer.open`. The full-screen lightbox image moved off a one-off black shadow onto `--art-shadow-lg`. **Every shadow in the app now resolves from one place (`shared/app.css`).**
+
+---
+
+# D-044
+## Title
+The product page has no "similar works" grid and no trust band — the advisor is the way to other pieces.
+### Status
+LOCKED
+### Decision
+Remove the bottom of the product page: the **"Similar / Popular / Bestselling — More from this collection"** related-artworks grid, and the **"Museum-grade / Made to order / Signed certificate / Secure checkout"** trust band. The product page is now just the artwork on the wall + the advisor.
+### Reason
+The advisor (D-034) is already **where you move to other pieces** ("something warmer", "calmer than this", "darker"). A separate related-grid at the bottom duplicates that and confuses — *which control do I use to change the piece?* Artur: the bottom section is now misleading. The trust band was cut from the landing for the same reason (D-038) and is marketing clutter under a focused buy/advise screen.
+### Implications
+- Removed `.whyband`, the `.gtabs` tabs, the related `#grid` and its loadmore from `04-advisor.html`, plus their JS (`renderGrid`, gtab handlers, `galMore`). Verified: no console errors; page collapses to a single-screen PDP.
+- If "you might also like" ever proves needed, it belongs **inside** the advisor (as proposals), not as a separate grid.

@@ -759,28 +759,7 @@
       </div>
     </section>
 
-    <!-- Why Latenca -->
-    <section class="whyband">
-      <div class="why"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></svg><div><b>Museum-grade materials</b><span>Paper, canvas, metal &amp; more, built to last.</span></div></div>
-      <div class="why"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="17.5" cy="18" r="1.5"/></svg><div><b>Made to order</b><span>Shipped in ~5 days, zero waste.</span></div></div>
-      <div class="why"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 19l4.5 2L15 14"/></svg><div><b>Signed certificate</b><span>Verified authenticity, every piece.</span></div></div>
-      <div class="why"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Secure checkout</b><span>Safe payment, 30-day returns.</span></div></div>
-    </section>
-
-    <!-- More like this -->
-    <div class="gtabs" id="gtabs">
-      <div class="tabs">
-        <button class="gtab on" data-t="0">Similar</button>
-        <button class="gtab" data-t="1">Popular</button>
-        <button class="gtab" data-t="2">Bestselling</button>
-      </div>
-      <span class="gcount">More from this collection</span>
-    </div>
-    <section class="grid" id="grid"></section>
-    <div class="loadmore">
-      <div class="txt">Not quite right?</div>
-      <button class="more" id="galMore">Ask for something different</button>
-    </div>
+    <!-- whyband + "more like this" removed (D-044): the advisor is where you move to other pieces -->
 
   </main>
 </div>
@@ -1019,27 +998,7 @@
 
   // theme, rail, topbar-sticky and search dropdown are owned by shared/shell.js
 
-  // more like this
-  const R=[[560,747],[560,784],[560,560],[560,420],[560,400],[560,700]];
-  const works=[["Ion Drift","Sora Lindqvist",0],["Cobalt Flow","Elena Kova",1],["Violet Hour","Mira Solheim",5],["Aurora No. 7","Lena Frost",2],["Ember Field","L. Poire",1],["Pale Fire","N. Dubois",4],["Meridian","Tomas Ek",0],["Soft Machine","Kip Alvarez",3],["Undertow","Rhea Salt",1],["Signal","Kaia Lund",5]];
-  const heartI='<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>';
-  const shareI='<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
-  const moreI='<svg class="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
-  let galTab=0, galN=6;
-  function renderGrid(){
-    const off=galTab;
-    document.getElementById('grid').innerHTML=Array.from({length:galN},(_,i)=>{
-      const w=works[(i+off*3)%works.length];const[t,c,ri]=w;const[iw,ih]=R[(i+ri)%R.length];
-      return `<a class="tile"><img src="${url(ART[(i+2+off)%ART.length],iw,ih)}" alt=""><span class="tgrad"></span><button class="fav" title="Save">${heartI}</button><span class="acts"><button class="tbtn" title="More">${moreI}</button><button class="tbtn" title="Share">${shareI}</button></span><span class="info"><span class="t">${t}</span><span class="a"><span class="dot"></span><span>${c}</span></span></span></a>`;
-    }).join('');
-  }
-  renderGrid();
-  document.querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.gtab').forEach(x=>x.classList.toggle('on',x===b));galTab=+b.dataset.t;galN=20;renderGrid();});
-  // the advisor is a better answer to "not this one" than twenty more tiles
-  document.getElementById('galMore').onclick=()=>{
-    setMode('chat');
-    document.querySelector('.chat').scrollIntoView({block:'center',behavior:'smooth'});
-  };
+  // "more like this" grid removed (D-044) — the advisor is where you move to other pieces
 
   // ── drawers (cart + size guide) — reuse Explore's right-panel pattern ──
   const scrim=document.getElementById('scrim'), cartDrawer=document.getElementById('cartDrawer'), sizeDrawer=document.getElementById('sizeDrawer'), matDrawer=document.getElementById('matDrawer');
