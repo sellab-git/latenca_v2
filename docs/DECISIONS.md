@@ -655,3 +655,23 @@ The three real arrival scenarios all resolve through the same three screens: (a)
 - Nav loses the Home/Explore split — one entry ("Explore"). "Get inspired" dropped.
 - Removed trust content (materials, made-to-order, certificate, secure checkout) can return in a footer/About later if a cold-shopper signal proves necessary — it is not gone by principle, just off the core path.
 - Frozen as `01-home` v6.
+
+---
+
+# D-039
+## Title
+Landing and product share one shell; the search field lives in the sticky top bar on every screen (D-037 option A).
+### Status
+LOCKED
+### Decision
+The persistent field-shell is resolved to **option A**: the search field sits in the **sticky top bar on both** the catalogue landing and the product page — same coordinate, same copy (*"Search the collection — try…"*), always reachable, never scrolling away.
+
+- The landing's big centred lead field is **dropped**; the lead is now a slim line (*"Make the wall you've been picturing."*) + the advisor door.
+- The **sidebar and top bar are identical** across landing and product: Explore (active) · Design my wall · [You] My projects · [Browse] Collections · Artists · Sell your art · Sign in/Guest; same top bar (search + theme/saved/cart/sign-in).
+- The product page **no longer auto-collapses its sidebar to a rail** in chat mode (removed) — it keeps the full labelled sidebar so the two screens match.
+### Reason
+After D-038 the landing and product are the two MVP shop screens. A user moving between them saw the header "jump" — field big-centre vs small-top, different nav (product still had "Home", lacked "Design my wall"), and a seller account ("Studio Latenca / Curator") vs guest. Artur chose option A: **one identical header everywhere** — simpler, less irritation, and the field never disappears on scroll (a real usability gain over the Ideogram-style shrinking field).
+### Implications
+- **Refines D-037**: "continuity is access and state, not identical coordinates" is now resolved to the **same coordinate** (top bar) for the search field. The advisor stays the product's right-column conversation (D-034/D-036) — search in the bar, advisor in the panel; still one conversation per screen.
+- Frozen as `01-home` v7 and `04-advisor` v4.
+- The advisor's focused-rail idea is dropped for consistency; the manual rail toggle still exists if the PDP ever needs more room at narrow widths.
