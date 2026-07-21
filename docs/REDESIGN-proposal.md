@@ -96,10 +96,14 @@ Zobaczyliśmy realną różnicę: **Midjourney kładzie pole na DOLE** (przy kci
 
 ---
 
-## Zebrane decyzje do ustalenia
+## Zebrane decyzje — ROZSTRZYGNIĘTE (D-037, po recenzji ChatGPT)
 
-1. **Home — radykalność:** A pełny generator / **B hybryda (rek.)** / C zachowawczo.
-2. **Pole na Home:** **A doradca‑jako‑wyszukiwarka (rek., cel)** / B osobne wyszukiwanie.
-3. **Pole na mobile:** **A dół (rek.)** / B góra.
+Wynik: **B / B / B + jeden shell z jawnym trybem.**
 
-Po ustaleniu tych trzech: kopiuję `01-home` i `04-advisor`, robię nowe wersje na makietach (mobile‑first, weryfikacja w przeglądarce), zamrażam w `versions/`. Nie wcześniej.
+1. **Home — radykalność: B (hybryda).** Warunek: „cienka" warstwa zaufania ma znaczyć cienką (jedno „jak to działa" + jeden dowód jakości + ewentualnie pokoje/zestawy), nie odbudowa starej Home.
+2. **Pole na Home: B — inteligentne WYSZUKIWANIE katalogu (język naturalny), nie czat.** Doradca startuje przez handoff (wybór produktu albo „Pomóż mi wybrać"). ~~A (doradca‑jako‑wyszukiwarka) — WYCOFANE~~: łamało D‑036 (górne pole zostaje wyszukiwarką) i tworzyło niejasny kontrakt pola (trzy różne intencje → trzy różne oczekiwane wyniki). Promocja pola do doradcy wymagałaby jawnego supersede D‑036, nie „urastania" po cichu.
+3. **Pole na mobile: B — góra na Home/katalogu.** Na produkcie composer może być na dole, **nad** buybarem i **tylko w stanie rozmowy**. Bez jednej wymuszonej współrzędnej dla dwóch trybów.
+
+**Jeden shell, jawny tryb:** ten sam wizualnie pasek, etykieta mówi co robi — „Przeszukaj kolekcję" (Home) vs „Zapytaj o tę ścianę" (produkt). Stałość dotyczy dostępu i stanu, nie identycznej współrzędnej. Wzmacnia D‑036, nie łamie.
+
+**Następny krok:** kopiuję `01-home`, robię nową wersję (mobile‑first, weryfikacja w przeglądarce), zamrażam w `versions/`. `04-advisor` zmienia się mało (tylko ujednolicenie górnego pola + porządek chipów, materiał zostaje pierwszy).

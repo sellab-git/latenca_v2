@@ -599,3 +599,30 @@ We locked **react-don't-specify** precisely because describing is the hard part.
 - The search field keeps its AI-phrasing placeholder — it *is* AI-assisted search. That is not a chat.
 - Rejected in the same pass, and why: **reviews and save counts** (we have no customers, and on a curated brand curation is the stronger proof — a fabricated number is the one thing on the page that can be caught as a lie); **Follow on the artist** (promises a social layer that is not in the MVP, and public-domain sources have nobody to follow); **the duplicated selection summary** (the panel already shows the selection by what is highlighted); **the twenty-tile grid** (it competed with the advisor, which is a better answer to "not this one" — reduced to six, and its button now opens the conversation).
 - **Not changed, after checking:** the material list stays at six, and the order stays material → size → frame. I had recommended cutting to two on a Mixtiles comparison, which was the wrong reference — Mixtiles sells photo tiles, not art prints, and material choice is standard at Desenio, Fy!, Society6 and King & McGaw. The order is also correct as it stands, because material determines which sizes and prices exist. Both recommendations withdrawn. The one real cost stands and is accepted: each material is a separate Gelato line, quality check and complaint surface.
+
+---
+
+# D-037
+## Title
+Home leads with search + immediate catalogue (thin hybrid); one persistent field-shell with an explicit per-screen mode.
+### Status
+LOCKED
+### Decision
+Outcome of reviewing the Ideogram/Midjourney study (`RESEARCH-generators.md`) with ChatGPT as senior reviewer. **B / B / B.**
+
+- **Home = thin hybrid.** Above the fold: one brand/value line, the persistent field, then the catalogue grid immediately. Below the fold: a **thin** trust layer only — one "how it works", one quality proof, optionally rooms/sets. **Not** a rebuild of the multi-section Home.
+- **The top field is intelligent natural-language search of the catalogue, not a chat.** The advisor begins only via **handoff**: a product is selected, or an explicit "Help me choose". This reaffirms D-036.
+- **One persistent field-shell across screens, but its mode is explicit** via label/placeholder: *"Search the collection"* on Home/catalogue vs *"Ask about this wall"* on the product/advisor screen. Continuity is of **access and state, not identical coordinates**.
+- **Mobile:** Home/catalogue field at the **top**; on the product screen the conversation composer may sit at the **bottom, above the buybar, and only in the conversation state**. No single forced coordinate for two different modes.
+- **Borrow from the generators:** restraint, catalogue-immediately, progressive disclosure, one persistent component. **Do not borrow:** their visual identity (our warm cream #F6F3ED + lavender system stays), the community layer, the generation UI, and — explicitly — their one-field-does-everything model.
+### Reason
+The proposal to make the Home field a "search-as-advisor" (original Decision 2A) was **retracted**: it contradicted locked **D-036** (the top field stays a search field, not a chat) and created an **unclear field contract**. Latenca has three distinct field jobs — search the catalogue, assess-and-advise, react to the piece on the wall — and each expects a different output (a grid, a question/recommendation, a swap). One ambiguous field turns visual simplicity into behavioural unpredictability. Generators use one field because they do one class of operation; Latenca keeps one shell but an **explicit mode**.
+
+Mobile-bottom-everywhere (original Decision 3A) was also narrowed: bottom placement suits an active composer (Midjourney), but on a discovery-first Home it is less recognisable as search and would compete with the tabbar and, later, the D-034 buybar.
+### Implications
+- **Redesign scope is Home.** The product page (`04-advisor`) changes little — screenshots confirmed its shape (image + side rail + thumbnails; mobile = image + stack + bottom action bar = our buybar). Changes there are limited to: fold the top field into the shared shell, tidy the configurator to chip rows (**material stays first — it determines which sizes and prices exist**), keep the mobile buybar.
+- **"Thin" is a hard constraint.** One how-it-works + one quality proof (+ optional rooms/sets). Anything more re-creates the multi-section problem this replaces.
+- The persistent field-shell **must** carry an explicit mode label; a screen showing two things that look like search/chat is a defect (D-036).
+- Home field = natural-language-intent search remains the differentiator, but must not present as a conversation. Promoting it to a true advisor field would require an explicit supersede of D-036, not silent "growth".
+- Benchmark screenshots kept local in `reference/generators-screens/` (unpushed).
+- Refines D-034 and D-036 into a concrete Home layout + the field-mode rule; supersedes nothing. `REDESIGN-proposal.md` updated to match (earlier 2A/3A recommendation retracted).
