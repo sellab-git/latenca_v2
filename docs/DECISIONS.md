@@ -692,3 +692,22 @@ The chrome had drifted between screens — the product page still showed "Home" 
 - The mobile tab bar is **optional per page** (`#appTabbar`): the landing has it; the product uses its **buy bar** instead (buy is the product's primary mobile action, not navigation), so it omits the placeholder and the shell skips it.
 - **Next candidate for single-sourcing: the design-system CSS** (~540 lines currently duplicated in every file) → a shared stylesheet. Not done yet — flagged so it does not get forgotten.
 - Verified: zero console errors on both pages; shell renders on desktop + mobile; search / theme / sticky work; the advisor's own logic is intact.
+
+---
+
+# D-041
+## Title
+The shared design system + shell CSS is a single source: shared/app.css.
+### Status
+LOCKED
+### Decision
+The design tokens, base styles, shell component styles and the shared systems (icon / button / form / focus / badge / state) live **once** in `prototypes/mockups/shared/app.css`, linked at the end of every page's `<head>` (after the inline `<style>`) so it is authoritative for shared selectors. Pages keep only page-specific CSS inline. This completes D-040: shell **markup** is single-source (`shell.js`), and now the shell **CSS** is single-source too.
+### Reason
+`shell.js` unified the markup, but each file still carried its **own copy of the design-system CSS**, and those copies had drifted. Measured at an identical 1440 viewport: the advisor was an older copy (its header literally reads *"same tokens as Explore v29"*) **missing the `.navlabel` rule** — group labels rendered as plain 14px ink text instead of 11px uppercase muted — and a stray `.topbar>.right{margin-left:auto}` left over in home shifted its search field 38px (search-left 382 vs 420). After linking `app.css` and removing the stray rule, both pages measure **identical**: navlabel uppercase-11px-muted, search-left 420, sidebar 246, search-width 640.
+### Implications
+- `app.css` is authoritative (loaded last, wins). The inline `<style>` blocks still contain now-superseded copies of the shared rules — dead weight, overridden. **Stripping those inline duplicates so `app.css` is the ONLY copy is the explicit next step**; functionally the single source already governs.
+- Removed home's stray `.topbar>.right{margin-left:auto}` (a leftover from the fieldless-topbar era, D-037 v4).
+- `03-product` stays the frozen reference, not migrated.
+- Verified with `getBoundingClientRect` + computed styles on both pages, plus screenshots; the advisor PDP is intact.
+### Diagnosis method (for next time)
+The drift was invisible to eyeballing and to a naive markup diff (markup was identical via `shell.js`). It was caught by **measuring computed styles at an identical viewport** — that is the tool to reach for when two pages "look different" but the HTML matches.
