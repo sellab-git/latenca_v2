@@ -178,3 +178,10 @@ Proponowana kolejność budowy (ChatGPT, przyjęta): 1) kręgosłup sklepu + poj
 10. **„10 prac" = 10 różnych** (galeria) — czy dopuszczamy wielokrotności tej samej? *(edge, rek.: różne.)*
 
 *Ten reframe unieważnia „curated pair jako pierwszy krok" z §7.5. Nowa jednostka to zmienne N. Decyzje z §7.5 (materiał/rama, para) zastąpione powyższymi. Po rozstrzygnięciu 1–10 → projekt decyzji D-047 (jednostka = 1..N, dwie drogi) + przepisanie SCREEN_MAP.*
+
+### Pomysł Artura (2026-07-21, do zapamiętania) — STRONA PRODUKTU = ŚCIANA
+Kandydat na odpowiedź do otwartych #3 (gdzie N żyje) i #6 (osobny ekran vs koszyk):
+**Nie ma osobnego ekranu „ściana" — strona produktu NIĄ jest.** Wchodzisz na jedną pracę (model D: praca na środku + czat po prawej). Gdzieś prompt „dodaj kolejną pracę / zbuduj z tego ścianę". Scena **rośnie w bok w rząd prac** — jak Mixtiles: kafle obok siebie, przesuwają się lewo/prawo, skalują, zmieniają ramki per sztuka — a **czat doradcy zostaje po prawej** (to, czego Mixtiles nie ma). Czerwone pola po bokach centralnej pracy = miejsce na kolejne.
+- **Mocne:** unifikuje model D ze ścianą (zero nowego ekranu), N=1 płynnie rośnie do N>1, Mixtiles-prostota + nasz czat = przewaga.
+- **⚠️ Do rozstrzygnięcia (napięcie z D-033 „AI układa, Ty oglądasz, nigdy canvas"):** Mixtiles pozwala userowi skalować/przesuwać/reframe'ować per kafel = manipulacja. Nasza wersja ma być **ograniczonym RZĘDEM** (poziomy pasek prac), NIE dowolnym canvasem 2D — i doradca dalej PROPONUJE (co dodać, jaki układ). Ile per-praca manipulacji vs ile „AI proponuje" = do ustalenia, ale to ewolucja D-033, nie jego złamanie.
+- Status: **zaparkowane jako wiodący kierunek dla powierzchni ściany** — potwierdzić przy rozstrzyganiu #1–#3.
