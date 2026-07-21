@@ -151,3 +151,30 @@ Moje rekomendowane odpowiedzi na 5 pytań ChatGPT (do potwierdzenia/korekty prze
 5. **Tak, rozszerzyć MVP do „single + curated pair"** — jawnie doprecyzować D-023/D-030/D-033. *(rekomendacja — czeka na decyzję Artura)*
 
 Proponowana kolejność budowy (ChatGPT, przyjęta): 1) kręgosłup sklepu + pojedynczy produkt → 2) warstwa skala/feasibility → 3) doradca jednej pracy → 4) **kuratorowana para jako SET/WALL** → 5) baseline zaufania + po-zakupie → 6) tryptyki/galeria → 7) dobierz-do-posiadanej (po teście vision) → 8) reorder/save/prezent → 9) B2B jako osobna decyzja.
+
+---
+
+## 8. Runda 3 — reframe Artura (2026-07-21): ZMIENNA liczba prac, dwie drogi do ściany
+
+⚠️ Artur odrzucił framing „zamknięta para + jeden materiał" (§7.3/7.5). Poprawiony model:
+
+- **Prymityw = pojedyncza praca** (artwork × rozmiar × materiał × rama). Kup 1 = single.
+- **„Ściana" = ZMIENNA liczba prac (1, 2, 3, 10…)** kupowanych razem. Nie ma sztywnej „pary". Trzeba umieć sprzedać dowolne N w spójnej kompozycji/zestawie.
+- **Materiały = wszystkie od Gelato** (papier, płótno, akryl, drewno, metal, pianka) — **per praca**, nie zablokowane do jednego na zestaw.
+- **Wzorzec prostoty = Mixtiles.** Ich analiza (`Analizy/Mixtiles/docs/UX-FLOW.md`) pokazuje **dwie drogi do ściany**, obie proste:
+  - **(A) Gotowe układy „Gallery Walls"** — pre-zaprojektowane kompozycje N prac (nazwa, wymiary, liczba, cena „From", BEST SELLER); wybierasz → wypełniasz → koszyk. Szablon rozwiązuje „nie wiem jak ułożyć", **bez przeciągania** (zgodne z D-033). Nasza VISION już to zakłada: „Kolekcje = gotowe ściany (gallery walls jak Desenio)".
+  - **(B) Wolne składanie** — dodajesz dowolną liczbę prac, każda personalizowana osobno, koszyk sumuje na żywo + próg wysyłki/rabatu.
+
+### Co zostało do WYJAŚNIENIA (otwarte, do rozstrzygnięcia z Arturem)
+1. **Dwie drogi — obie na MVP czy jedna?** Gotowe układy (A) i/lub wolne składanie (B). *(rek.: obie — A daje pewność i AOV bez wysiłku usera, B daje elastyczność; A prostsza do udania w makiecie.)*
+2. **Kto układa kompozycję (przy N>1)?** Szablon (wybierasz+wypełniasz) / AI proponuje układ / brak układu (lista, sam wieszasz). *(rek.: szablon + AI-proponuje, NIGDY drag — D-033.)*
+3. **Podgląd ściany:** pokazujemy N prac razem na płaskiej ścianie w konkretnym układzie (dla pewności), czy tylko siatkę? Czy układ w podglądzie jest tylko wizualny (i tak sam wieszasz, nie wpływa na to, co wysyłamy)? *(rek.: podgląd na ścianie, układ = wizualna pewność.)*
+4. **Spójność vs dowolność per praca:** wszystkie materiały dostępne per sztuka (potwierdzone). Czy doradca NUDGE-uje spójność (np. „ta sama rama dla ściany"), czy pełna dowolność jak Mixtiles? *(rek.: dowolność + delikatny nudge spójności.)*
+5. **Cennik przy N:** per-praca sumowane na żywo (Mixtiles). Dokładamy rabat/próg za większą ścianę (ekonomia €0,29/kolejna sztuka), żeby zachęcić do N>1? *(rek.: tak, próg free-shipping / rabat od 2–3 szt.)*
+6. **Gdzie N prac „żyje" w UI:** model D = jedna praca + doradca. Przy N potrzeba powierzchni „ściana/projekt". Czy „ściana" to osobny ekran/projekt, czy rozszerzony koszyk-jako-ściana (Mixtiles)? *(rek.: „ściana" jako lekki projekt/koszyk, nie ciężki edytor.)*
+7. **Rola doradcy przy N:** proponuje CAŁĄ ścianę N naraz (feasibility per praca + logika kompozycji), czy zawsze jedną, a Ty dokładasz? *(otwarte — wpływa na złożoność.)*
+8. **Feasibility przy N:** „czy się zmieści" liczy całkowitą szerokość N + odstępy, nie jedną. *(potwierdzić że silnik z §7.1 to obejmuje.)*
+9. **Kuracja gotowych ścian:** układy (A) ktoś (operator/AI) musi skomponować z katalogu z góry — praca kuratorska. Ile na start? *(otwarte.)*
+10. **„10 prac" = 10 różnych** (galeria) — czy dopuszczamy wielokrotności tej samej? *(edge, rek.: różne.)*
+
+*Ten reframe unieważnia „curated pair jako pierwszy krok" z §7.5. Nowa jednostka to zmienne N. Decyzje z §7.5 (materiał/rama, para) zastąpione powyższymi. Po rozstrzygnięciu 1–10 → projekt decyzji D-047 (jednostka = 1..N, dwie drogi) + przepisanie SCREEN_MAP.*
