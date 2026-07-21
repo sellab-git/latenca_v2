@@ -209,6 +209,8 @@ Zasada: max 4–5 kafli, opisane konkretnie (NN/g G3/G4). Wejście z katalogu na
 
 **Małe do dogrania (później):** kiedy pali się upsell „dodaj 2gą" (po akceptacji pracy? po rozmiarze?); jak dokładnie działa klik w pusty slot; jak rząd się „sam przesuwa" na fokus (Mixtiles).
 
+**✅ PIERWSZY PROTOTYP zbudowany (2026-07-21): `prototypes/mockups/05-wall.html` (v1).** Stan chooser (4 kafelki) → stan ściany; strona produktu JEST ścianą; N prac (1..5) w układach z biblioteki presetów per liczba; fokus na pracy; panel dwupoziomowy (praca + ściana); zejście N→N‑1 → zapas; zero przeciągania. Na shell.js + app.css. `04-advisor` v16 i `01-home` v13 zamrożone, nietknięte.
+
 ### Mechanika ściany + prawy panel (Artur, 2026-07-21)
 - **Katalog i designer = ta sama powierzchnia i ten sam PROJEKT.** Wejście z katalogu ląduje na 1 pracy, ale ma identyczne możliwości (pomija tylko chooser). Jedna praca → dodawanie → układy = **kolejne fazy jednego projektu ściany**.
 - **Układy = biblioteka presetów per liczba prac** (np. 10 układów dla 4 prac, 10 dla 5…). Zmiana układu dynamiczna. Zejście z N na N‑1 → nadmiarowa praca ląduje **w zapasie** (nie znika). **Zero przeciągania prac po ścianie** — układ trzyma system (D‑033‑safe, tanie: układ = dane).

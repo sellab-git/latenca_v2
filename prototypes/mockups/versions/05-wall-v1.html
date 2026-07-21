@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latenca — Design my wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400..600&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  /* ── wall surface: product page IS the wall (D-046 + intent chooser + layout presets) ── */
+  .crumb{display:flex;align-items:center;gap:var(--sp-2);color:var(--muted);font-size:var(--fs-xs);margin:0 0 0}
+  .crumb b{color:var(--ink);font-weight:var(--w-semibold)}
+  .crumb .sep{color:var(--faint)}
+  .backint{margin-left:auto;display:inline-flex;align-items:center;gap:var(--sp-1);color:var(--accent-ink);font-weight:var(--w-semibold);cursor:pointer}
+  .backint svg{width:14px;height:14px}
+  .backint.hidden{display:none}
+
+  .pdp{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:clamp(16px,2.4vw,34px);align-items:stretch}
+
+  /* the wall stage — the whole area reads as a wall (ground gradient lives in app.css .main) */
+  .stagewrap{min-width:0;display:flex;align-items:center;justify-content:center}
+  .wall{position:relative;width:100%;max-width:840px;aspect-ratio:4/3;max-height:100%}
+
+  /* intent chooser (initial state) */
+  .chooser{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-5);padding:var(--sp-4)}
+  .chooser .lead{text-align:center;max-width:34ch}
+  .chooser .lead h1{font-family:var(--serif);font-weight:var(--w-medium);font-size:clamp(24px,3vw,32px);line-height:var(--lh-tight);margin:0}
+  .chooser .lead p{color:var(--muted);font-size:var(--fs-base);margin:8px 0 0}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);width:100%;max-width:520px}
+  .tile{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);padding:16px 16px;box-shadow:var(--shadow-pop);transition:border-color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease)}
+  .tile:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .tile svg{width:22px;height:22px;stroke:var(--accent)}
+  .tile .tt{font-weight:var(--w-semibold);font-size:var(--fs-sm)}
+  .tile .ts{font-size:var(--fs-xs);color:var(--muted);line-height:var(--lh-base)}
+
+  /* hung pieces */
+  .slot{position:absolute;background:#fff;padding:4px;box-shadow:var(--art-shadow-lg);cursor:pointer;transition:box-shadow var(--dur-base) var(--ease),outline-color var(--dur-fast) var(--ease);outline:2px solid transparent;outline-offset:3px}
+  .slot img{width:100%;height:100%;object-fit:cover;display:block}
+  .slot.focus{outline-color:var(--accent)}
+  .slot .sz{position:absolute;left:6px;bottom:6px;background:var(--glass);color:var(--on-dark);font-size:10px;font-weight:var(--w-semibold);padding:2px 6px;border-radius:var(--r-sm);opacity:0;transition:opacity var(--dur-fast)}
+  .slot:hover .sz,.slot.focus .sz{opacity:1}
+  .slot.empty{background:transparent;border:1.5px dashed var(--faint);box-shadow:none;display:flex;align-items:center;justify-content:center}
+  .slot.empty svg{width:22px;height:22px;stroke:var(--faint)}
+
+  /* right column — two levels: focused PIECE (top) + WALL (chat + dock) */
+  .col{min-width:0;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-ui);box-shadow:var(--shadow-pop);overflow:hidden}
+  /* before an intent is chosen, the panel is just the advisor — no piece level, no wall dock */
+  .col:not([data-started]) .phead,.col:not([data-started]) .walldock{display:none}
+
+  .phead{flex:none;padding:var(--card-pad-lg) var(--card-pad-lg) var(--sp-3);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:var(--sp-3)}
+  .plevel{font-size:var(--fs-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:var(--w-semibold)}
+  .creatorline{display:flex;align-items:center;gap:var(--sp-3)}
+  .creatorline .av{width:30px;height:30px;border-radius:var(--r-ui);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
+  .creatorline .nm{font-size:var(--fs-xs);font-weight:var(--w-semibold);min-width:0}
+  .creatorline .nm small{color:var(--muted);font-weight:var(--w-normal)}
+  .pacts{display:flex;gap:var(--sp-2);margin-left:auto}
+  .pact{width:34px;height:34px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);color:var(--muted);display:flex;align-items:center;justify-content:center;transition:border-color var(--dur-fast),color var(--dur-fast)}
+  .pact:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .pact svg{width:17px;height:17px}
+  .ptitle{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-xl);line-height:var(--lh-tight);margin:0}
+  .prow{display:flex;gap:var(--sp-2);flex-wrap:wrap}
+  .pchip{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);padding:7px 12px;font-size:var(--fs-xs);font-weight:var(--w-semibold);color:var(--muted);transition:var(--dur-fast)}
+  .pchip:hover{border-color:var(--faint);color:var(--ink)}
+  .pchip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .pchip.sizehint{margin-left:auto;border:0;color:var(--faint);font-weight:var(--w-normal);pointer-events:none}
+
+  /* conversation — wall level */
+  .chat{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;overflow:hidden}
+  .chathead{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--card-pad-lg) 0}
+  .chathead .dot{width:8px;height:8px;border-radius:var(--r-full);background:var(--accent)}
+  .chathead .t{font-weight:var(--w-semibold);font-size:var(--fs-xs)}
+  .chathead .sub{margin-left:auto;color:var(--faint);font-size:var(--fs-2xs)}
+  .msgs{flex:1;min-height:0;overflow-y:auto;padding:var(--card-pad-lg);display:flex;flex-direction:column;gap:var(--sp-3)}
+  .msg{max-width:90%;font-size:var(--fs-sm);line-height:var(--lh-base);border-radius:var(--r-ui);padding:10px 13px}
+  .msg.ai{align-self:flex-start;background:var(--panel2);color:var(--ink);border-bottom-left-radius:var(--r-sm)}
+  .msg.me{align-self:flex-end;background:var(--accent);color:var(--on-dark);border-bottom-right-radius:var(--r-sm)}
+  .quick{flex:none;display:flex;gap:var(--sp-2);flex-wrap:wrap;padding:0 var(--card-pad-lg) var(--sp-3)}
+  .quick button{border:1px solid var(--line);background:var(--bg);border-radius:var(--r-ui);padding:7px 12px;font-size:var(--fs-xs);color:var(--muted);transition:var(--dur-fast)}
+  .quick button:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .composer{flex:none;display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--card-pad-lg);border-top:1px solid var(--line)}
+  .composer input{flex:1;min-width:0;height:var(--btn-md);background:var(--bg);border:1px solid var(--line);border-radius:var(--r-ui);padding:0 12px;font:inherit;font-size:var(--fs-sm);color:var(--ink)}
+  .composer input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .composer .send{width:var(--btn-md);height:var(--btn-md);flex:none;border-radius:var(--r-ui);background:var(--accent);color:var(--on-dark);display:flex;align-items:center;justify-content:center}
+  .composer .send svg{width:18px;height:18px}
+
+  /* dock — WALL level: layout switch + reserve + total + add wall */
+  .walldock{flex:none;border-top:1px solid var(--line);padding:var(--sp-3) var(--card-pad-lg);display:flex;flex-direction:column;gap:var(--sp-3);background:var(--panel)}
+  .layoutrow{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-sm)}
+  .layoutrow .lbl{font-weight:var(--w-semibold);display:flex;align-items:center;gap:var(--sp-2)}
+  .layoutrow .lbl svg{width:16px;height:16px;stroke:var(--muted)}
+  .stepper{margin-left:auto;display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:var(--r-ui);overflow:hidden}
+  .stepper button{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .stepper button:hover{background:var(--panel2);color:var(--ink)}
+  .stepper button svg{width:15px;height:15px}
+  .stepper .val{min-width:56px;text-align:center;font-size:var(--fs-xs);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums;border-inline:1px solid var(--line)}
+  .countrow{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-xs);color:var(--muted)}
+  .reserve{display:flex;align-items:center;gap:var(--sp-2);margin-left:auto}
+  .reserve .rz{width:22px;height:28px;border-radius:var(--r-sm);object-fit:cover;border:1px solid var(--line);opacity:.75}
+  .totalrow{display:flex;align-items:baseline;justify-content:space-between}
+  .totalrow .lab{font-size:var(--fs-xs);color:var(--muted)}
+  .totalrow .amt{font-size:var(--fs-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums}
+  .addwall{background:var(--ink);color:var(--bg);border-radius:var(--r-ui);height:var(--btn-lg);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);font-weight:var(--w-semibold);font-size:var(--fs-base);transition:filter var(--dur-fast)}
+  .addwall:hover{filter:brightness(1.14)}
+  .addwall svg{width:17px;height:17px}
+  .addwall .cp{opacity:.72;font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
+
+  /* full viewport — the page never scrolls; only panel regions scroll (desktop) */
+  @media(min-width:821px){
+    html,body{height:100%;overflow:hidden}
+    .app{height:100vh;min-height:0}
+    .app .main{height:100vh;overflow:hidden;display:flex;flex-direction:column;padding-bottom:16px}
+    .topbar{position:static}
+    .crumb{margin-top:2px}
+    .pdp{flex:1;min-height:0;margin-top:12px}
+    .stagewrap{height:100%}
+    .col{height:100%;min-height:0}
+  }
+  @media(max-width:820px){
+    .pdp{grid-template-columns:1fr;gap:16px}
+    .wall{max-width:none;aspect-ratio:1/1}
+    .col{height:auto}
+    .chat{height:clamp(320px,52vh,460px)}
+    .tiles{max-width:none}
+  }
+</style>
+<link rel="stylesheet" href="shared/app.css">
+</head>
+<body data-active="design">
+<div class="app">
+  <aside class="side" id="appSide"></aside>
+
+  <main class="main">
+    <div class="topbar" id="topbar"></div>
+
+    <nav class="crumb"><a>Design my wall</a><span class="sep">&middot;</span><b id="crumbState">Start</b>
+      <span class="backint hidden" id="backInt"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Zmień intencję</span>
+    </nav>
+
+    <section class="pdp">
+      <!-- LEFT: the wall -->
+      <div class="stagewrap">
+        <div class="wall" id="wall">
+
+          <!-- initial state: intent chooser -->
+          <div class="chooser" id="chooser">
+            <div class="lead">
+              <h1>Tell Latenca about your wall.</h1>
+              <p>Zacznij od tego, po co tu jesteś — resztę ułożymy razem.</p>
+            </div>
+            <div class="tiles">
+              <button class="tile" data-intent="single">
+                <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/></svg>
+                <span class="tt">Jedna praca</span><span class="ts">Znajdź jedną grafikę na ścianę.</span>
+              </button>
+              <button class="tile" data-intent="wall">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7"/><rect x="13" y="4" width="8" height="7"/><rect x="3" y="14" width="8" height="6"/><rect x="13" y="14" width="8" height="6"/></svg>
+                <span class="tt">Zaprojektuj ścianę</span><span class="ts">Ułożymy kilka prac w gotowy układ.</span>
+              </button>
+              <button class="tile" data-intent="photo">
+                <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 15l5-5 4 4 3-3 4 4"/><circle cx="9" cy="9" r="1.5"/></svg>
+                <span class="tt">Wgraj zdjęcie</span><span class="ts">Od Twojej ściany albo pracy, którą masz.</span>
+              </button>
+              <button class="tile" data-intent="surprise">
+                <svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.4L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.6z"/></svg>
+                <span class="tt">Zaskocz mnie</span><span class="ts">Zdecyduję za Ciebie i zacznę.</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- wall state: pieces render here -->
+        </div>
+      </div>
+
+      <!-- RIGHT: two-level panel -->
+      <aside class="col" id="col">
+        <div class="phead">
+          <div class="plevel" id="pieceLevel">Praca</div>
+          <div class="creatorline">
+            <span class="av"></span>
+            <span class="nm" id="pieceBy">—</span>
+            <div class="pacts">
+              <button class="pact" id="saveBtn" title="Save"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg></button>
+              <button class="pact" id="shareBtn" title="Share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+            </div>
+          </div>
+          <h1 class="ptitle" id="pieceTitle">—</h1>
+          <div class="prow" id="matRow"></div>
+          <div class="prow">
+            <button class="pchip" id="frameBtn">Rama: brak</button>
+            <button class="pchip" id="swapBtn">Podmień grafikę</button>
+            <span class="pchip sizehint" id="sizeHint">—</span>
+          </div>
+        </div>
+
+        <section class="chat" id="chat">
+          <div class="chathead"><span class="dot"></span><span class="t">Latenca</span><span class="sub" id="chatSub">picking with you</span></div>
+          <div class="msgs" id="msgs"></div>
+          <div class="quick" id="quick"></div>
+          <div class="composer">
+            <input id="chatInput" placeholder="Ask Latenca — dodaj pracę, cieplej, inny układ&hellip;" autocomplete="off">
+            <button class="send" id="chatSend" title="Send"><svg viewBox="0 0 24 24"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></button>
+          </div>
+        </section>
+
+        <div class="walldock">
+          <div class="layoutrow">
+            <span class="lbl"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7"/><rect x="14" y="4" width="7" height="7"/><rect x="3" y="14" width="7" height="6"/><rect x="14" y="14" width="7" height="6"/></svg>Układ</span>
+            <span class="stepper">
+              <button id="layPrev" title="Poprzedni układ"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+              <span class="val" id="layVal">1 / 1</span>
+              <button id="layNext" title="Następny układ"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+            </span>
+          </div>
+          <div class="countrow">
+            <span id="countLbl">1 praca</span>
+            <span class="reserve" id="reserve"></span>
+            <span class="stepper">
+              <button id="cntDown" title="Usuń pracę"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+              <span class="val" id="cntVal">1</span>
+              <button id="cntUp" title="Dodaj pracę"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+            </span>
+          </div>
+          <div class="totalrow"><span class="lab" id="totalLab">Razem · 1 praca</span><span class="amt" id="totalAmt">$59</span></div>
+          <button class="addwall"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg><span id="addLbl">Dodaj do koszyka</span><span class="cp" id="addPrice">&middot; $59</span></button>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<script src="shared/shell.js"></script>
+<script>
+  // ── artwork pool (reuses the same Unsplash source as the other screens) ──
+  const ART=["photo-1605721911519-3dfeb3be25e7","photo-1602464729960-f95937746b68","photo-1541512416146-3cf58d6b27cc","photo-1541961017774-22349e4a1262","photo-1533158388470-9a56699990c6","photo-1552250575-e508473b090f","photo-1622542796254-5b9c46ab0d2f","photo-1548362851-ea052637ad64"];
+  const WORKS=[
+    {t:'Tidal Field',a:'Aria Vela'},{t:'Terracotta Rise',a:'Sora Lindqvist'},
+    {t:'Ember Hollow',a:'L. Poire'},{t:'Pale Fire',a:'N. Dubois'},
+    {t:'Still Water',a:'Tomas Ek'},{t:'Cobalt Flow',a:'Elena Kova'},
+    {t:'Nocturne',a:'Mira Solheim'},{t:'Dust & Gold',a:'Jonas Rye'}
+  ];
+  const url=(i,w,h)=>`https://images.unsplash.com/${ART[i%ART.length]}?auto=format&fit=crop&w=${w}&h=${h}&q=74`;
+
+  // ── size tiers (from slot height) → price + cm ──
+  const TIER={L:{cm:'70×100',usd:89},M:{cm:'50×70',usd:59},S:{cm:'30×40',usd:39}};
+  const tierOf=h=> h>=58?'L': h>=42?'M':'S';
+
+  // ── layout preset library, keyed by piece-count. slot = {l,t,w,h} in % of the wall ──
+  const LAYOUTS={
+    1:[[{l:33,t:12,w:34,h:76}]],
+    2:[
+      [{l:19,t:20,w:27,h:60},{l:54,t:20,w:27,h:60}],
+      [{l:19,t:14,w:27,h:56},{l:54,t:28,w:27,h:56}]
+    ],
+    3:[
+      [{l:13,t:15,w:33,h:70},{l:53,t:15,w:31,h:33},{l:53,t:53,w:31,h:33}],
+      [{l:9,t:22,w:25,h:56},{l:37.5,t:22,w:25,h:56},{l:66,t:22,w:25,h:56}]
+    ],
+    4:[
+      [{l:19,t:11,w:27,h:37},{l:54,t:11,w:27,h:37},{l:19,t:53,w:27,h:37},{l:54,t:53,w:27,h:37}],
+      [{l:7,t:26,w:19,h:48},{l:29.5,t:26,w:19,h:48},{l:52,t:26,w:19,h:48},{l:74.5,t:26,w:19,h:48}]
+    ],
+    5:[
+      [{l:9,t:15,w:35,h:70},{l:50,t:13,w:19,h:34},{l:72,t:13,w:19,h:34},{l:50,t:53,w:19,h:34},{l:72,t:53,w:19,h:34}],
+      [{l:6,t:24,w:17,h:52},{l:26,t:16,w:17,h:36},{l:26,t:56,w:17,h:36},{l:46,t:24,w:17,h:52},{l:66,t:24,w:26,h:52}]
+    ]
+  };
+  const MAX=5;
+
+  // ── state ──
+  const st={count:1, lay:0, pieces:[6], focus:0, reserve:[], frame:false, started:false, seed:6};
+  const wallEl=document.getElementById('wall');
+  const msgs=document.getElementById('msgs'), quickEl=document.getElementById('quick');
+
+  function preset(){const set=LAYOUTS[st.count]; return set[st.lay%set.length];}
+  function priceOf(i){const p=preset()[i]; return TIER[tierOf(p.h)].usd;}
+  function total(){return preset().reduce((s,_,i)=>s+priceOf(i),0);}
+
+  // ── render the wall ──
+  function renderWall(){
+    const P=preset();
+    // keep pieces array in sync with count
+    while(st.pieces.length<st.count){ st.pieces.push(st.reserve.length?st.reserve.pop():nextArt()); }
+    if(st.focus>=st.count)st.focus=st.count-1;
+    wallEl.querySelectorAll('.slot').forEach(n=>n.remove());
+    P.forEach((s,i)=>{
+      const el=document.createElement('button');
+      el.className='slot'+(i===st.focus?' focus':'');
+      el.style.cssText=`left:${s.l}%;top:${s.t}%;width:${s.w}%;height:${s.h}%`;
+      const t=tierOf(s.h);
+      el.innerHTML=`<img src="${url(st.pieces[i],520,700)}" alt="${WORKS[st.pieces[i]%WORKS.length].t}"><span class="sz">${TIER[t].cm} · $${TIER[t].usd}</span>`;
+      el.onclick=()=>{st.focus=i;renderWall();renderPanel();};
+      wallEl.appendChild(el);
+    });
+    document.querySelector('.wall .empty')?.remove();
+  }
+  function nextArt(){ st.seed=(st.seed+3)%WORKS.length; return st.seed; }
+
+  // ── render the right panel (focused piece + wall level) ──
+  const MATS=['Poster','Canvas','Metal','Acrylic','Wood','Foam'];
+  const st2={material:'Poster'};
+  function renderPanel(){
+    const w=WORKS[st.pieces[st.focus]%WORKS.length];
+    const p=preset()[st.focus], t=tierOf(p.h);
+    document.getElementById('pieceLevel').textContent = st.count>1?`Praca ${st.focus+1} z ${st.count}`:'Praca';
+    document.getElementById('pieceBy').innerHTML=`${w.a} <small>&middot; ${20+((st.pieces[st.focus]*7)%70)} works</small>`;
+    document.getElementById('pieceTitle').textContent=w.t;
+    document.getElementById('sizeHint').textContent=`${TIER[t].cm} · z układu`;
+    document.getElementById('matRow').innerHTML=MATS.map(m=>`<button class="pchip${m===st2.material?' on':''}" data-m="${m}">${m}</button>`).join('');
+    document.querySelectorAll('#matRow .pchip').forEach(b=>b.onclick=()=>{st2.material=b.dataset.m;renderPanel();});
+    document.getElementById('frameBtn').textContent='Rama: '+(st.frame?'Oak':'brak');
+    // wall level
+    const n=st.count, t2=total();
+    document.getElementById('layVal').textContent=`${(st.lay%LAYOUTS[n].length)+1} / ${LAYOUTS[n].length}`;
+    document.getElementById('cntVal').textContent=n;
+    document.getElementById('countLbl').textContent=n===1?'1 praca':`${n} prace${n>=5?'':''}`;
+    document.getElementById('totalLab').textContent=`Razem · ${n===1?'1 praca':n+' prace'}`;
+    document.getElementById('totalAmt').textContent='$'+t2;
+    document.getElementById('addLbl').textContent = n===1?'Dodaj do koszyka':'Dodaj ścianę do koszyka';
+    document.getElementById('addPrice').innerHTML='&middot; $'+t2;
+    // reserve thumbs
+    document.getElementById('reserve').innerHTML = st.reserve.map(i=>`<img class="rz" src="${url(i,60,80)}" alt="">`).join('') + (st.reserve.length?`<span style="font-size:var(--fs-2xs)">zapas</span>`:'');
+    document.getElementById('cntDown').disabled=n<=1;
+    document.getElementById('cntUp').disabled=n>=MAX;
+  }
+
+  // ── chat ──
+  function say(role,text){const d=document.createElement('div');d.className='msg '+role;d.innerHTML=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+  function setQuick(list){quickEl.innerHTML=list.map(q=>`<button>${q}</button>`).join('');quickEl.querySelectorAll('button').forEach(b=>b.onclick=()=>handle(b.textContent));}
+  function wallQuick(){return st.count<MAX?['Dodaj pracę','Inny układ','Cieplej','Ciemniej']:['Inny układ','Cieplej','Ciemniej','Spokojniej'];}
+
+  function addPiece(){ if(st.count>=MAX)return; st.count++; st.lay=0; renderWall(); st.focus=st.count-1; renderWall(); renderPanel(); }
+  function removePiece(){ if(st.count<=1)return; st.reserve.push(st.pieces.splice(st.focus,1)[0]); st.count--; st.lay=0; renderWall(); renderPanel(); }
+  function cycleLayout(d){ const n=LAYOUTS[st.count].length; st.lay=(st.lay+d+n)%n; renderWall(); renderPanel(); }
+  function swapFocus(){ st.pieces[st.focus]=nextArt(); renderWall(); renderPanel(); }
+
+  function handle(text){
+    say('me',text);
+    const q=text.toLowerCase();
+    setTimeout(()=>{
+      if(/dodaj|another|drug|kolejn/.test(q)){ if(st.count>=MAX){say('ai','Pięć prac to maksimum, jaki uczciwie ułożę na jednej ścianie.');} else {addPiece();say('ai',`Dodane. Teraz <em>${st.count}</em> prace — dobrałem układ, który je utrzyma.`);} }
+      else if(/układ|uklad|inn|layout/.test(q)){ cycleLayout(1); say('ai','Inny układ dla tej samej liczby prac. Pozycje trzyma system — nic nie przesuwasz.'); }
+      else if(/podmie|swap|zmień graf|inna graf/.test(q)){ swapFocus(); say('ai',`Podmieniłem zaznaczoną pracę na <em>${WORKS[st.pieces[st.focus]%WORKS.length].t}</em>.`); }
+      else if(/ciepl|warm/.test(q)){ swapFocus(); say('ai','Cieplej, then.'); }
+      else if(/ciemn|dark/.test(q)){ swapFocus(); say('ai','Ciemniej — zamieniłem na mocniejszą w tonie.'); }
+      else if(/spok|calm|jaśn|jasn|light/.test(q)){ swapFocus(); say('ai','Spokojniej, then.'); }
+      else { say('ai','Powiedz „dodaj pracę", „inny układ", albo klik pracę i „cieplej / ciemniej".'); }
+      setQuick(wallQuick());
+    },420);
+  }
+  document.getElementById('chatSend').onclick=()=>{const v=document.getElementById('chatInput').value.trim();if(v){document.getElementById('chatInput').value='';handle(v);}};
+  document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('chatSend').click();});
+
+  // ── dock controls ──
+  document.getElementById('layPrev').onclick=()=>cycleLayout(-1);
+  document.getElementById('layNext').onclick=()=>cycleLayout(1);
+  document.getElementById('cntUp').onclick=()=>addPiece();
+  document.getElementById('cntDown').onclick=()=>removePiece();
+  document.getElementById('frameBtn').onclick=()=>{st.frame=!st.frame;renderPanel();};
+  document.getElementById('swapBtn').onclick=()=>swapFocus();
+  document.getElementById('saveBtn').onclick=e=>e.currentTarget.classList.toggle('on');
+
+  // ── intent chooser → start a path ──
+  function start(intent){
+    st.started=true;
+    document.getElementById('chooser').style.display='none';
+    document.getElementById('col').setAttribute('data-started','1');
+    document.getElementById('backInt').classList.remove('hidden');
+    msgs.innerHTML='';
+    if(intent==='single'){ st.count=1; st.pieces=[6]; st.focus=0; document.getElementById('crumbState').textContent='Jedna praca';
+      say('ai',`Zacznijmy tu — <em>${WORKS[6].t}</em> by ${WORKS[6].a}. Powiedz, co zmienić, albo „dodaj pracę", żeby zrobić z tego ścianę.`); }
+    else if(intent==='wall'){ st.count=3; st.lay=0; st.pieces=[6,1,4]; st.focus=0; document.getElementById('crumbState').textContent='Ściana';
+      say('ai','Zaprojektowałem ścianę z 3 prac w gotowym układzie. Przełącz układ, dodaj lub usuń pracę — pozycje trzyma system.'); }
+    else if(intent==='photo'){ st.count=1; st.pieces=[3]; st.focus=0; document.getElementById('crumbState').textContent='Od Twojego zdjęcia';
+      say('ai','Z Twojego zdjęcia dobrałem punkt startowy — <em>Pale Fire</em>, jasna i spokojna. Chcesz z tego jedną pracę, czy całą ścianę?'); }
+    else { st.count=3; st.lay=1; st.pieces=[2,6,4]; st.focus=0; document.getElementById('crumbState').textContent='Zaskocz mnie';
+      say('ai','Zdecydowałem za Ciebie: trzy prace, które trzymają się razem. Zmieniaj do woli — albo zostaw.'); }
+    renderWall(); renderPanel(); setQuick(wallQuick());
+  }
+  document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>start(t.dataset.intent));
+  document.getElementById('backInt').onclick=()=>{
+    st.started=false; document.getElementById('chooser').style.display='';
+    document.getElementById('col').removeAttribute('data-started');
+    document.getElementById('backInt').classList.add('hidden');
+    document.getElementById('crumbState').textContent='Start';
+    wallEl.querySelectorAll('.slot').forEach(n=>n.remove()); msgs.innerHTML=''; quickEl.innerHTML='';
+  };
+
+  // chooser welcome
+  say('ai','Cześć — powiedz, po co tu jesteś, albo kliknij kafelek obok.');
+
+  // theme / rail / search owned by shared/shell.js
+</script>
+</body>
+</html>
