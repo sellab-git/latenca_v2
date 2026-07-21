@@ -185,3 +185,26 @@ Kandydat na odpowiedź do otwartych #3 (gdzie N żyje) i #6 (osobny ekran vs kos
 - **Mocne:** unifikuje model D ze ścianą (zero nowego ekranu), N=1 płynnie rośnie do N>1, Mixtiles-prostota + nasz czat = przewaga.
 - **Zgodność z D-033 (skorygowane przez Artura 2026-07-21):** Mixtiles **NIE** pozwala dowolnie przeciągać kafli — one same przesuwają się w rzędzie zależnie od kliknięcia (fokus). Czyli **układ trzyma system (rząd), nie user** — to nie canvas. User zmienia tylko rzeczy per-praca, które MY już mamy w model D (rozmiar/rama). Więc napięcie z D-033 jest **małe**: pozycji się nie przeciąga, system/AI trzyma układ, Ty oglądasz i podmieniasz prace. To ewolucja D-033 w duchu zasady, nie złamanie.
 - Status: **zaparkowane jako wiodący kierunek dla powierzchni ściany** — potwierdzić przy rozstrzyganiu #1–#3.
+
+### Model przepływu (Artur, 2026-07-21) — JEDNA powierzchnia = ściana, chooser intencji, wiele ścieżek
+To rozwija pomysł „strona produktu = ściana" w pełny przepływ. **Rozstrzyga otwarte #1 (obie drogi), #2 (system/AI układa), #3/#6 (produkt = ściana).**
+
+**Wejście:** Home → „Start design" → powierzchnia‑ściana. Prawa = czat (jak model D). Środek, przed wyborem = **kafelki‑chooser intencji**. Po wyborze środek ładuje jedną ze ścieżek; wszystko dzieje się dalej na tej samej ścianie z czatem po prawej. Całość ma być **mega prosta i interaktywna** (Mixtiles‑prostota + nasz czat).
+
+**Ścieżki po wyborze intencji (Artur):**
+1. Jedna praca na środku (← mamy, model D).
+2. Wybrana ściana z pustymi slotami → dobiera prace rozmawiając w czacie.
+3. Wgrał zdjęcie → pojawia się wybrana przez AI praca startowa.
+4. Wybrał konkretny układ + wgrał zdjęcie → ściana od razu z wypełnionymi pracami.
+5. Pojedyncza praca → AI „może warto dodać 2gą" → klik OK → druga praca obok (każda kolejna obok, rząd rośnie).
+6. Wcześniej wybrał układ → sloty się pokazują; np. 2 wypełnione, 3ci ze schematu pusty → klikasz pusty i dobierasz dalej.
+
+**Kafelki‑chooser — PROPOZYCJA (Artur: „nie wiem"; propozycja grounded w mapie intencji, do korekty):**
+- **„Jedna praca"** → ścieżka 1 (single).
+- **„Zaprojektuj ścianę"** → gotowe układy + AI składa; ścieżki 2/6.
+- **„Wgraj zdjęcie"** → od Twojej przestrzeni albo pracy, którą masz; ścieżki 3/4 (+ „dobierz do posiadanej").
+- **„Nie wiem — zaskocz mnie"** → AI decyduje i startuje (delegacja).
+- *(opcjonalnie 5ty: „Przeglądaj gotowe ściany" — albo to = Kolekcje w nawigacji.)*
+Zasada: max 4–5 kafli, opisane konkretnie (NN/g G3/G4). Wejście z katalogu na konkretną pracę **pomija chooser** → od razu ścieżka 1.
+
+**Małe do dogrania (później):** kiedy pali się upsell „dodaj 2gą" (po akceptacji pracy? po rozmiarze?); jak dokładnie działa klik w pusty slot; jak rząd się „sam przesuwa" na fokus (Mixtiles).
