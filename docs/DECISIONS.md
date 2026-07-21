@@ -780,3 +780,6 @@ Reinforces the **wall** feeling (D-042/CONCEPT-the-wall): the artwork stays put 
 ### Implications
 - `.app` height:100vh; `.main` is a flex column (topbar / crumb / pdp); `.pdp` fills; `.col` bounded with `.buy` scrolling (buy) or `.chat` filling + internal `.msgs` scroll (chat). Desktop-only (`@media min-width:821px`); mobile keeps page scroll.
 - Verified: page not scrollable in either state; buy panel scrolls internally. Frozen `04-advisor` v8.
+
+### D-045 fix (2026-07-21)
+First cut of the full-viewport lock forced `.stage{height:100%}` and `.chat{flex:1}`, which blew up the artwork (much larger, wrong apparent size) and stretched the chat into a tall empty card. Corrected: the artwork keeps its own clamp size (just centred vertically), the chat keeps its own bounded height + internal `.msgs` scroll. The page-lock and the buy-panel internal scroll stay. Verified at 1440 and 1900 wide: page not scrollable, stage 720, chat 720.

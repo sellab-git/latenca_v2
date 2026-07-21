@@ -20,5 +20,6 @@
   "01-home-v12.html": "hero C — wysokość wyważona (~358px): duży tekst z oddechem, bez pustki, katalog widać w pierwszym ekranie",
   "04-advisor-v7.html": "cienie ujednolicone w jeden system z app.css (art + panele) + usunięta dolna sekcja similar/whyband — produkt = obraz + doradca (D-043/D-044)",
   "01-home-v13.html": "wall-treatment złożony do landingu — grunt-ściany (wspólny w app.css, oba ekrany), kafle zawieszone z cieniem, pasek pełnej szerokości bez kreski",
-  "04-advisor-v8.html": "produkt = pełny ekran; strona nie przewija się, tylko prawy panel (buy/chat) wewnętrznie; obraz wypełnia wysokość (D-045)"
+  "04-advisor-v8.html": "produkt = pełny ekran; strona nie przewija się, tylko prawy panel (buy/chat) wewnętrznie; obraz wypełnia wysokość (D-045)",
+  "04-advisor-v9.html": "poprawka full-viewport: obraz i czat wracają do swoich rozmiarów (v8 je rozdmuchał); tylko strona zablokowana + panel buy scrolluje wewnętrznie (D-045)"
 }
