@@ -10,5 +10,7 @@
   "01-home-v5.html": "filtry kategorii działają (klik = active + filtrowanie siatki), heart się przełącza",
   "01-home-v6.html": "landing = pełny katalog Explore (panel filtrów, kolory, wybrane filtry); dolne sekcje usunięte; nawigacja scalona Home+Explore (D-038)",
   "01-home-v7.html": "pole wyszukiwania w sticky górnym pasku (nie w leadzie); lead ścieśniony do jednej linii; szkielet identyczny z produktem (D-039)",
-  "04-advisor-v4.html": "wyrównanie do landingu: pełny sidebar (bez auto-rail), nawigacja i konto jak na Home, copy pola ujednolicone (D-039)"
+  "04-advisor-v4.html": "wyrównanie do landingu: pełny sidebar (bez auto-rail), nawigacja i konto jak na Home, copy pola ujednolicone (D-039)",
+  "01-home-v8.html": "szkielet (sidebar+pasek+tabbar) z jednego źródła shared/shell.js — drift niemożliwy (D-040)",
+  "04-advisor-v5.html": "szkielet z jednego źródła shared/shell.js (identyczny nagłówek jak landing); logika doradcy nietknięta (D-040)"
 }

@@ -675,3 +675,20 @@ After D-038 the landing and product are the two MVP shop screens. A user moving 
 - **Refines D-037**: "continuity is access and state, not identical coordinates" is now resolved to the **same coordinate** (top bar) for the search field. The advisor stays the product's right-column conversation (D-034/D-036) — search in the bar, advisor in the panel; still one conversation per screen.
 - Frozen as `01-home` v7 and `04-advisor` v4.
 - The advisor's focused-rail idea is dropped for consistency; the manual rail toggle still exists if the PDP ever needs more room at narrow widths.
+
+---
+
+# D-040
+## Title
+The app shell (sidebar + top bar + mobile tab bar) is a single shared source: shared/shell.js.
+### Status
+LOCKED
+### Decision
+The sidebar, top bar and mobile tab bar are defined **once** in `prototypes/mockups/shared/shell.js` and injected into every page through placeholders (`#appSide`, `#topbar`, `#appTabbar`). A page declares its current section with `<body data-active="…">`. The shell also **owns the shared behaviours** — theme toggle, sidebar rail toggle, top-bar sticky observer, and the search dropdown. Pages must not redefine any of these.
+### Reason
+The chrome had drifted between screens — the product page still showed "Home" in the nav, a seller account ("Studio Latenca / Curator"), the old search copy, and had no mobile tab bar — because the shell was **hand-copied into each file**. Artur: *"Czy nie masz zawsze korzystać z jednego źródła dla danego elementu i go używać konsekwentnie?"* Correct: duplication is the root cause of drift. One source makes drift **impossible** — a change in `shell.js` changes every screen at once. This also mirrors the real Next.js build, where the shell is a shared layout component.
+### Implications
+- `01-home` v8 and `04-advisor` v5 both mount the shell. `03-product` stays as the frozen pre-advisor reference and is not migrated.
+- The mobile tab bar is **optional per page** (`#appTabbar`): the landing has it; the product uses its **buy bar** instead (buy is the product's primary mobile action, not navigation), so it omits the placeholder and the shell skips it.
+- **Next candidate for single-sourcing: the design-system CSS** (~540 lines currently duplicated in every file) → a shared stylesheet. Not done yet — flagged so it does not get forgotten.
+- Verified: zero console errors on both pages; shell renders on desktop + mobile; search / theme / sticky work; the advisor's own logic is intact.
