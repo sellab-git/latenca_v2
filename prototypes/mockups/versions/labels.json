@@ -17,5 +17,6 @@
   "04-advisor-v6.html": "CSS szkieletu z shared/app.css — naprawione etykiety nav i pozycja pola; zmierzone identycznie z home (D-041)",
   "01-home-v10.html": "landing prowadzi doradcą — kompaktowy hero na górze, katalog od razu pod spodem (wariant C, D-042)",
   "01-home-v11.html": "hero C poprawiony — duże czcionki + dwa wiersze jak wcześniej, pasek obejmuje tekst bez pustego pola (zdjęcie nie zawyża wysokości)",
-  "01-home-v12.html": "hero C — wysokość wyważona (~358px): duży tekst z oddechem, bez pustki, katalog widać w pierwszym ekranie"
+  "01-home-v12.html": "hero C — wysokość wyważona (~358px): duży tekst z oddechem, bez pustki, katalog widać w pierwszym ekranie",
+  "04-advisor-v7.html": "cienie ujednolicone w jeden system z app.css (art + panele) + usunięta dolna sekcja similar/whyband — produkt = obraz + doradca (D-043/D-044)"
 }
