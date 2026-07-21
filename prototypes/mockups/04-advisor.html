@@ -360,8 +360,8 @@
   /* ── Slide-in drawers (cart + size guide) — same right-panel pattern as Explore filters ── */
   .scrim{position:fixed;inset:0;background:rgba(15,12,20,.44);opacity:0;pointer-events:none;transition:opacity var(--dur-base);z-index:var(--z-scrim)}
   .scrim.open{opacity:1;pointer-events:auto}
-  .drawer{position:fixed;top:0;right:0;height:100dvh;width:400px;max-width:92vw;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform var(--dur-base) var(--ease);z-index:var(--z-panel);display:flex;flex-direction:column;box-shadow:var(--shadow-drawer)}
-  .drawer.open{transform:none}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:400px;max-width:92vw;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform var(--dur-base) var(--ease);z-index:var(--z-panel);display:flex;flex-direction:column}
+  .drawer.open{transform:none;box-shadow:var(--shadow-drawer)}
   .dhead{display:flex;align-items:center;gap:var(--sp-3);padding:17px 20px;border-bottom:1px solid var(--line)}
   .dhead h3{font-family:var(--serif);font-weight:var(--w-medium);font-size:var(--fs-lg);margin:0;flex:1}
   .dhead .ok{width:22px;height:22px;border-radius:var(--r-sm);background:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
@@ -418,7 +418,7 @@
   /* lightbox (click artwork / zoom → full-screen detail view) */
   .lightbox{position:fixed;inset:0;z-index:var(--z-toast);background:rgba(15,12,20,.93);display:none;align-items:center;justify-content:center;padding:4vh 4vw}
   .lightbox.open{display:flex}
-  .lightbox img{max-width:100%;max-height:92vh;width:auto;height:auto;object-fit:contain;box-shadow:0 24px 70px rgba(0,0,0,.55);cursor:zoom-out}
+  .lightbox img{max-width:100%;max-height:92vh;width:auto;height:auto;object-fit:contain;box-shadow:var(--art-shadow-lg);cursor:zoom-out}
   .lbclose{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:var(--r-ui);background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center}
   .lbclose:hover{background:rgba(255,255,255,.26)}
   .lbclose svg{width:20px;height:20px}

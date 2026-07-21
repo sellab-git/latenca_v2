@@ -747,3 +747,6 @@ Three inconsistent shadows existed: the catalogue had a cheap single dark drop-s
 - `04-advisor` `.stageArt img` and `.frameOnWall` now use `--art-shadow-lg`; catalogue tiles use `--art-shadow`. Verified: layered warm shadow renders on both (computed styles + screenshots).
 - Light-theme tuned; on dark theme the warm-dark shadow recedes (realistic on a dark wall).
 - Part of the "the wall" concept (`CONCEPT-the-wall.md`). The full wall-treatment (lit ground, hung art, floating panels) still lives in `landing-wall.html` pending the fold into `01-home`.
+
+### D-043 addendum — panels + drawer folded into the same shadow system (2026-07-21)
+The floating-panel shadows now share the warm-layered language: `--shadow-pop` (advisor/buy panel, search dropdown, lightbox), `--shadow-drawer` (side drawer), and `--shadow-bar` (mobile bottom bar) are layered + warm-tinted in `app.css`, same hue family as `--art-shadow`. Legacy `--shadow-1/2` alias to the art tokens. **Bug fixed:** off-screen (closed) `.drawer`s were casting their left-pointing `--shadow-drawer` onto the viewport's right edge — the shadow now applies only on `.drawer.open`. The full-screen lightbox image moved off a one-off black shadow onto `--art-shadow-lg`. **Every shadow in the app now resolves from one place (`shared/app.css`).**

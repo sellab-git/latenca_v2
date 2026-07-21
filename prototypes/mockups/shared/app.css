@@ -21,11 +21,13 @@
     --r-ui:6px;     /* controls, inputs, buttons */
     --r-full:999px; /* pills & circles */
     /* Elevation */
-    --shadow-1:0 6px 16px rgba(20,16,10,.20);    /* resting media */
-    --shadow-2:0 12px 28px rgba(20,16,10,.30);   /* lifted media (hover) */
-    --shadow-pop:0 16px 40px rgba(15,12,20,.18);
-    --shadow-drawer:-14px 0 40px rgba(15,12,20,.18); /* side drawers/panels (directional) */
-    --shadow-bar:0 -8px 24px rgba(15,12,20,.08);      /* sticky bottom bars */ /* overlays: dropdown / panel */
+    /* FLOATING UI PANELS — one layered, warm-tinted elevation (same hue family as --art-shadow).
+       Panels float higher than art, so a touch more spread and less contact. */
+    --shadow-pop:0 1px 2px hsl(35deg 25% 14% / .05),0 4px 10px hsl(35deg 25% 14% / .07),0 16px 40px hsl(35deg 25% 14% / .11);   /* dropdown / advisor / buy panel / lightbox */
+    --shadow-drawer:-1px 0 2px hsl(35deg 25% 14% / .05),-10px 0 34px hsl(35deg 25% 14% / .12);  /* side drawer, only while open */
+    --shadow-bar:0 -1px 2px hsl(35deg 25% 14% / .04),0 -8px 26px hsl(35deg 25% 14% / .09);        /* sticky bottom bar (upward) */
+    --shadow-1:var(--art-shadow);      /* legacy alias → art system */
+    --shadow-2:var(--art-shadow-lg);   /* legacy alias → art system */
     /* ART ON THE WALL — one layered, warm-tinted shadow language (2026 technique). Use --art-shadow on catalogue tiles, --art-shadow-lg on the big product image / framed piece. */
     --art-shadow:0 1px 1.5px hsl(35deg 30% 13% / .11),0 2px 4px hsl(35deg 30% 13% / .07),0 6px 12px hsl(35deg 30% 13% / .06),0 14px 26px hsl(35deg 30% 13% / .06);
     --art-shadow-lg:0 1px 2px hsl(35deg 30% 13% / .10),0 3px 6px hsl(35deg 30% 13% / .08),0 8px 18px hsl(35deg 30% 13% / .09),0 20px 40px hsl(35deg 30% 13% / .10);
