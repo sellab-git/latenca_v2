@@ -626,3 +626,32 @@ Mobile-bottom-everywhere (original Decision 3A) was also narrowed: bottom placem
 - Home field = natural-language-intent search remains the differentiator, but must not present as a conversation. Promoting it to a true advisor field would require an explicit supersede of D-036, not silent "growth".
 - Benchmark screenshots kept local in `reference/generators-screens/` (unpushed).
 - Refines D-034 and D-036 into a concrete Home layout + the field-mode rule; supersedes nothing. `REDESIGN-proposal.md` updated to match (earlier 2A/3A recommendation retracted).
+
+---
+
+# D-038
+## Title
+Home and Explore merge into one catalogue landing; the landing IS the shop.
+### Status
+LOCKED
+### Decision
+There is **no separate marketing Home**. The landing = the catalogue: the search field (door) + the full grid + the full filter system (pills, applied chips, side panel with subjects/style/colour/orientation/room/price) — i.e. **"Explore as home"**, the way Ideogram and Midjourney drop you straight onto the feed.
+
+The thin trust sections added in the v4 Home (how-it-works, quality band) are **removed**. The value ("we help you make your wall") is carried by the headline + the advisor door, not by extra sections below.
+
+**MVP screen set collapses to three:**
+1. **Catalogue landing** (Explore) — field + full grid + full filters
+2. **Product page with the built-in advisor** (D-034) — see one piece, configure, keep talking/swapping
+3. **Cart + checkout**
+
+Collections and Artists are secondary browse, not part of the core path.
+### Reason
+After D-037 made the Home a thin field+catalogue, it became indistinguishable from Explore — two pages showing the same thing. Artur: *"po co przy obecnym pomyśle 2 strony pokazujące praktycznie to samo… ścieżka ma być logiczna i jak najszybsza."* Correct, and it matches the generators, which have no marketing Home at all.
+
+The three real arrival scenarios all resolve through the same three screens: (a) *browse-and-buy* → landing → product → cart; (b) *help-me-choose* → landing → advisor-on-product (D-034) → cart; (c) *arrived-on-a-product-from-search* → product → cart. No scenario needs a fourth screen.
+### Implications
+- **Refines D-037**: the "thin trust layer below the fold" and the implicit separate-Explore page are **dropped**. Field-led + one-shell-explicit-mode from D-037 still hold.
+- `01-home` becomes the catalogue landing — the full Explore filter system is folded in, reusing the shared design-system CSS (the panel/chip/swatch styles were already present). **No separate Explore mockup is needed.**
+- Nav loses the Home/Explore split — one entry ("Explore"). "Get inspired" dropped.
+- Removed trust content (materials, made-to-order, certificate, secure checkout) can return in a footer/About later if a cold-shopper signal proves necessary — it is not gone by principle, just off the core path.
+- Frozen as `01-home` v6.

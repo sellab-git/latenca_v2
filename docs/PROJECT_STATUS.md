@@ -66,12 +66,18 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 
 ## Aktywne zadania — etap 1: system (makiety)
 
-Gotowe: **`01-home`**, **`03-product`** (stan sprzed doradcy, nietknięty jako punkt odniesienia), **`04-advisor`** (strona produktu + doradca, D-034; skala w cm, D-035; obcięty panel, D-036).
+**MVP = 3 ekrany (D-038):** Katalog-landing → Produkt+doradca → Koszyk. Nic więcej na ścieżce głównej.
 
-Brakujące ekrany MVP — istnieją w projekcie 15, ale bez nowej nawigacji i bez spójności z doradcą:
-- [ ] **Katalog (Explore)** — `reference/prototype-html-15/Latenca-Explore.html`
-- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, zasady w `docs/` (zasady koszyka i checkoutu są zablokowane)
-- [ ] Kolekcje i Artyści — dopiero jeśli MVP ich naprawdę potrzebuje (artyści = sama atrybucja)
+Gotowe:
+- **`01-home` = katalog-landing** (D-037 field-led + D-038 pełny Explore wciągnięty: pole + siatka + panel filtrów/kolory/wybrane filtry; dolne sekcje usunięte; nawigacja scalona Home+Explore). To jest „Explore jako strona główna".
+- **`04-advisor`** (strona produktu + doradca, D-034; skala w cm, D-035; obcięty panel, D-036).
+- **`03-product`** — stan sprzed doradcy, nietknięty jako punkt odniesienia.
+
+Brakujące na ścieżce głównej:
+- [ ] **`04-advisor` — drobne wyrównanie do landingu** (górne pole = ten sam shell, porządek chipów; materiał zostaje pierwszy)
+- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, zasady koszyka/checkoutu zablokowane w `docs/`
+- [ ] Kolekcje i Artyści — poza ścieżką główną, dopiero jeśli MVP ich potrzebuje (artyści = sama atrybucja)
+- [ ] Osobny `Explore` — **niepotrzebny** (D-038: landing nim jest)
 
 Do decyzji po drodze:
 - [ ] Wymienić `dresser-zoom.webp` albo ograniczyć ten pokój do ≤50×70 (D-035 — kadr nie mieści 70×100)
