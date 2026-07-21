@@ -142,7 +142,7 @@
   .sitem:hover{background:var(--panel2)}
   .sitem svg{width:15px;height:15px;stroke:var(--muted)}
   .sitem .av{width:20px;height:20px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--grad-a),var(--grad-b));flex:none}
-  .sitem .tag{margin-left:auto;font-size:var(--fs-2xs);color:var(--faint)}
+  .sitem .tag{margin-left:auto;font-size:var(--fs-2xs);color:var(--faint);font-weight:var(--w-normal);border:0;padding:0;border-radius:0;background:none;height:auto}
 
   .topbar .right{display:flex;align-items:center;gap:var(--sp-2)}
   .icobtn{width:40px;height:40px;border-radius:var(--r-ui);display:flex;align-items:center;justify-content:center;color:var(--muted);position:relative}

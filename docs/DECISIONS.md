@@ -709,5 +709,8 @@ The design tokens, base styles, shell component styles and the shared systems (i
 - Removed home's stray `.topbar>.right{margin-left:auto}` (a leftover from the fieldless-topbar era, D-037 v4).
 - `03-product` stays the frozen reference, not migrated.
 - Verified with `getBoundingClientRect` + computed styles on both pages, plus screenshots; the advisor PDP is intact.
+- **Class-collision caught by the same method:** the advisor's page-specific `.tag` (product chips on the PDP) leaked into the shell's dropdown `.tag`, giving it a border/pill and taller rows. Fixed by making the shell's `.sitem .tag` **self-contained** in `app.css` (it now resets border/padding/radius/weight so no page `.tag` can bleed in). After this, a full computed-style sweep of **16 shell elements shows 0 differences** between the two pages.
+- **Browser caches linked CSS.** Editing `app.css` and reloading showed the OLD css until the cache was bypassed — verify on a fresh port (or hard-reload), not a plain reload. This bit both the reviewer and the verification.
+
 ### Diagnosis method (for next time)
-The drift was invisible to eyeballing and to a naive markup diff (markup was identical via `shell.js`). It was caught by **measuring computed styles at an identical viewport** — that is the tool to reach for when two pages "look different" but the HTML matches.
+The drift was invisible to eyeballing and to a naive markup diff (markup was identical via `shell.js`). It was caught by **measuring computed styles at an identical viewport** — that is the tool to reach for when two pages "look different" but the HTML matches. Sweep a fixed list of shared selectors on both pages and diff the JSON; aim for literally 0 differences.
