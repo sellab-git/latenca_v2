@@ -3,7 +3,7 @@
 > Jedyne źródło prawdy o **bieżącym stanie** projektu — „gdzie jesteśmy teraz". Nadpisywane swobodnie.
 > Czytaj to jako pierwsze każdą sesję.
 
-Ostatnia aktualizacja: 2026-07-20
+Ostatnia aktualizacja: 2026-07-21
 
 ---
 
@@ -68,20 +68,21 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 
 **MVP = 3 ekrany (D-038):** Katalog-landing → Produkt+doradca → Koszyk. Nic więcej na ścieżce głównej.
 
+**Cała aplikacja = „ściana"** (`CONCEPT-the-wall.md`): wspólny grunt‑ściany w `app.css`, grafiki „zawieszone" (cień), panele pływają. Szkielet z JEDNEGO źródła: `shared/shell.js` (markup, D-040) + `shared/app.css` (design‑system + cienie, D-041). Jeden system cieni (D-043).
+
 Gotowe:
-- **`01-home` = katalog-landing** (D-037 field-led + D-038 pełny Explore wciągnięty: pole + siatka + panel filtrów/kolory/wybrane filtry; dolne sekcje usunięte; nawigacja scalona Home+Explore). To jest „Explore jako strona główna".
-- **`04-advisor`** (strona produktu + doradca, D-034; skala w cm, D-035; obcięty panel, D-036).
+- **`01-home` = katalog‑landing** (v13). Doradca‑hero na górze (wariant C, D-042) + pełny Explore wciągnięty (D-038: pole + siatka + panel filtrów/kolory/wybrane filtry). Na „ścianie".
+- **`04-advisor` = produkt + doradca** (v11). Pełny ekran: strona się nie przewija, tylko prawy panel (D-045). Usunięte similar/whyband (D-044). D-034 (jeden ekran/dwa stany), skala cm (D-035). Na „ścianie".
 - **`03-product`** — stan sprzed doradcy, nietknięty jako punkt odniesienia.
 
 Brakujące na ścieżce głównej:
-- [ ] **`04-advisor` — drobne wyrównanie do landingu** (górne pole = ten sam shell, porządek chipów; materiał zostaje pierwszy)
-- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, zasady koszyka/checkoutu zablokowane w `docs/`
+- [ ] **Koszyk + checkout** — `reference/prototype-html-15/Latenca-Cart.html`, na shell.js + app.css + w języku ściany; zasady koszyka/checkoutu zablokowane w `docs/`. **To jest następny krok.**
 - [ ] Kolekcje i Artyści — poza ścieżką główną, dopiero jeśli MVP ich potrzebuje (artyści = sama atrybucja)
-- [ ] Osobny `Explore` — **niepotrzebny** (D-038: landing nim jest)
 
-Do decyzji po drodze:
+Odłożone / do posprzątania:
+- [ ] **Nakładka wymiarów na produkcie** („50×70 cm" ze strzałkami) — Artur: „temat na bardzo później". Reszta ulepszeń w `UX-CRITIQUE-landing-product.md`
+- [ ] Usunąć pliki‑eksperymenty `landing-B.html`, `landing-C.html`, `landing-wall.html` (zastąpione przez `01-home` v13)
 - [ ] Wymienić `dresser-zoom.webp` albo ograniczyć ten pokój do ≤50×70 (D-035 — kadr nie mieści 70×100)
-- [ ] Uzupełnić opisy wersji `01-home` i `02-design-journey` w `versions/labels.json` (dziś puste wiersze w indeksie)
 
 ## Etap 2: właściwy kod (jeszcze nie zaczynamy)
 
