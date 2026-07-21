@@ -53,7 +53,7 @@ Dwa wcześniejsze projekty opisywały to samo z dwóch stron i **teraz się scho
 - Katalog kurowany (źródło: sekcja 4), **atrybucja artysty** (przeglądaj po autorze)
 - Kolekcje = **gotowe ściany** (merchandising zestawów, jak „gallery walls" Desenio)
 - Customizacja „na szynach", warstwy nie-AI (sekcja 7)
-- Sprzedaż: druk POD (Gelato) + plik cyfrowy; **zestawy = silnik koszyka**
+- Sprzedaż: **tylko druk POD (Gelato)** — pliki cyfrowe usunięte (D-036); **zestawy = silnik koszyka**
 
 **⛔ Odłożone (świadomie):**
 - **Marketplace/upload twórców** (17 D-011 → faza 2). Artysta jako atrybucja zostaje; otwarty upload nie.
@@ -84,7 +84,7 @@ Byty (z 15 §3, zachowane):
 - **ARTIST** — konto, `trust_tier`, `revenue_share%`, dane wypłat. Pełny byt od początku (nawet gdy v1 = tylko atrybucja: operator = pierwszy artysta).
 - **ARTWORK** — sama grafika: `source`, `source_image` (master hi-res), tagi, `artist_id`, `allowed_tones[]/allowed_crops[]/allow_text`. Bez ceny.
 - **DERIVATIVE** — wariant WYGLĄDU (tonacja/kadr/układ-tekstu), przepis nie plik, `root_artist_id` zawsze płaci. ~24/dzieło, indeksowany do wyszukiwania.
-- **PRODUCT/VARIANT** — SKU (oś przedmiotu): `(artwork|derivative) × {size, material, mat, frame, FILE|PRINT}` + cena z wzoru. Wirtualny, liczony przy wyborze.
+- **PRODUCT/VARIANT** — SKU (oś przedmiotu): `(artwork|derivative) × {size, material, mat, frame}` + cena z wzoru. Wirtualny, liczony przy wyborze. (Bez osi FILE|PRINT — tylko druk, D-036.)
 - **SET/WALL** — pakietuje N prac, sprzedaje jako jeden produkt. **Centralny obiekt** (= „wall project" z 17).
 - **ORDER + ORDER_LINE** — przy zakupie zamrażamy kopię (tytuł, konfiguracja, cena).
 - **PAYOUT, MODERATION_REVIEW** — gotowe pod fazę 2.
@@ -95,7 +95,7 @@ Byty (z 15 §3, zachowane):
 
 ## 6. Cennik (15 formuła + COSTS.md realne liczby)
 
-**Formuła gross-up** (jedna dla druku i pliku):
+**Formuła gross-up** (dla druku):
 ```
 Cena netto = (koszt_Gelato + koszty_stałe) ÷ (1 − nasza_marża% − %_artysty − prowizja%)
 ```

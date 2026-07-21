@@ -107,3 +107,47 @@ Uszeregowane wg wpływu:
 ---
 
 *Następny krok po Twojej reakcji: wybrać podzbiór flow na MVP → dla każdego rozpisać „faza-po-fazie" na konkretne ekrany (na model D + shell/app.css) → przepisać przestarzały `SCREEN_MAP.md`. ChatGPT = senior reviewer tego + katalogu (czyta repo); przygotuję brief. Nie ruszam budowy, dopóki nie uzgodnimy flow.*
+
+---
+
+## 7. Runda 2 — recenzja ChatGPT (2026-07-21) i wynikające ulepszenia
+
+ChatGPT (senior reviewer) pressure-testował mapę. Werdykt: szeroka, ale słabsza jako mapa **stanów systemu i porażek operacyjnych**. Poniżej przyjęte ulepszenia (nie zmieniają decyzji — poprawiają mapę) + jedna decyzja dla Artura.
+
+### 7.1 Nowe braki (realne, tanie do przewidzenia, przyjęte do mapy)
+- **Feasibility / substitution engine** — najważniejszy. AI może polecać **tylko z wariantów, które przejdą**: rozmiar, DPI (rozdzielczość per obraz), materiał, kraj/wysyłkę, termin. Nie wolno sprzedać pewności, a potem powiedzieć „środkowy obraz niedostępny/za mała rozdzielczość na 70×100". To **wspólny mechanizm przed rekomendacją**, nie edge-case. (Łączy CON-20/21/26, CH-13, cała gałąź zestawów.)
+- **„Nie mam uczciwego dopasowania"** — pełnoprawny wynik doradcy. Przy małym kurowanym katalogu będzie częsty (mała wnęka, ogromna ściana, ekstremalny aspekt, twarde ograniczenia). Bezpośredni test D-002 „trust before sales". Część faz 4/6/9, nie osobny ekran.
+- **Taksonomia zestawu** — para/tryptyk/galeria to NIE jedna kategoria: (1) **jeden obraz podzielony na panele** (diptych/triptych z jednego motywu), (2) **coordinated set** (różne prace jako rodzina), (3) **gallery wall** (różne prace + formaty + układ). Różna logika katalogowa/produkcyjna/zakupowa.
+- **Perspektywa operatora** (solo) — scenariusze wewnętrzne, bez których zestawy zaprojektujemy idealistycznie: praca wypada z jakości, Gelato wycofuje wariant, zmiana kosztu/dostępności, podmiana elementu we wszystkich aktywnych zestawach, ręczna podmiana uszkodzonego elementu.
+- **Częściowa awaria zestawu** — 3 elementy, jeden uszkodzony; dwie paczki w różnych terminach; jeden panel w innym kolorze; zwrot jednego elementu. `ORDER_LINE` musi obsługiwać element osobno, choć klient kupił aranżację jako całość.
+
+### 7.2 13 flow → 5 głównych PODRÓŻY (przyjęte — czystszy model)
+ChatGPT słusznie: 13 pozycji było na różnych poziomach abstrakcji. Nowy podział:
+- **5 głównych podróży:** 1) Browse-and-buy · 2) Doradca: jedna praca · 3) Dobierz do posiadanej · 4) Kup kuratorowany zestaw · 5) Po-zakupie / support / reorder.
+- **Reszta to warstwy, nie osobne podróże:** *wejścia* (Google/Pinterest/reel/prezent-link/powrót, „więcej jak ta"), *capabilities* (**feasibility+skala** — obowiązkowa faza każdego zakupu; similarity), *reguły przekrojowe* (**constraint engine**: budżet/rozmiar/materiał/kraj/deadline/montaż; **warstwa zaufania** = copy w momentach tarcia; **ścieżka bez zdjęcia** = zasada wszystkich flow), *lifecycle/commerce* (wishlist, konto/reorder, prezent-overlay, tracking/zwroty).
+- **B2B (dawny flow 8) = osobny produkt operacyjny, nie wariant konsumencki** — backlog. Nie łamie D-024 (może mieć projekt/konto firmowe bez profilu gustu konsumenta).
+
+### 7.3 Zestawy — forma i kolejność (rekomendacja ChatGPT, spójna z naszą)
+- **Forma:** „zestaw = jedna kuratorowana aranżacja, którą akceptujesz albo wymieniasz" — poprawna. „Jeden produkt" = **jedna decyzja handlowa** (jedna cena, jedno „Add set to cart", „Show me another"), ale w modelu **wiele elementów** (`SET_ITEM[]`), każdy z własnym wariantem produkcyjnym i osobnym `ORDER_LINE`.
+- **Fazy MVP zestawu:** wejście = wybierasz tylko *Para/Tryptyk/Galeria* (+opcjonalnie szerokość ściany, klimat, posiadana praca) — **nie pusty canvas**. Propozycja = jedna gotowa aranżacja na płaskiej ścianie (obrazy, rozmiary, odstępy, całkowita szerokość, „dlaczego"). Reakcja poziom 1 = Keep / Show another / Warmer / Calmer / Bolder; wymiana pojedynczego panelu = **dopiero później** (kombinatoryka niszczy spójność). Dopasowanie = feasibility całości. Konfiguracja MVP = **jeden materiał + jedna rama dla całego zestawu** + 2–3 skale (Compact/Balanced/Statement). Koszyk = jedna karta zestawu (aranżacja, elementy, łączna cena, łączny termin, info o osobnych paczkach).
+- **Kolejność typów:** 1) **Para** (najłatwiejsza) → 2) **Tryptyk** (jako zamknięty kuratorowany SKU) → 3) **Gallery wall 3–5** (po parze) → 4) **Dobierz do posiadanej** (v2, wymaga realnego vision).
+- **Model danych:** `SET/WALL` jako obiekt od początku — **już przewidziany w `PRODUCT_BIBLE.md` §5** (SET/WALL = centralny obiekt). Minimalny schemat: `WallOrSet{type, source, items[], layout_preset_id, total_w/h_cm, spacing, rationale}` + `SetItem{artwork_id, position, size, material, frame}`. Layout = preset/dane, **nie zapis drag-and-drop**.
+
+### 7.4 Top ryzyka (przyjęte)
+1. **Over-build „178 intencji"** → katalog to *taxonomy/testing reference*, nie backlog; każda funkcja musi obsłużyć wiele scenariuszy naraz.
+2. **Zestawy wybuchają kombinatorycznie** → zamknięte pary, jeden materiał/rama, 2–3 skale, wymiana całości nie panelu.
+3. **„Pewność" bez pewności produkcyjnej** → feasibility PRZED rekomendacją (§7.1).
+4. **Zestaw wypiera single** → jednostka (single/pair/set) wynika z **przestrzeni+intencji, nie z marży**; system musi umieć polecić jedną pracę jako najlepszą (chroni WHO-25 minimalistę + D-002).
+5. **Pamięć ≠ profil gustu** → od początku trzymać historię zamówień + opcjonalne zapisane zestawy, ale **nie inferować profilu gustu** (D-024 trzyma).
+
+### 7.5 ⚠️ DECYZJA DLA ARTURA (blokuje resztę — wymaga jawnej zmiany D-023/D-030/D-033)
+ChatGPT i ja rekomendujemy **formalne rozszerzenie MVP z „pojedyncza grafika" na „single + curated pair"** (para jako zamknięty produkt-zestaw, bez canvasu, bez wymiany paneli). To najtańszy krok do ekonomii zestawów (2. sztuka w paczce ~€0,29) i przybliża produkt do „dobrej ściany", nie „sklepu z plakatami". **To NIE może być ciche rozszerzenie** — potrzebna świadoma zmiana D-023/D-030/D-033.
+
+Moje rekomendowane odpowiedzi na 5 pytań ChatGPT (do potwierdzenia/korekty przez Artura):
+1. **Para = dwie różne, skoordynowane prace** (rodzina), nie jeden obraz podzielony — bo split-image to inna logika produkcyjna i słabiej wyraża kurację. *(rekomendacja)*
+2. **Zestaw kupowany jako całość** w v1; kup pojedynczy element z zestawu = później. *(rekomendacja)*
+3. **Wymiana całej aranżacji, nie pojedynczego panelu** w v1. *(rekomendacja)*
+4. **Jeden materiał + jedna rama dla całego zestawu** jako ograniczenie MVP. *(rekomendacja)*
+5. **Tak, rozszerzyć MVP do „single + curated pair"** — jawnie doprecyzować D-023/D-030/D-033. *(rekomendacja — czeka na decyzję Artura)*
+
+Proponowana kolejność budowy (ChatGPT, przyjęta): 1) kręgosłup sklepu + pojedynczy produkt → 2) warstwa skala/feasibility → 3) doradca jednej pracy → 4) **kuratorowana para jako SET/WALL** → 5) baseline zaufania + po-zakupie → 6) tryptyki/galeria → 7) dobierz-do-posiadanej (po teście vision) → 8) reorder/save/prezent → 9) B2B jako osobna decyzja.
