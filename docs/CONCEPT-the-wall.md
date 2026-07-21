@@ -61,3 +61,8 @@
 **Wejść w to — jako JĘZYK (powierzchnia‑ściana + pływające panele), nie jako narzędzie.** Jest spójne, ownable, tanie do osiągnięcia jako feeling, rozwija D‑033 i jest potwierdzone przez Fy!. **Twarda granica:** katalog zostaje przeglądalną siatką (nie dosłowną rozstawioną ścianą), a użytkownik niczego nie przeciąga — AI układa.
 
 **Następny krok:** zamiast dalej dyskutować — **zaprototypować „wall treatment" na jednym ekranie**, żebyś POCZUŁ różnicę. Proponuję **katalog/Home**, bo tam efekt jest największy i tam go dziś brakuje. Zrobię wariant obok obecnego, porównasz.
+
+---
+
+## Zastosowane (2026-07-21)
+Wall‑treatment złożony do produkcyjnych ekranów: **grunt‑ściany** (delikatne światło z góry) wyniesiony do `shared/app.css` → mają go **oba** ekrany (landing i produkt) z jednego źródła. Na landingu kafle „zawieszone" (cień `--art-shadow`, ostre krawędzie, pasek filtrów pełnej szerokości bez kreski); panele (doradca‑hero) pływają (`--shadow-pop`). Cienie w jednym systemie (D‑043). `01-home` v13; `landing-wall.html` zostaje jako snapshot „przed".

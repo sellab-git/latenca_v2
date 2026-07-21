@@ -127,6 +127,8 @@
   .account .who small{display:block;color:var(--muted);font-weight:var(--w-normal);font-size:var(--fs-2xs)}
 
   .main{--mainpad:clamp(20px,3.2vw,44px);padding:0 var(--mainpad) 70px;min-width:0}
+  /* THE WALL — the content area is a wall; a soft light from above makes it read as a plane (theme-aware). Shared by every screen. */
+  .main{background:radial-gradient(135% 95% at 50% -18%, var(--panel) 0%, var(--bg) 52%)}
 
   /* ── Top bar + search ── */
   .topbar{position:sticky;top:0;z-index:var(--z-header);display:flex;align-items:center;gap:var(--sp-2);margin:0 calc(var(--mainpad) * -1);padding:14px 18px 12px 12px;background:var(--bg);border-bottom:1px solid transparent;transition:border-color var(--dur-base)}
