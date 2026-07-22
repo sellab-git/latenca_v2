@@ -882,3 +882,17 @@ Two things Artur required next:
    - **Square source → Square only**
 
    *Why:* you can crop toward square by trimming the long axis, but you cannot invent the missing dimension to flip the long axis; and a square composition is deliberately square. The **Shape** selector in Options offers only the allowed shapes (hidden entirely for square sources). Switching to Square centre-crops the image (fetch 720×720). Swapping the artwork resets the shape to the new source's native orientation. Frozen `05-wall` v7.
+
+# D-051
+
+The wall uses REAL gallery-wall layouts captured from Mixtiles — the SLOT dictates position + shape.
+
+## Status
+Accepted — 2026-07-22
+
+## Context / Decision
+We researched Mixtiles' whole "Gallery Walls" section exhaustively (Artur: *"wszystkie ściany, 100% pewności, nic nie zgadywać"*): all **45 named walls** across the Small/Medium/Large tabs, extracting **exact frame positions from the editor DOM** (`.sc-ykt6xc-12` rects → `box[x,y,w,h]%` + orientation, normalized to the union bbox, cross-validated 1:1 against catalog dims) plus the full configurator behavior (border cm, photo mapping, crop, per-frame pricing). Data lives in `docs/mixtiles-positions.json` (geometry) + `docs/mixtiles-layouts-data.json` (config). Only **1 true duplicate** (Stillness == Bright and Cherished) + 1 same-arrangement-different-size pair → **43 distinct arrangements**.
+
+`scratchpad/gen_layouts.py` compiles these into **`prototypes/mockups/shared/wall-layouts.js`** (`WALL_LAYOUTS`, keyed by frame count: 6 layouts for 3 pieces, 5 for 4, 5 for 5, 6 for 6, … down to 1 each for 11/12/13/15/16/20).
+
+**Model (wired into `05-wall` v8):** the **layout dictates each slot's position AND shape** — the wall area letterboxes to the layout's aspect, slots place at their `%`, and each piece's image is centre-cropped to its slot's orientation. This supersedes the earlier "piece dictates shape" model (the per-piece Shape selector is retired). "Ready-made wall" fills every slot with an **orientation-matched** artwork (square slot crops any source; P/L slots need that source). Build-up (add/remove) still snaps to a preset for the new N and appends empty placeholders. Reconciles Mixtiles' fixed-composition model with our interactive one-screen build-up (Artur: *"ma być wrażenie interaktywności… u nas ma się to dziać na jednym ekranie"* — not entering each wall separately like Mixtiles). Physical sizes are NOT copied — slots map to our 9 Gelato sizes via the D-050 crop rules. Playwright-verified: layout cycling, grow to 9, orientation-matched fill, zero errors/overflow.

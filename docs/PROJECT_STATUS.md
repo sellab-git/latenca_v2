@@ -86,7 +86,7 @@ Artur zapytał o realny plan „Design my wall" → wyszła głęboka praca nad 
 
 Następne (po reakcji na `05-wall`):
 - [ ] **Decyzja D‑047: rozszerzyć MVP z „pojedyncza grafika" na „N prac"?** (zmienia D‑023/D‑030/D‑033) — czeka na Artura.
-- [ ] **Matryca układów z Mixtiles** — Artur odpala `docs/BRIEF-chrome-wall-layouts.md` w Claude Chrome (matryca jest w ich builderze, nie na stronach publicznych); ja składam z tego `LAYOUTS` (per liczba × mieszane orientacje, odstępy, wyrównanie) na naszych 9 rozmiarach Gelato i zastępuję tymczasowe presety. Boundary: bierzemy tylko wzorce rozmieszczenia, nie ich kod/grafiki/brand/rozmiary.
+- [x] **Matryca układów z Mixtiles — ZROBIONE (D-051).** Zebrane wszystkie 45 ścian (pozycje z DOM edytora, zwalidowane) + config (border/kadr/mapowanie/cena). 43 różne układy → `shared/wall-layouts.js`, wpięte w `05-wall` v8: slot dyktuje pozycję+kształt, Ready-made wypełnia grafiką dopasowaną do orientacji, build-up dodaje puste sloty. Dane: `docs/mixtiles-positions.json` + `docs/mixtiles-layouts-data.json`.
 - [ ] Iteracja ściany: klik w pusty slot = dodaj tu; materiał/rama na żywo na podglądzie; wpięcie „gotowych ścian" (droga A).
 - [ ] **Koszyk + checkout** — po ustaleniu modelu ściany (był „następnym ekranem", teraz PO ścianie). `reference/prototype-html-15/Latenca-Cart.html`.
 - [ ] Kolekcje i Artyści — poza ścieżką główną, tylko jeśli MVP ich potrzebuje.
