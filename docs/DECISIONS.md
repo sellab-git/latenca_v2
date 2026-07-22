@@ -869,4 +869,16 @@ Artur set the size list directly: *"tyle masz rozmiarów zgodny z Gelato — mas
 - Image fetch ratio follows orientation (600×800 / 800×600 / 720×720); size selector, slot label, config summary and size-guide all read the per-orientation list.
 - Price is by size tier (S/M/L index), same across orientations — a prototype simplification; **real per-SKU prices come from Gelato at build.**
 
-**Known gap (not yet done):** the wall's slot *shapes* still come from the layout preset (uniform portrait), so landscape/square pieces are cover-cropped into portrait slots — the size DATA is right, the frame SHAPE doesn't yet reflect orientation. Making slot frames match true orientation is the next visual step. Frozen `05-wall` v6.
+Frozen `05-wall` v6.
+
+### D-050 refinement (2026-07-22) — frame shape follows the size + crop rules
+Two things Artur required next:
+
+1. **The frame on the wall must have the real proportion of the chosen size** — not a uniform portrait box. Each slot is now fitted to its size's aspect ratio (portrait ~0.75, landscape ~1.33, square 1.0) inside the layout's allotted box, centred. Rendered in px from the measured wall + a resize listener, so it stays correct across viewports. Picking a different size subtly changes the frame proportion; picking a different shape changes it fully.
+
+2. **Crop rules — what a source image may be sold as.** A piece keeps its **source orientation** (`o`, fixed by the artwork) plus a separate **print shape** it is currently sold as. Allowed shapes:
+   - **Portrait source → Portrait or Square** (crop toward centre is fine), **never Landscape**
+   - **Landscape source → Landscape or Square**, **never Portrait**
+   - **Square source → Square only**
+
+   *Why:* you can crop toward square by trimming the long axis, but you cannot invent the missing dimension to flip the long axis; and a square composition is deliberately square. The **Shape** selector in Options offers only the allowed shapes (hidden entirely for square sources). Switching to Square centre-crops the image (fetch 720×720). Swapping the artwork resets the shape to the new source's native orientation. Frozen `05-wall` v7.
