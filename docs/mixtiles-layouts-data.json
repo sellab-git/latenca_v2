@@ -3,7 +3,8 @@
     "purpose": "Measured Mixtiles gallery-wall data → source for our LAYOUTS matrix (mapped to our 9 Gelato sizes). Numbers/patterns only — no competitor images/code/brand stored here.",
     "validated": "2026-07-22: rigid named compositions, no reflow, fixed frame count, empty frames allowed, S/M/L = three separate collections (each wall has ONE size).",
     "howToFill": "Append one object per wall to walls[]. Positions (box%) are derived by Claude from clean empty-frame screenshots — do NOT hand-estimate them here.",
-    "target": "~45 walls (Small ~20 + Medium ~18 + Large ~7)"
+    "target": "~45 walls (Small ~20 + Medium ~18 + Large ~7)",
+    "progress": "11 captured (1 Medium + 10 Small). Batch 1 (Small 1-10) received 2026-07-22."
   },
   "config": {
     "frames": [
@@ -32,6 +33,12 @@
       "frameCount": "fixed per wall; clicking an empty cell only offers Upload/Import",
       "emptyFramesAllowed": true,
       "sizeModel": "S/M/L are separate collections, not per-product scale; each wall has one overallCm"
+    },
+    "observedTileSizesCm": {
+      "note": "distinct tile sizes seen so far — for mapping to our Gelato sizes later",
+      "square": ["21x21", "32x32", "50x50"],
+      "portrait": ["21x28", "32x42", "50x69"],
+      "landscape": ["28x21", "42x32", "69x50", "64x21 (full-width band)"]
     }
   },
   "walls": [
@@ -48,6 +55,159 @@
       ],
       "screenshot": "16-snapshots-empty (in chat)",
       "confidence": { "cm": "ruler", "gap": "derived" }
+    },
+    {
+      "name": "Wild Visuals",
+      "sizeBand": "Small",
+      "bestSeller": true,
+      "frameCount": 7,
+      "compositionType": "staggered-cluster",
+      "overallCm": { "w": 122, "h": 79 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "L", "cm": { "w": 42, "h": 32 } },
+        { "orientation": "P", "cm": { "w": 21, "h": 28 } },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 } },
+        { "orientation": "S", "cm": { "w": 21, "h": 21 } },
+        { "orientation": "S", "cm": { "w": 32, "h": 32 } },
+        { "orientation": "P", "cm": { "w": 32, "h": 42 } },
+        { "orientation": "S", "cm": { "w": 21, "h": 21 } }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "irregular-cluster-not-derivable" }
+    },
+    {
+      "name": "Offbeat Set",
+      "sizeBand": "Small",
+      "bestSeller": true,
+      "frameCount": 5,
+      "compositionType": "staggered-cluster",
+      "overallCm": { "w": 64, "h": 79 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "S", "cm": { "w": 21, "h": 21 } },
+        { "orientation": "P", "cm": { "w": 32, "h": 42 } },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 } },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 } },
+        { "orientation": "P", "cm": { "w": 21, "h": 28 } }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "irregular-cluster-not-derivable" }
+    },
+    {
+      "name": "12 Memories",
+      "sizeBand": "Small",
+      "bestSeller": true,
+      "frameCount": 12,
+      "compositionType": "uniform-grid",
+      "overallCm": { "w": 97, "h": 71 },
+      "gridGuess": "4 cols x 3 rows",
+      "gapCm": 4.3,
+      "frames": [ { "orientation": "S", "cm": { "w": 21, "h": 21 }, "count": 12 } ],
+      "confidence": { "cm": "ruler", "gap": "derived" }
+    },
+    {
+      "name": "6 Enduring Pictures",
+      "sizeBand": "Small",
+      "bestSeller": true,
+      "frameCount": 6,
+      "compositionType": "uniform-grid",
+      "overallCm": { "w": 104, "h": 69 },
+      "gridGuess": "3 cols x 2 rows",
+      "gapCm": 4.5,
+      "frames": [ { "orientation": "S", "cm": { "w": 32, "h": 32 }, "count": 6 } ],
+      "confidence": { "cm": "ruler", "gap": "derived" }
+    },
+    {
+      "name": "Symphony of Frames",
+      "sizeBand": "Small",
+      "bestSeller": true,
+      "frameCount": 5,
+      "compositionType": "symmetric-center",
+      "overallCm": { "w": 124, "h": 71 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "S", "cm": { "w": 32, "h": 32 } },
+        { "orientation": "P", "cm": { "w": 50, "h": 69 }, "note": "center, large" },
+        { "orientation": "S", "cm": { "w": 32, "h": 32 } },
+        { "orientation": "S", "cm": { "w": 32, "h": 32 } },
+        { "orientation": "S", "cm": { "w": 32, "h": 32 } }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "mixed-not-derivable" }
+    },
+    {
+      "name": "Bold Statement",
+      "sizeBand": "Small",
+      "bestSeller": false,
+      "frameCount": 15,
+      "compositionType": "symmetric-center",
+      "overallCm": { "w": 130, "h": 102 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "L", "cm": { "w": 69, "h": 50 }, "note": "center" },
+        { "orientation": "S", "cm": { "w": 21, "h": 21 }, "count": 14, "note": "ring around center" }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "mixed-not-derivable" }
+    },
+    {
+      "name": "Parallel Triplet",
+      "sizeBand": "Small",
+      "bestSeller": false,
+      "frameCount": 3,
+      "compositionType": "row",
+      "overallCm": { "w": 74, "h": 28 },
+      "gapCm": 5.5,
+      "frames": [ { "orientation": "P", "cm": { "w": 21, "h": 28 }, "count": 3 } ],
+      "confidence": { "cm": "ruler", "gap": "derived" }
+    },
+    {
+      "name": "Timeless Quartet",
+      "sizeBand": "Small",
+      "bestSeller": false,
+      "frameCount": 4,
+      "compositionType": "uniform-grid",
+      "overallCm": { "w": 69, "h": 69 },
+      "gridGuess": "2 cols x 2 rows",
+      "gapCm": 5,
+      "frames": [ { "orientation": "S", "cm": { "w": 32, "h": 32 }, "count": 4 } ],
+      "confidence": { "cm": "ruler", "gap": "derived" }
+    },
+    {
+      "name": "Harmony in Four",
+      "sizeBand": "Small",
+      "bestSeller": false,
+      "frameCount": 4,
+      "compositionType": "mixed-cluster",
+      "overallCm": { "w": 102, "h": 119 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "S", "cm": { "w": 50, "h": 50 }, "note": "top-left" },
+        { "orientation": "P", "cm": { "w": 50, "h": 69 }, "note": "top-right" },
+        { "orientation": "P", "cm": { "w": 50, "h": 69 }, "note": "bottom-left" },
+        { "orientation": "S", "cm": { "w": 50, "h": 50 }, "note": "bottom-right" }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "mixed-not-derivable" }
+    },
+    {
+      "name": "Embraced by Warmth",
+      "sizeBand": "Small",
+      "bestSeller": false,
+      "frameCount": 5,
+      "compositionType": "symmetric-center",
+      "overallCm": { "w": 64, "h": 74 },
+      "gapCm": null,
+      "frames": [
+        { "orientation": "L", "cm": { "w": 28, "h": 21 }, "note": "top-left" },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 }, "note": "top-right" },
+        { "orientation": "L", "cm": { "w": 64, "h": 21 }, "note": "center band, full-width" },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 }, "note": "bottom-left" },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 }, "note": "bottom-right" }
+      ],
+      "screenshotNeeded": true,
+      "confidence": { "cm": "ruler", "gap": "mixed-not-derivable" }
     }
   ]
 }
