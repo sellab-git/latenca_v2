@@ -13,6 +13,7 @@ DROP = {
     "Dancing Lights", "Heartfelt Reflections",   # 6-piece = same 3×2 square grid as "6 Enduring Pictures" (kept)
     "Frame by Frame",                            # 13 pieces — removed
     "Bold Statement", "16 Snapshots", "The Memory Mosaic",  # 15 / 16 / 20 pieces — removed
+    "Framed Connections",                        # 10-L4 — top square could only be tiny; Artur: drop it
 }
 # MODIFY: per-layout slot edits, applied AFTER debanner (operate on the reworked slot list, aspect A).
 def _last_to_square(slots, A, cy):   # replace the (reworked) extra slot with a grid-sized square, centred
