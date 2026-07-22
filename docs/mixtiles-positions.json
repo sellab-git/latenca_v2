@@ -3,7 +3,7 @@
     "purpose": "EXACT frame positions from Mixtiles editor DOM (.sc-ykt6xc-12 rects, normalized to union bbox). Claude's domain. Merge with cm from mixtiles-layouts-data.json at the end.",
     "format": "per wall: wallPxAspect + frames[] with box[x,y,w,h] (% of wall) + orient (P/L/S). Aspect ratios cross-validated against catalog cm every time.",
     "method": "reliable extractor: cardOf(smallest ancestor with name+price) → click its img → verify editor URL slug matches name → read rects → normalize. One batch, slug-checked.",
-    "progress": "Small: 20/20 DONE. Next: Medium (~18) + Large (~7)."
+    "progress": "COMPLETE — all 45 walls captured (Small 20 + Medium 18 + Large 7). Every wall's frame aspect cross-validated against its catalog overall dims. Note: some geometries repeat across bands under different names (e.g. Stillness[Large] == Bright and Cherished[Medium]) — the distinct-layout library is smaller than 45."
   },
   "walls": {
     "Wild Visuals": { "wallPxAspect": 1.5, "frames": [
@@ -155,6 +155,28 @@
       { "orient": "S", "box": [32.1, 58.5, 23.2, 41.5] }, { "orient": "S", "box": [56.8, 51.7, 23.2, 41.5] }, { "orient": "L", "box": [81.6, 51.7, 18.4, 24.4] } ] },
     "Heartfelt Heights": { "band": "Medium", "wallPxAspect": 1.4, "frames": [
       { "orient": "S", "box": [0, 23.3, 23.1, 31.3] }, { "orient": "L", "box": [26.1, 0, 30.9, 31.3] }, { "orient": "S", "box": [59.9, 12.4, 13.9, 18.9] }, { "orient": "S", "box": [76.9, 0, 23.1, 31.3] },
-      { "orient": "S", "box": [8.9, 58.2, 13.9, 18.9] }, { "orient": "P", "box": [25.8, 35.7, 23.1, 41.8] }, { "orient": "L", "box": [52.2, 35.7, 30.9, 31.3] }, { "orient": "S", "box": [8.9, 81.1, 13.9, 18.9] } ] }
+      { "orient": "S", "box": [8.9, 58.2, 13.9, 18.9] }, { "orient": "P", "box": [25.8, 35.7, 23.1, 41.8] }, { "orient": "L", "box": [52.2, 35.7, 30.9, 31.3] }, { "orient": "S", "box": [8.9, 81.1, 13.9, 18.9] } ] },
+    "Stillness": { "band": "Large", "wallPxAspect": 1.6, "note": "identical geometry to 'Bright and Cherished' (Medium) — Mixtiles reuses compositions across size bands", "frames": [
+      { "orient": "P", "box": [0, 24, 17.2, 35.1] }, { "orient": "P", "box": [19.7, 0, 28.9, 59.1] }, { "orient": "P", "box": [51.9, 0, 17.2, 35.1] }, { "orient": "P", "box": [72, 11.7, 11.3, 23.4] },
+      { "orient": "P", "box": [16.7, 64.9, 11.3, 23.4] }, { "orient": "P", "box": [31.4, 64.9, 17.2, 35.1] }, { "orient": "P", "box": [51, 40.9, 28.9, 59.1] }, { "orient": "P", "box": [82.8, 41.6, 17.2, 35.1] } ] },
+    "Timeless Bonds": { "band": "Large", "wallPxAspect": 2.1, "frames": [
+      { "orient": "S", "box": [0, 0, 22.5, 46.6] }, { "orient": "S", "box": [25.8, 0, 22.5, 46.6] }, { "orient": "S", "box": [51.7, 0, 22.5, 46.6] }, { "orient": "S", "box": [77.5, 0, 22.5, 46.6] },
+      { "orient": "S", "box": [0, 53.4, 22.5, 46.6] }, { "orient": "S", "box": [25.8, 53.4, 22.5, 46.6] }, { "orient": "S", "box": [51.7, 53.4, 22.5, 46.6] }, { "orient": "S", "box": [77.5, 53.4, 22.5, 46.6] } ] },
+    "Treasured Moments": { "band": "Large", "wallPxAspect": 1.8, "frames": [
+      { "orient": "P", "box": [0, 19.3, 11.5, 28.6] }, { "orient": "L", "box": [14.2, 12.4, 26.8, 34.8] }, { "orient": "P", "box": [43.8, 0, 19.5, 47.8] }, { "orient": "S", "box": [65.9, 12.4, 19.9, 35.4] }, { "orient": "P", "box": [88.2, 19.3, 11.5, 28.6] },
+      { "orient": "S", "box": [0, 52.2, 11.8, 21.1] }, { "orient": "S", "box": [14.3, 52.2, 19.9, 35.4] }, { "orient": "P", "box": [36.9, 52.2, 19.5, 47.8] }, { "orient": "L", "box": [58.9, 52.2, 26.8, 34.8] }, { "orient": "S", "box": [88.2, 52.2, 11.8, 21.1] } ] },
+    "Shining Paths": { "band": "Large", "wallPxAspect": 1.2, "frames": [
+      { "orient": "P", "box": [0, 67.1, 21.1, 32.9] }, { "orient": "P", "box": [26.3, 44.5, 21.1, 32.9] },
+      { "orient": "P", "box": [52.6, 22.3, 21.1, 32.9] }, { "orient": "P", "box": [78.9, 0, 21.1, 32.9] } ] },
+    "Joyful Reflections": { "band": "Large", "wallPxAspect": 1.7, "frames": [
+      { "orient": "P", "box": [0, 0, 22.7, 54.2] }, { "orient": "S", "box": [25.9, 0.7, 22.7, 39.4] }, { "orient": "P", "box": [51.8, 0, 22.7, 54.2] }, { "orient": "S", "box": [77.3, 0.7, 22.7, 39.4] },
+      { "orient": "S", "box": [0, 59.9, 22.7, 39.4] }, { "orient": "P", "box": [25.9, 45.8, 22.7, 54.2] }, { "orient": "S", "box": [51.8, 59.9, 22.7, 39.4] }, { "orient": "P", "box": [77.3, 45.8, 22.7, 54.2] } ] },
+    "Brighter Days": { "band": "Large", "wallPxAspect": 4.3, "frames": [
+      { "orient": "P", "box": [0, 0, 17.2, 100] }, { "orient": "P", "box": [20.7, 0, 17.2, 100] }, { "orient": "P", "box": [41.4, 0, 17.2, 100] },
+      { "orient": "P", "box": [62.1, 0, 17.2, 100] }, { "orient": "P", "box": [82.8, 0, 17.2, 100] } ] },
+    "Framed Connections": { "band": "Large", "wallPxAspect": 0.9, "frames": [
+      { "orient": "S", "box": [0, 14.3, 30.9, 26.6] }, { "orient": "S", "box": [34.5, 14.3, 30.9, 26.6] }, { "orient": "S", "box": [69.1, 14.3, 30.9, 26.6] },
+      { "orient": "S", "box": [0, 43.7, 30.9, 26.6] }, { "orient": "S", "box": [34.5, 43.7, 30.9, 26.6] }, { "orient": "S", "box": [69.1, 43.7, 30.9, 26.6] },
+      { "orient": "S", "box": [0, 73.4, 30.9, 26.6] }, { "orient": "S", "box": [34.5, 73.4, 30.9, 26.6] }, { "orient": "S", "box": [69.1, 73.4, 30.9, 26.6] }, { "orient": "L", "box": [30, 0, 39.7, 10.6] } ] }
   }
 }
