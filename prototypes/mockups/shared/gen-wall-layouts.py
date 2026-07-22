@@ -7,6 +7,34 @@ d = json.load(open(P, encoding="utf-8"))
 def sig(w):
     return tuple(sorted((round(f["box"][0]),round(f["box"][1]),round(f["box"][2]),round(f["box"][3]),f["orient"]) for f in w["frames"]))
 
+# ── curation (Artur review 2026-07-22) ──
+# DROP: near-duplicate layouts + everything above 12 pieces (we end at 12).
+DROP = {
+    "Dancing Lights", "Heartfelt Reflections",   # 6-piece = same 3×2 square grid as "6 Enduring Pictures" (kept)
+    "Frame by Frame",                            # 13 pieces — removed
+    "Bold Statement", "16 Snapshots", "The Memory Mosaic",  # 15 / 16 / 20 pieces — removed
+}
+# MODIFY: per-layout slot edits, applied AFTER debanner (operate on the reworked slot list, aspect A).
+def _last_to_square(slots, A, cy):   # replace the (reworked) extra slot with a grid-sized square, centred
+    # size the square to the median grid square, place centred at cy (vertical %)
+    sq = [s for s in slots[:-1] if s[4]=='S'] or slots[:-1]
+    w = sorted(s[2] for s in sq)[len(sq)//2]; h = sorted(s[3] for s in sq)[len(sq)//2]
+    return slots[:-1] + [[round((100-w)/2,1), round(cy,1), round(w,1), round(h,1), 'S']]
+def _framed_conn(slots, A):          # 3×3 squares fill y=14..100; small centred SQUARE in the thin top band
+    h = 11.0; w = round(h/A, 1)      # real aspect (w/h)*A = 1.0 → exact square, sized to the ~14% top band
+    return slots[:-1] + [[round((100-w)/2,1), 1.0, w, h, 'S']]
+def _loving_cols(slots, A):          # 11-piece: middle-row side squares → columns 1 & 4 (stop them sticking out)
+    for s in slots:
+        if s[4]=='S' and 34<s[1]<38:
+            if s[0]<10: s[0]=7.5
+            elif s[0]>75: s[0]=74.8
+    return slots
+MODIFY = {
+    "Timeless Moments":   lambda s,A: _last_to_square(s, A, 80.5),   # 10 · bottom element → square
+    "Framed Connections": lambda s,A: _framed_conn(s, A),            # 10 · top element → square
+    "Loving Life":        lambda s,A: _loving_cols(s, A),            # 11 · side squares → columns
+}
+
 # We only offer P/L/S (real aspects ~0.71 / 1.0 / 1.4). A Mixtiles "banner" slot (wide-thin
 # title band, ~3.0) has no equivalent in our catalogue → rework it into a centred LANDSCAPE
 # (aspect 1.4) in the same band, keeping the layout. (Tall-thin <0.6 → centred PORTRAIT 0.714.)
@@ -27,6 +55,7 @@ def debanner(slots, A):
 seen = {}
 order = []
 for name, w in d["walls"].items():
+    if name in DROP: continue
     s = sig(w)
     if s in seen:
         seen[s]["aliases"].append(name)
@@ -35,6 +64,7 @@ for name, w in d["walls"].items():
         aspect = round(oc.get("w",1)/oc.get("h",1), 3) if oc else w.get("wallPxAspect",1)
         raw = [[f["box"][0],f["box"][1],f["box"][2],f["box"][3],f["orient"]] for f in w["frames"]]
         slots, rk = debanner(raw, aspect)
+        if name in MODIFY: slots = MODIFY[name](slots, aspect)
         seen[s] = {"name":name, "aliases":[], "aspect":aspect, "slots":slots, "reworked":rk}
         order.append(s)
 
