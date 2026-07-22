@@ -820,3 +820,15 @@ Two problems on the wall prototype, both fixed together:
 
 ## Implication
 Any future screen inherits the rule: no breadcrumb rows; changeable-content surfaces express "where am I / what mode" through the persistent nav + the advisor, never a static trail or a gate. Frozen `05-wall` v3 (also swapped its placeholder images for the real curated catalogue used on the product page).
+
+### D-048 refinement (2026-07-22) — presume nothing: slots start EMPTY
+Artur: *"pierwszy ekran raczej powinien być z placeholderem — bez pracy — jeszcze nic nie wiemy o kliencie… jak ktoś zmienia z 2 na 3 prace ta trzecia praca chyba też powinna być placeholderem."* Correct — auto-filling a slot with an artwork presumes taste we don't have yet. New rule for the wall:
+
+- **A slot is either EMPTY (a dashed placeholder — "Dodaj pracę") or FILLED (a piece).** We presume **nothing**: slots start empty.
+- **Two exceptions where we DO place a piece** (both are the customer telling us what they want): (a) arrival from the catalog `?art=slug` places that one piece; (b) an explicit "Gotowa ściana" / "Zaskocz mnie" fills slots on request.
+- **Entry from nav** (no context) opens with **one empty placeholder**, not a curated piece (this narrows D-048's original "opens populated" — populated only when we have a signal).
+- **Growing N→N+1 always appends an empty placeholder**, focused; the advisor asks *"czym je wypełnić?"* with chips **Zaskocz mnie / Dopasuj do reszty / Przeglądaj katalog** (+ **Przywróć poprzednią** when the reserve is non-empty).
+- **Focused-empty panel state:** header "Puste miejsce · Do wypełnienia", price "—", Options disabled; the advisor drives the fill.
+- **Pricing:** only filled slots count; empty = $0; "Dodaj ścianę do koszyka" is enabled once ≥1 piece is filled.
+
+Frozen `05-wall` v4. Playwright-verified: empty start, fill via each chip, add-empty, reserve/restore, catalog arrival, zero errors.
