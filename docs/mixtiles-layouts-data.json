@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "purpose": "Measured Mixtiles gallery-wall data → source for our LAYOUTS matrix (mapped to our 9 Gelato sizes). Numbers/patterns only — no competitor images/code/brand stored here.",
+    "validated": "2026-07-22: rigid named compositions, no reflow, fixed frame count, empty frames allowed, S/M/L = three separate collections (each wall has ONE size).",
+    "howToFill": "Append one object per wall to walls[]. Positions (box%) are derived by Claude from clean empty-frame screenshots — do NOT hand-estimate them here.",
+    "target": "~45 walls (Small ~20 + Medium ~18 + Large ~7)"
+  },
+  "config": {
+    "frames": [
+      { "name": "Frameless", "priceDelta": 0 },
+      { "name": "Black", "priceDelta": 0 },
+      { "name": "White", "priceDelta": 0 },
+      { "name": "Oak", "priceDelta": 48 },
+      { "name": "Wide Black", "priceDelta": 96 },
+      { "name": "Wide White", "priceDelta": 96 },
+      { "name": "Wide Walnut", "priceDelta": 96 },
+      { "name": "Earthy Blend", "priceDelta": 48 },
+      { "name": "Classic Blend", "priceDelta": 48 },
+      { "name": "Harmony Mix", "priceDelta": 30 }
+    ],
+    "borders": [
+      { "name": "None", "matCm": 0 },
+      { "name": "Shallow", "matCm": null },
+      { "name": "Medium", "matCm": null },
+      { "name": "Deep", "matCm": null }
+    ],
+    "effects": ["Original", "Silver", "Noir", "Vivid", "Dramatic"],
+    "photoMapping": { "note": "TBD by Chrome: how 'Add N Photos' maps to cell count (demo prefill?), and how a portrait photo crops into a square cell (centre? repositionable?)." },
+    "behavior": {
+      "flow": "pick a rigid named wall, fill with photos",
+      "reflow": "none — deselecting a photo empties that cell in place; layout never shifts",
+      "frameCount": "fixed per wall; clicking an empty cell only offers Upload/Import",
+      "emptyFramesAllowed": true,
+      "sizeModel": "S/M/L are separate collections, not per-product scale; each wall has one overallCm"
+    }
+  },
+  "walls": [
+    {
+      "name": "16 Snapshots",
+      "sizeBand": "Medium",
+      "bestSeller": true,
+      "frameCount": 16,
+      "compositionType": "uniform-grid",
+      "overallCm": { "w": 97, "h": 97 },
+      "gapCm": 4.3,
+      "frames": [
+        { "orientation": "S", "cm": { "w": 21, "h": 21 }, "count": 16 }
+      ],
+      "screenshot": "16-snapshots-empty (in chat)",
+      "confidence": { "cm": "ruler", "gap": "derived" }
+    }
+  ]
+}
