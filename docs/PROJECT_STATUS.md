@@ -84,9 +84,16 @@ Gotowe:
 ### ⚡ ZMIANA KIERUNKU (2026‑07‑21) — czytaj `docs/USER-INTENTS.md` (żywa mapa)
 Artur zapytał o realny plan „Design my wall" → wyszła głęboka praca nad intencjami (178 scenariuszy → 5 podróży, recenzja ChatGPT, feasibility‑engine). **Reframe: jednostka = jedna praca; „ściana" = ZMIENNA liczba prac (1..N) kupowanych razem** (nie sztywna para); dwie drogi (gotowe układy + składanie), wzorzec Mixtiles; **strona produktu = ściana**; układy z biblioteki presetów; rozmiar należy do układu; panel dwupoziomowy. Modsy jako analogia — **zbanowane**.
 
-### ⏭ WZNOWIENIE (2026‑07‑22 EOD) — OTWARTA decyzja o układach (A vs B)
-Matryca Mixtiles zebrana (45 ścian, `docs/mixtiles-positions.json` + config) i wpięta w `05-wall` v12 jako **cm‑true** (każda praca w proporcji naszych cm — kwadrat 5×5 / pion 5×7 / poziom 7×5, D‑051). **Problem:** auto‑układanie w rzędy **psuje układy MIESZANE/klastry** (samotne prace w rzędzie + poszarpane wysokości przy mieszanych orientacjach w rzędzie). Czyste wychodzą tylko JEDNORODNE (grid/rzędy).
-**Decyzja czeka na Artura:** **A)** zastąpić mieszane/klastry generowanymi czystymi siatkami (kwadrat/pion/poziom per liczba) — czyste+poprawne, pokrycie 3–12, tracimy fikuśne układy Mixtiles (dane matrycy zostają); **B)** ręcznie zaprojektować zestaw ładnych cm‑true mieszanych. Rekomendacja: **A teraz + B później.** Generator: `shared/gen-wall-layouts.py`.
+### ⏭ WZNOWIENIE (2026‑07‑22, późna sesja) — `05-wall` = **v22**, wszystko wypushowane
+**Układy:** decyzja A/B zdjęta — Artur chce też mieszane, więc powstał **kit do projektowania układów** (`shared/gen-wall-layouts.py`: tokeny `P/L/S`×rozmiar`0/1/2` = 9 rozmiarów Gelato jako moduły 10 cm; `rows()`/`grid()` + **stack** `["P2",["S0","S0"]]` na kompozycje „bohater"). Matryca 3–12 z **mieszanymi rozmiarami**, cm‑true z definicji. Mixtiles = tylko biblioteka pomysłów (`docs/mixtiles-positions.json` nietknięte).
+
+**Zbudowany builder ściany + WIDOK SZCZEGÓŁÓW (główna robota sesji):**
+- **Płótno 3‑warstwowe:** `#wallView` `position:fixed` pełny ekran (z1) MIĘDZY tłem‑ścianą a NAKŁADKAMI (menu/topbar/panel, z2, nieprzezroczyste); grafiki wjeżdżają POD nakładki. Akcje: **scroll = zoom** (+ przyciski −/100/+), **przeciągnij PUSTE płótno = pan**, **klik w pracę = szczegóły**.
+- **D5 orientacja** pilnowana wszędzie (`reconcileToLayout()` + `swapArt`): pion→pion/kwadrat, poziom→poziom/kwadrat, kwadrat→kwadrat.
+- **WIDOK SZCZEGÓŁÓW = pełny „model B" (Ideogram):** jedna przewijalna strona — góra: duża **surowa grafika** (bez ramki) + pasek **„Recently viewed"** (historia) po lewej, **panel po prawej** (reparentowany do przepływu, **odjeżdża przy scrollu**); pod foldem **katalog na PEŁNĄ SZEROKOŚĆ**. Tło `var(--bg)` wg motywu. Kolumny wyrównane (góra/dół). Powrót „× Back to wall" przywraca panel do nakładki.
+- **Katalog = moduł 01-home 1:1** (Artur 3× „nie wymyślaj swojego UX"): dokopiowany brakujący CSS filtrów (`.pill/.filters/.seg/.allf/.drop/.count`); render = filterzone (pigułki + count + All filters + orientacja + Sort) + masonry `.tile` (fav/share/more/info) + Load more.
+
+**STUBY do dokończenia:** filtry (pigułki/orientacja/sort/„All filters") są WIZUALNE, nie zawężają; brak wysuwanego panelu „All filters" (drawer — Artur: i tak pewnie usuniemy); brak dopasowania picków po palecie/nastroju (katalog filtruje tylko po orientacji). Snapshoty: `prototypes/mockups/versions/05-wall-vNN.html` + `labels.json` (do v22).
 
 Następne (po reakcji na `05-wall`):
 - [ ] **Decyzja D‑047: rozszerzyć MVP z „pojedyncza grafika" na „N prac"?** (zmienia D‑023/D‑030/D‑033) — czeka na Artura.
