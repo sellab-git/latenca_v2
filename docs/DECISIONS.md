@@ -803,3 +803,20 @@ Artur flagged the old toggle as broken: different heights (buy panel flexed tall
 
 ### D-046 refinement (2026-07-21) — one control, one summary
 Artur spotted duplication: the config summary appeared in both the header and the dock, and with the sheet open there were two config affordances (the dock "Options" toggle + the sheet's own "Configure your print" header/close). Resolved to an **accordion**: the config summary lives **only in the dock**; the header is title + price. The **dock "Options" row is the single open/close control** (chevron rotates 180°); the sheet is just the configurator content — no separate header, no second close button. Frozen `04-advisor` v16.
+
+# D-048
+
+No breadcrumbs anywhere; the wall opens populated and intent lives in the advisor (not a gate screen).
+
+## Status
+Accepted — 2026-07-22
+
+## Context / Decision
+Two problems on the wall prototype, both fixed together:
+
+1. **Breadcrumbs removed project-wide.** On a surface where the content changes under the user — the advisor swaps the artwork, the wall grows/shrinks — a breadcrumb like `Explore · Abstract` becomes a lie (it never updates). Artur: *"w aplikacjach nie ma bread crumbs tylko w lewym menu widać gdzie jesteśmy."* Correct: this is an app, not a document tree. **Location is shown by the active item in the left nav**, nothing else. Removed from `03-product`, `04-advisor`, `05-wall`.
+
+2. **No intent-chooser gate; no "Zmień intencję".** v2 gated the wall behind a blank 4-tile chooser screen with a "Zmień intencję" back-link — **this violated [[D-022]] (the designer is never a gate)** and was a weak flow (a dead-end back-button). Fixed: **the wall always opens populated** (from the catalog = that piece; otherwise the first curated piece), and the **four approaches — Gotowa ściana / Od mojego zdjęcia / Zaskocz mnie / Dodaj pracę — live as the advisor's opening quick-replies.** Each reconfigures the *same* wall in place; the user switches approach anytime by tapping a chip or chatting. There is no separate screen and nothing to navigate back from. This also keeps the advisor persistent (model D, D-046) rather than a front gate.
+
+## Implication
+Any future screen inherits the rule: no breadcrumb rows; changeable-content surfaces express "where am I / what mode" through the persistent nav + the advisor, never a static trail or a gate. Frozen `05-wall` v3 (also swapped its placeholder images for the real curated catalogue used on the product page).
