@@ -73,7 +73,7 @@ Nie są to życzenia — projektujemy pod nie **od pierwszej linijki**, bo obu n
 Gotowe:
 - **`01-home` = katalog‑landing** (v13). Doradca‑hero na górze (wariant C, D-042) + pełny Explore wciągnięty (D-038). Na „ścianie".
 - **`04-advisor` = produkt + doradca** (v16). **MODEL D (D-046):** jeden trwały panel — doradca główną powierzchnią, tytuł+cena u góry, dok „Options + Add to cart" na dole, konfiguracja jako accordion nad rozmową. Zastąpił przełącznik trybów (D-034). Ugruntowane na Figma/Ideogram/Fy! + Rufus/NN-g.
-- **`05-wall` = powierzchnia ŚCIANY** (v1) — **strona produktu JEST ścianą.** Chooser 4 intencji → stan ściany; N prac (1..5) w układach z biblioteki presetów per liczba; fokus; panel dwupoziomowy (praca + ściana); N→N‑1 → zapas; zero przeciągania (D-033). Pierwszy prototyp kierunku „zmienne N".
+- **`05-wall` = powierzchnia ŚCIANY** (v2) — **strona produktu JEST ścianą.** **v2 = REBUILD właściwą metodą: skopiowana `04-advisor` 1:1 i dostosowana** (v1 była pisana od zera → dryf panelu/breadcrumbs/kadrów, Artur słusznie zwrócił uwagę). Dziedziczy cały panel model D + config sheet + drawery + kadry #fff/`--art-shadow-lg`. Zmienione: lewa scena 1→N slotów w układach z presetów + chooser 4 intencji; panel +„Praca X z N"; dok +poziom ściany (układ ‹1/2›, liczba −N+); CTA „Dodaj ścianę do koszyka"=suma. Per‑praca materiał/rozmiar/rama w Options zmieniają sumę; N→N‑1 → zapas; zero przeciągania (D‑033). Playwright‑verified.
 - **`03-product`** — stan sprzed doradcy, punkt odniesienia.
 
 ### ⚡ ZMIANA KIERUNKU (2026‑07‑21) — czytaj `docs/USER-INTENTS.md` (żywa mapa)
