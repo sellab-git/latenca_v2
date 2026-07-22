@@ -3,7 +3,7 @@
     "purpose": "EXACT frame positions from Mixtiles editor DOM (.sc-ykt6xc-12 rects, normalized to union bbox). Claude's domain. Merge with cm from mixtiles-layouts-data.json at the end.",
     "format": "per wall: wallPxAspect + frames[] with box[x,y,w,h] (% of wall) + orient (P/L/S). Aspect ratios cross-validated against catalog cm every time.",
     "method": "reliable extractor: cardOf(smallest ancestor with name+price) → click its img → verify editor URL slug matches name → read rects → normalize. One batch, slug-checked.",
-    "progress": "Small: 12/20 done. Remaining Small: Parallel Triplet, Timeless Quartet, 12 Memories, 6 Enduring Pictures, Cozy Trio, Drifting Shapes, Soft Melodies, Beautiful Lines. Then Medium (~18) + Large (~7)."
+    "progress": "Small: 20/20 DONE. Next: Medium (~18) + Large (~7)."
   },
   "walls": {
     "Wild Visuals": { "wallPxAspect": 1.5, "frames": [
@@ -62,6 +62,36 @@
       { "orient": "S", "box": [16.4, 0, 28, 27.9] }, { "orient": "S", "box": [52.6, 0, 28, 27.9] },
       { "orient": "S", "box": [0, 36.1, 28, 27.9] }, { "orient": "S", "box": [36.2, 36.1, 28, 27.9] },
       { "orient": "S", "box": [72, 36.1, 28, 27.9] }, { "orient": "S", "box": [16.4, 72.1, 28, 27.9] },
-      { "orient": "S", "box": [52.6, 72.1, 28, 27.9] } ] }
+      { "orient": "S", "box": [52.6, 72.1, 28, 27.9] } ] },
+    "Parallel Triplet": { "wallPxAspect": 2.6, "frames": [
+      { "orient": "P", "box": [0, 0, 29.3, 100] }, { "orient": "P", "box": [35.4, 0, 29.3, 100] },
+      { "orient": "P", "box": [70.7, 0, 29.3, 100] } ] },
+    "Timeless Quartet": { "wallPxAspect": 1, "frames": [
+      { "orient": "S", "box": [0, 0, 45.7, 46.3] }, { "orient": "S", "box": [54.3, 0, 45.7, 46.3] },
+      { "orient": "S", "box": [0, 53.7, 45.7, 46.3] }, { "orient": "S", "box": [54.3, 53.7, 45.7, 46.3] } ] },
+    "12 Memories": { "wallPxAspect": 1.4, "frames": [
+      { "orient": "S", "box": [0, 0, 22.1, 29.9] }, { "orient": "S", "box": [26, 0, 22.1, 29.9] },
+      { "orient": "S", "box": [51.9, 0, 22.1, 29.9] }, { "orient": "S", "box": [77.9, 0, 22.1, 29.9] },
+      { "orient": "S", "box": [0, 35.1, 22.1, 29.9] }, { "orient": "S", "box": [26, 35.1, 22.1, 29.9] },
+      { "orient": "S", "box": [51.9, 35.1, 22.1, 29.9] }, { "orient": "S", "box": [77.9, 35.1, 22.1, 29.9] },
+      { "orient": "S", "box": [0, 70.1, 22.1, 29.9] }, { "orient": "S", "box": [26, 70.1, 22.1, 29.9] },
+      { "orient": "S", "box": [51.9, 70.1, 22.1, 29.9] }, { "orient": "S", "box": [77.9, 70.1, 22.1, 29.9] } ] },
+    "6 Enduring Pictures": { "wallPxAspect": 1.5, "frames": [
+      { "orient": "S", "box": [0, 0, 30.4, 46.6] }, { "orient": "S", "box": [34.8, 0, 30.4, 46.6] },
+      { "orient": "S", "box": [69.6, 0, 30.4, 46.6] }, { "orient": "S", "box": [0, 53.4, 30.4, 46.6] },
+      { "orient": "S", "box": [34.8, 53.4, 30.4, 46.6] }, { "orient": "S", "box": [69.6, 53.4, 30.4, 46.6] } ] },
+    "Cozy Trio": { "wallPxAspect": 1.2, "frames": [
+      { "orient": "P", "box": [0, 12, 40.7, 65.3] }, { "orient": "L", "box": [45.2, 0, 54.8, 48.7] },
+      { "orient": "S", "box": [45.8, 54, 39, 46] } ] },
+    "Drifting Shapes": { "wallPxAspect": 2.1, "frames": [
+      { "orient": "P", "box": [0, 16.2, 24, 68.6] }, { "orient": "P", "box": [32.4, 0, 35.1, 100] },
+      { "orient": "P", "box": [76, 14.3, 24, 68.6] } ] },
+    "Soft Melodies": { "wallPxAspect": 3.4, "frames": [
+      { "orient": "P", "box": [0, 0.2, 22.3, 99.8] }, { "orient": "P", "box": [26, 0.2, 22.3, 99.8] },
+      { "orient": "P", "box": [51.9, 0.2, 22.3, 99.8] }, { "orient": "P", "box": [77.7, 0, 22.3, 99.8] } ] },
+    "Beautiful Lines": { "wallPxAspect": 1.2, "frames": [
+      { "orient": "P", "box": [0, 0, 29.8, 46.4] }, { "orient": "P", "box": [34.9, 0, 29.8, 46.4] },
+      { "orient": "P", "box": [70.2, 0, 29.8, 46.4] }, { "orient": "P", "box": [0, 53.6, 29.8, 46.4] },
+      { "orient": "P", "box": [34.9, 53.6, 29.8, 46.4] }, { "orient": "P", "box": [70.2, 53.6, 29.8, 46.4] } ] }
   }
 }
