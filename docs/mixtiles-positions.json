@@ -114,6 +114,29 @@
       { "orient": "S", "box": [0, 79.1, 16.5, 20.9] }, { "orient": "S", "box": [20.9, 79.1, 16.5, 20.9] }, { "orient": "S", "box": [41.7, 79.1, 16.5, 20.9] }, { "orient": "S", "box": [62.6, 79.1, 16.5, 20.9] }, { "orient": "S", "box": [83.5, 79.1, 16.5, 20.9] } ] },
     "The Perfect Four": { "band": "Medium", "wallPxAspect": 1, "frames": [
       { "orient": "L", "box": [0, 11.2, 47.1, 35.6] }, { "orient": "P", "box": [53.4, 0, 35.8, 46.8] },
-      { "orient": "P", "box": [10.8, 53.2, 35.8, 46.8] }, { "orient": "L", "box": [52.9, 53.2, 47.1, 35.6] } ] }
+      { "orient": "P", "box": [10.8, 53.2, 35.8, 46.8] }, { "orient": "L", "box": [52.9, 53.2, 47.1, 35.6] } ] },
+    "The Bright Quartet": { "band": "Medium", "wallPxAspect": 3.3, "frames": [
+      { "orient": "P", "box": [0, 0, 22.3, 100] }, { "orient": "P", "box": [25.9, 0, 22.3, 100] },
+      { "orient": "P", "box": [51.8, 0, 22.3, 100] }, { "orient": "P", "box": [77.7, 0, 22.3, 100] } ] },
+    "Twilight Notes": { "band": "Medium", "wallPxAspect": 1.2, "frames": [
+      { "orient": "P", "box": [0, 56.7, 28.3, 43.3] }, { "orient": "P", "box": [35.9, 27.5, 28.3, 43.3] },
+      { "orient": "P", "box": [71.7, 0, 28.3, 43.3] } ] },
+    "Loving Life": { "band": "Medium", "wallPxAspect": 1.6, "frames": [
+      { "orient": "S", "box": [7.5, 0, 17.8, 28.4] }, { "orient": "S", "box": [29.9, 0, 17.8, 28.4] }, { "orient": "S", "box": [52.3, 0, 17.8, 28.4] }, { "orient": "S", "box": [74.8, 0, 17.8, 28.4] },
+      { "orient": "S", "box": [0, 35.8, 17.8, 28.4] }, { "orient": "S", "box": [82.2, 35.8, 17.8, 28.4] },
+      { "orient": "S", "box": [7.5, 71.6, 17.8, 28.4] }, { "orient": "S", "box": [29.9, 71.6, 17.8, 28.4] }, { "orient": "S", "box": [52.3, 71.6, 17.8, 28.4] }, { "orient": "S", "box": [74.8, 71.6, 17.8, 28.4] },
+      { "orient": "L", "box": [22.4, 35.8, 55.1, 28.4] } ] },
+    "Heartfelt Reflections": { "band": "Medium", "wallPxAspect": 1.5, "frames": [
+      { "orient": "S", "box": [0, 0, 31.2, 47.3] }, { "orient": "S", "box": [34.4, 0, 31.2, 47.3] }, { "orient": "S", "box": [68.8, 0, 31.2, 47.3] },
+      { "orient": "S", "box": [0, 52.7, 31.2, 47.3] }, { "orient": "S", "box": [34.4, 52.7, 31.2, 47.3] }, { "orient": "S", "box": [68.8, 52.7, 31.2, 47.3] } ] },
+    "Framed with Joy": { "band": "Medium", "wallPxAspect": 1.5, "frames": [
+      { "orient": "S", "box": [0, 0, 21.6, 32.7] }, { "orient": "S", "box": [26.1, 0, 21.6, 32.7] }, { "orient": "S", "box": [52.2, 0, 21.6, 32.7] }, { "orient": "S", "box": [78.4, 0, 21.6, 32.7] },
+      { "orient": "S", "box": [0, 38.3, 21.6, 32.7] }, { "orient": "S", "box": [26.1, 38.3, 21.6, 32.7] }, { "orient": "S", "box": [52.2, 38.3, 21.6, 32.7] }, { "orient": "S", "box": [78.4, 38.3, 21.6, 32.7] },
+      { "orient": "L", "box": [27.3, 78.4, 44.5, 21.6] } ] },
+    "Timeless Moments": { "band": "Medium", "wallPxAspect": 0.7, "frames": [
+      { "orient": "S", "box": [0, 0, 28.8, 21.5] }, { "orient": "S", "box": [36.6, 0.2, 28.8, 21.5] }, { "orient": "S", "box": [71.2, 0.2, 28.8, 21.5] },
+      { "orient": "S", "box": [0, 27.1, 28.8, 21.5] }, { "orient": "S", "box": [36.6, 27.3, 28.8, 21.5] }, { "orient": "S", "box": [71.2, 27.3, 28.8, 21.5] },
+      { "orient": "S", "box": [0, 53.9, 28.8, 21.5] }, { "orient": "S", "box": [36.6, 53.6, 28.8, 21.5] }, { "orient": "S", "box": [71.2, 53.6, 28.8, 21.5] },
+      { "orient": "L", "box": [15.7, 83.3, 69.3, 16.7] } ] }
   }
 }
