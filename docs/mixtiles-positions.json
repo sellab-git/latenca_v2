@@ -1,61 +1,67 @@
 {
   "_meta": {
-    "purpose": "EXACT frame positions extracted from Mixtiles editor DOM (.sc-ykt6xc-12 rects, normalized to union bbox). Claude's domain. Merge with cm from mixtiles-layouts-data.json at the end.",
-    "format": "per wall: wallPxAspect + frames[] with box[x,y,w,h] (% of wall) + orient (P/L/S). Cross-validated 1:1 against Artur's ruler orientations.",
-    "reliabilityNote": "Extract one wall per call (or via harvested product slugs). Batched history.back() looping is unreliable — it mixed up Harmony in Four / Embraced by Warmth with Wild Visuals; redo those."
+    "purpose": "EXACT frame positions from Mixtiles editor DOM (.sc-ykt6xc-12 rects, normalized to union bbox). Claude's domain. Merge with cm from mixtiles-layouts-data.json at the end.",
+    "format": "per wall: wallPxAspect + frames[] with box[x,y,w,h] (% of wall) + orient (P/L/S). Aspect ratios cross-validated against catalog cm every time.",
+    "method": "reliable extractor: cardOf(smallest ancestor with name+price) → click its img → verify editor URL slug matches name → read rects → normalize. One batch, slug-checked.",
+    "progress": "Small: 12/20 done. Remaining Small: Parallel Triplet, Timeless Quartet, 12 Memories, 6 Enduring Pictures, Cozy Trio, Drifting Shapes, Soft Melodies, Beautiful Lines. Then Medium (~18) + Large (~7)."
   },
   "walls": {
-    "Wild Visuals": {
-      "wallPxAspect": 1.5,
-      "frames": [
-        { "orient": "L", "box": [9.3, 0, 34.1, 40.1] },
-        { "orient": "P", "box": [48.8, 3.6, 17.1, 36.4] },
-        { "orient": "L", "box": [71.1, 13.7, 23.6, 26.3] },
-        { "orient": "S", "box": [0, 47.3, 16.7, 25.7] },
-        { "orient": "S", "box": [21.5, 47.3, 26, 40.1] },
-        { "orient": "P", "box": [52.4, 47.3, 26, 52.7] },
-        { "orient": "S", "box": [83.3, 47.3, 16.7, 25.7] }
-      ]
-    },
-    "Offbeat Set": {
-      "wallPxAspect": 0.8,
-      "frames": [
-        { "orient": "S", "box": [11.5, 0, 33.5, 27.3] },
-        { "orient": "P", "box": [50.5, 2.2, 49.5, 53.6] },
-        { "orient": "L", "box": [0, 31.5, 45, 27.3] },
-        { "orient": "L", "box": [50.5, 60.7, 45, 27.3] },
-        { "orient": "P", "box": [11.5, 63.3, 33.5, 36.7] }
-      ]
-    },
-    "Symphony of Frames": {
-      "wallPxAspect": 1.8,
-      "frames": [
-        { "orient": "S", "box": [0, 0, 25.3, 45.1] },
-        { "orient": "P", "box": [30.2, 0, 39.6, 100] },
-        { "orient": "S", "box": [74.7, 0, 25.3, 45.1] },
-        { "orient": "S", "box": [0, 54.9, 25.3, 45.1] },
-        { "orient": "S", "box": [74.7, 54.9, 25.3, 45.1] }
-      ]
-    },
-    "Bold Statement": {
-      "wallPxAspect": 1.3,
-      "frames": [
-        { "orient": "S", "box": [0, 0, 16.4, 21] },
-        { "orient": "S", "box": [21, 0, 16.4, 21] },
-        { "orient": "S", "box": [41.7, 0, 16.7, 21] },
-        { "orient": "S", "box": [62.7, 0, 16.4, 21] },
-        { "orient": "S", "box": [83.6, 0, 16.4, 21] },
-        { "orient": "S", "box": [0, 26.5, 16.4, 20.6] },
-        { "orient": "L", "box": [21.6, 24.5, 56.8, 51] },
-        { "orient": "S", "box": [83.6, 26.5, 16.4, 20.6] },
-        { "orient": "S", "box": [0, 52.9, 16.4, 20.6] },
-        { "orient": "S", "box": [21, 79, 16.4, 21] },
-        { "orient": "S", "box": [41.7, 79, 16.7, 21] },
-        { "orient": "S", "box": [62.7, 79, 16.4, 21] },
-        { "orient": "S", "box": [83.6, 52.9, 16.4, 20.6] },
-        { "orient": "S", "box": [0, 79, 16.4, 21] },
-        { "orient": "S", "box": [83.6, 79, 16.4, 21] }
-      ]
-    }
+    "Wild Visuals": { "wallPxAspect": 1.5, "frames": [
+      { "orient": "L", "box": [9.3, 0, 34.1, 40.1] }, { "orient": "P", "box": [48.8, 3.6, 17.1, 36.4] },
+      { "orient": "L", "box": [71.1, 13.7, 23.6, 26.3] }, { "orient": "S", "box": [0, 47.3, 16.7, 25.7] },
+      { "orient": "S", "box": [21.5, 47.3, 26, 40.1] }, { "orient": "P", "box": [52.4, 47.3, 26, 52.7] },
+      { "orient": "S", "box": [83.3, 47.3, 16.7, 25.7] } ] },
+    "Offbeat Set": { "wallPxAspect": 0.8, "frames": [
+      { "orient": "S", "box": [11.5, 0, 33.5, 27.3] }, { "orient": "P", "box": [50.5, 2.2, 49.5, 53.6] },
+      { "orient": "L", "box": [0, 31.5, 45, 27.3] }, { "orient": "L", "box": [50.5, 60.7, 45, 27.3] },
+      { "orient": "P", "box": [11.5, 63.3, 33.5, 36.7] } ] },
+    "Symphony of Frames": { "wallPxAspect": 1.8, "frames": [
+      { "orient": "S", "box": [0, 0, 25.3, 45.1] }, { "orient": "P", "box": [30.2, 0, 39.6, 100] },
+      { "orient": "S", "box": [74.7, 0, 25.3, 45.1] }, { "orient": "S", "box": [0, 54.9, 25.3, 45.1] },
+      { "orient": "S", "box": [74.7, 54.9, 25.3, 45.1] } ] },
+    "Bold Statement": { "wallPxAspect": 1.3, "frames": [
+      { "orient": "S", "box": [0, 0, 16.4, 21] }, { "orient": "S", "box": [21, 0, 16.4, 21] },
+      { "orient": "S", "box": [41.7, 0, 16.7, 21] }, { "orient": "S", "box": [62.7, 0, 16.4, 21] },
+      { "orient": "S", "box": [83.6, 0, 16.4, 21] }, { "orient": "S", "box": [0, 26.5, 16.4, 20.6] },
+      { "orient": "L", "box": [21.6, 24.5, 56.8, 51] }, { "orient": "S", "box": [83.6, 26.5, 16.4, 20.6] },
+      { "orient": "S", "box": [0, 52.9, 16.4, 20.6] }, { "orient": "S", "box": [21, 79, 16.4, 21] },
+      { "orient": "S", "box": [41.7, 79, 16.7, 21] }, { "orient": "S", "box": [62.7, 79, 16.4, 21] },
+      { "orient": "S", "box": [83.6, 52.9, 16.4, 20.6] }, { "orient": "S", "box": [0, 79, 16.4, 21] },
+      { "orient": "S", "box": [83.6, 79, 16.4, 21] } ] },
+    "Harmony in Four": { "wallPxAspect": 0.9, "frames": [
+      { "orient": "S", "box": [0, 0, 48.4, 41.4] }, { "orient": "P", "box": [51.6, 0, 48.4, 55.2] },
+      { "orient": "P", "box": [0, 44.8, 48.4, 55.2] }, { "orient": "S", "box": [51.6, 58.6, 48.4, 41.4] } ] },
+    "Embraced by Warmth": { "wallPxAspect": 0.9, "frames": [
+      { "orient": "L", "box": [1.1, 0, 44.9, 29.5] }, { "orient": "L", "box": [53.2, 0, 44.9, 29.5] },
+      { "orient": "L", "box": [1.1, 70.5, 44.9, 29.5] }, { "orient": "L", "box": [53.2, 70.5, 44.9, 29.5] },
+      { "orient": "L", "box": [0, 36.9, 100, 28.2] } ] },
+    "Boundless Moments": { "wallPxAspect": 1.3, "frames": [
+      { "orient": "S", "box": [0, 0, 30.1, 40.1] }, { "orient": "P", "box": [34.7, 0, 30.1, 53] },
+      { "orient": "S", "box": [69.9, 0, 30.1, 40.1] }, { "orient": "P", "box": [0, 46.9, 30.1, 53] },
+      { "orient": "S", "box": [34.7, 59.9, 30.1, 40.1] }, { "orient": "P", "box": [69.9, 46.9, 30.1, 53] } ] },
+    "Dancing Lights": { "wallPxAspect": 1.6, "frames": [
+      { "orient": "S", "box": [0, 0, 29.3, 45.5] }, { "orient": "S", "box": [35.1, 0, 29.3, 45.5] },
+      { "orient": "S", "box": [70.7, 0, 29.3, 45.5] }, { "orient": "S", "box": [0, 54.5, 29.3, 45.5] },
+      { "orient": "S", "box": [35.1, 54.5, 29.3, 45.5] }, { "orient": "S", "box": [70.7, 54.5, 29.3, 45.5] } ] },
+    "Captured Affection": { "wallPxAspect": 0.9, "frames": [
+      { "orient": "S", "box": [0, 12.3, 46.3, 40.4] }, { "orient": "P", "box": [53.3, 0, 46.7, 52.7] },
+      { "orient": "L", "box": [23.4, 59.2, 60.4, 40.8] } ] },
+    "Frame by Frame": { "wallPxAspect": 1, "frames": [
+      { "orient": "S", "box": [0, 26.5, 22.7, 22.7] }, { "orient": "S", "box": [26, 26.5, 22.7, 22.7] },
+      { "orient": "S", "box": [51.9, 26.5, 22.1, 22.7] }, { "orient": "S", "box": [77.3, 26.5, 22.7, 22.7] },
+      { "orient": "S", "box": [0, 51.9, 22.7, 22.1] }, { "orient": "S", "box": [26, 51.9, 22.7, 22.1] },
+      { "orient": "S", "box": [51.9, 51.9, 22.1, 22.1] }, { "orient": "S", "box": [77.3, 51.9, 22.7, 22.1] },
+      { "orient": "S", "box": [0, 77.3, 22.7, 22.7] }, { "orient": "S", "box": [26, 77.3, 22.7, 22.7] },
+      { "orient": "S", "box": [51.9, 77.3, 22.1, 22.7] }, { "orient": "S", "box": [77.3, 77.3, 22.7, 22.7] },
+      { "orient": "L", "box": [14.4, 0, 72.9, 23.2] } ] },
+    "The Joyful Five": { "wallPxAspect": 1.5, "frames": [
+      { "orient": "S", "box": [0, 0, 29.6, 45.5] }, { "orient": "S", "box": [35.2, 0, 29.6, 45.5] },
+      { "orient": "S", "box": [70.4, 0, 29.6, 45.5] }, { "orient": "S", "box": [16.2, 54.5, 29.6, 45.5] },
+      { "orient": "S", "box": [51.8, 54.5, 29.6, 45.5] } ] },
+    "The Sweet Seven": { "wallPxAspect": 1, "frames": [
+      { "orient": "S", "box": [16.4, 0, 28, 27.9] }, { "orient": "S", "box": [52.6, 0, 28, 27.9] },
+      { "orient": "S", "box": [0, 36.1, 28, 27.9] }, { "orient": "S", "box": [36.2, 36.1, 28, 27.9] },
+      { "orient": "S", "box": [72, 36.1, 28, 27.9] }, { "orient": "S", "box": [16.4, 72.1, 28, 27.9] },
+      { "orient": "S", "box": [52.6, 72.1, 28, 27.9] } ] }
   }
 }
