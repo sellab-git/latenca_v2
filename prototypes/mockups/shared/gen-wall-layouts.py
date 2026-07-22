@@ -30,11 +30,41 @@ def _loving_cols(slots, A):          # 11-piece: middle-row side squares → col
             if s[0]<10: s[0]=7.5
             elif s[0]>75: s[0]=74.8
     return slots
-MODIFY = {
-    "Timeless Moments":   lambda s,A: _last_to_square(s, A, 80.5),   # 10 · bottom element → square
-    "Framed Connections": lambda s,A: _framed_conn(s, A),            # 10 · top element → square
-    "Loving Life":        lambda s,A: _loving_cols(s, A),            # 11 · side squares → columns
-}
+MODIFY = {}  # superseded by cm_true (below): rebuilding on our cm auto-removes banners + stick-outs
+
+# ── cm-TRUE geometry (Artur direction A) ───────────────────────────────────
+# We only sell 3 sizes/orientation; on the wall every piece defaults to the middle tier, whose real
+# cm share a 50cm module: square 50×50, portrait 50×70, landscape 70×50. Mixtiles' pixel geometry
+# used THEIR size mix (21/32/50) → relabeling gave wrong proportions. So we KEEP only the arrangement
+# (which piece is roughly where + its orientation) and REBUILD the geometry on OUR module: cluster
+# slots into rows by vertical centre, lay each row left→right at cm-true sizes with a constant gap,
+# centre + stack the rows. Every frame's on-wall size is then proportional to its real cm.
+CM_UNIT = {'P':(5,7), 'L':(7,5), 'S':(5,5)}   # 10cm units, size-1 (middle) tier
+GAP = 0.55                                     # ~5.5 cm between frames
+def cm_true(slots):
+    items = sorted(({'o':s[4], 'cx':s[0]+s[2]/2, 'cy':s[1]+s[3]/2} for s in slots), key=lambda it: it['cy'])
+    rows = []
+    for it in items:
+        if rows and abs(it['cy'] - sum(r['cy'] for r in rows[-1])/len(rows[-1])) < 13:
+            rows[-1].append(it)
+        else:
+            rows.append([it])
+    for r in rows: r.sort(key=lambda it: it['cx'])
+    laid, y, maxw = [], 0.0, 0.0
+    for r in rows:
+        rh = max(CM_UNIT[it['o']][1] for it in r)
+        x, rects = 0.0, []
+        for it in r:
+            w,h = CM_UNIT[it['o']]
+            rects.append([x, y+(rh-h)/2, w, h, it['o']]); x += w + GAP
+        maxw = max(maxw, x-GAP); laid.append(rects); y += rh + GAP
+    tw, th = maxw, y-GAP
+    out = []
+    for rects in laid:
+        roww = max(r[0]+r[2] for r in rects); offx = (tw-roww)/2
+        for r in rects:
+            out.append([round((r[0]+offx)/tw*100,1), round(r[1]/th*100,1), round(r[2]/tw*100,1), round(r[3]/th*100,1), r[4]])
+    return out, round(tw/th, 3)
 
 # We only offer P/L/S (real aspects ~0.71 / 1.0 / 1.4). A Mixtiles "banner" slot (wide-thin
 # title band, ~3.0) has no equivalent in our catalogue → rework it into a centred LANDSCAPE
@@ -57,22 +87,23 @@ seen = {}
 order = []
 for name, w in d["walls"].items():
     if name in DROP: continue
-    s = sig(w)
-    if s in seen:
-        seen[s]["aliases"].append(name)
+    raw = [[f["box"][0],f["box"][1],f["box"][2],f["box"][3],f["orient"]] for f in w["frames"]]
+    slots, aspect = cm_true(raw)                              # rebuild on our cm module
+    key = tuple(sorted((round(x[0]),round(x[1]),round(x[2]),round(x[3]),x[4]) for x in slots))
+    if key in seen:
+        seen[key]["aliases"].append(name)
     else:
-        oc = w.get("overallCm", {})
-        aspect = round(oc.get("w",1)/oc.get("h",1), 3) if oc else w.get("wallPxAspect",1)
-        raw = [[f["box"][0],f["box"][1],f["box"][2],f["box"][3],f["orient"]] for f in w["frames"]]
-        slots, rk = debanner(raw, aspect)
-        if name in MODIFY: slots = MODIFY[name](slots, aspect)
-        seen[s] = {"name":name, "aliases":[], "aspect":aspect, "slots":slots, "reworked":rk}
-        order.append(s)
+        seen[key] = {"name":name, "aliases":[], "aspect":aspect, "slots":slots, "reworked":0}
+        order.append(key)
 
-# group by frame count
+# group by frame count. Drop layouts that came out too tall (aspect < 0.6) — these are the staggered
+# clusters that our cm-true row-rebuild flattens into an ugly narrow stack; keep only clean grid/row ones.
 by_count = collections.defaultdict(list)
+dropped_tall = []
 for s in order:
     e = seen[s]
+    if e["aspect"] < 0.6:
+        dropped_tall.append((len(e["slots"]), e["name"])); continue
     by_count[len(e["slots"])].append(e)
 
 # emit JS

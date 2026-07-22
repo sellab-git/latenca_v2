@@ -908,3 +908,10 @@ A curation layer in `shared/gen-wall-layouts.py` (DROP set + MODIFY dict, by lay
 - **End at 12 pieces:** removed the 13/15/16/20 layouts (Frame by Frame, Bold Statement, 16 Snapshots, The Memory Mosaic); `MAXPIECES=12`. Matrix now 37 layouts (counts 3–12). Full 45-wall data preserved in `mixtiles-positions.json`.
 
 Frozen `05-wall` v10. Playwright-verified all four fixes render correctly.
+
+### D-051 cm-true rebuild (2026-07-22) — pieces render at real cm proportions
+Artur caught that the on-wall sizes were wrong: we were putting **our** cm labels on **Mixtiles' pixel geometry**, and their size mix (21/32/50) ≠ ours (30/50/70). Symptom: two portraits both labelled "50×70" rendered at different sizes; a "50×50" square and a "50×70" portrait didn't share width. Direction A (chosen): rebuild geometry on OUR cm.
+
+On the wall every piece defaults to the middle tier, whose real cm share a **50cm module**: square 50×50, portrait 50×70, landscape 70×50 (units 5×5 / 5×7 / 7×5). The generator now **keeps only the arrangement** (which piece is roughly where + its orientation) and **rebuilds the geometry cm-true**: cluster slots into rows by vertical centre, lay each row left→right at cm-true sizes with a constant ~5.5cm gap, centre and stack the rows. Result (Playwright-measured): landscape 156×111, portrait 111×156, square 111×111 — square width = portrait width, landscape wider, two portraits identical. Correct proportions everywhere.
+
+**Trade-off:** the row-rebuild flattens staggered/centre-ring **clusters** into an ugly narrow stack (aspect < 0.6), so those are dropped (7: Offbeat Set, Symphony of Frames, Cozy Trio, Twilight Notes, Shining Paths, Ascending Memories, Bright and Cherished). Clean **grid/row** layouts survive: **27 cm-true layouts, every piece-count 3–12 covered** (3→2, 4→4, 5→3, 6→4, 7→3, 8→3, 9→3, 10→3, 11→1, 12→1). Bespoke cm-true cluster layouts can be designed later from the intact 45-wall matrix (`mixtiles-positions.json`). Generator: `shared/gen-wall-layouts.py`. `05-wall` v12.
