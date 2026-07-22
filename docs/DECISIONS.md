@@ -832,3 +832,17 @@ Artur: *"pierwszy ekran raczej powinien być z placeholderem — bez pracy — j
 - **Pricing:** only filled slots count; empty = $0; "Dodaj ścianę do koszyka" is enabled once ≥1 piece is filled.
 
 Frozen `05-wall` v4. Playwright-verified: empty start, fill via each chip, add-empty, reserve/restore, catalog arrival, zero errors.
+
+# D-049
+
+The front-end is English; code is written i18n-ready for future languages.
+
+## Status
+Accepted — 2026-07-22
+
+## Context / Decision
+Artur: *"Wszystko co robimy na froncie ma być po angielsku — przygotowane na inne języki w przyszłości jeżeli będzie taka potrzeba."* This settles the EN-vs-PL question flagged when the wall work drifted into Polish. **All customer-facing UI text is English** (global market, USD pricing — consistent with the earlier english-first note). Polish stays only for **internal** docs/decisions/commit-bodies and the founder-facing side.
+
+The wall (`05-wall`) was the only screen that had drifted to Polish; it was fully translated (panel labels, wall dock, placeholder, every advisor line, cart drawer, and the chat parser's keywords — English keywords now, with the collision fix so "another layout" reads as a layout change, not an artwork swap). `01-home` / `03-product` / `04-advisor` were already English.
+
+**i18n-ready** means: UI strings stay as plain text (never baked into images or fused with logic), no hardcoded locale/currency/date — the real Next.js build extracts strings to a message catalogue and uses central `formatCurrency`/`formatDate`. In the static mockups the practical rule is just: English text, kept as literals. Frozen `05-wall` v5.
