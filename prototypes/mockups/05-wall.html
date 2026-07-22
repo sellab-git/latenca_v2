@@ -1316,7 +1316,7 @@
   function applyApproach(kind,baseIdx){
     wall.reserve=[]; wall.layout=0; wall.focus=0;
     const N=APPROACH_N[kind]||1, b=baseIdx||0, lay=layoutsFor(N)[0];
-    wall.pieces=lay.slots.map((s,i)=>newPiece(artForOrient(oKey(s[4]), b+i)));   // fill each slot with orientation-matched art
+    wall.pieces=lay.slots.map((s,i)=>{const pc=newPiece(artForOrient(oKey(s[4]), b+i)); if(s[5]!=null)pc.size=s[5]; return pc;});   // fill each slot with orientation-matched art + the layout's suggested size tier
     renderWall(); syncFocus(); syncWallDock();
     return {
       single:`Keeping one piece — <em>${ARTPOOL[wall.pieces[0].art].t}</em>. Add more whenever you like.`,

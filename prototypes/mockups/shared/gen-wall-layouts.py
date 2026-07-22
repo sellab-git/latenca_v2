@@ -1,137 +1,190 @@
-import json, collections
+# -*- coding: utf-8 -*-
+# =============================================================================
+#  LATENCA — WALL-LAYOUT DESIGN KIT
+#  Author gallery-wall layouts in our OWN cm grid. Proportions are correct by
+#  construction — we never copy Mixtiles pixels, we only borrow their IDEAS.
+#
+#  We sell 3 sizes per orientation; on the wall every piece shows at its middle
+#  (50 cm) tier, whose real cm share a 50 cm module:
+#     square  50x50   portrait 50x70   landscape 70x50
+#  Expressed in 10 cm UNITS (u):  S = 5x5   P = 5x7   L = 7x5
+#  Because every piece's on-wall size comes from this module (not from pixels),
+#  a square and a portrait ALWAYS share the 50 cm width and differ only in height.
+#
+#  HOW TO DESIGN A NEW LAYOUT  (edit SECTION 2):
+#    rows("SP", "L")        -> row 1 = square+portrait, row 2 = one landscape
+#    grid(3, 2, "S")        -> 3 columns x 2 rows of squares
+#    A "spec" is a string of orient chars (S/P/L) = one horizontal row,
+#    left->right. rows() stacks the rows, centres each one, and vertically
+#    centres each piece inside its row band. Output proportions are exact.
+#    For a shifted (brick) row pass a tuple: ("SPS", dx_in_units).
+#
+#  Run:  python "gen-wall-layouts.py"   ->  writes wall-layouts.js
+# =============================================================================
 
-P = r"C:\AI biznes\18. Latenca\docs\mixtiles-positions.json"
-OUT = r"C:\AI biznes\18. Latenca\prototypes\mockups\shared\wall-layouts.js"
-d = json.load(open(P, encoding="utf-8"))
+import collections
 
-def sig(w):
-    return tuple(sorted((round(f["box"][0]),round(f["box"][1]),round(f["box"][2]),round(f["box"][3]),f["orient"]) for f in w["frames"]))
-
-# ── curation (Artur review 2026-07-22) ──
-# DROP: near-duplicate layouts + everything above 12 pieces (we end at 12).
-DROP = {
-    "Dancing Lights", "Heartfelt Reflections",   # 6-piece = same 3×2 square grid as "6 Enduring Pictures" (kept)
-    "Frame by Frame",                            # 13 pieces — removed
-    "Bold Statement", "16 Snapshots", "The Memory Mosaic",  # 15 / 16 / 20 pieces — removed
-    "Framed Connections",                        # 10-L4 — top square could only be tiny; Artur: drop it
+# ---- SECTION 1: THE ENGINE (reusable — you rarely touch this) ---------------
+# All 9 Gelato sizes, in 10 cm UNITS. tier 0=small 1=mid 2=large.
+#   Portrait  30x40  50x70  70x100     Landscape 40x30  70x50  100x70
+#   Square    30x30  50x50  70x70
+# A "token" = orient letter + tier digit: P0 P1 P2 / L0 L1 L2 / S0 S1 S2.
+# Because every module lives in the same 10 cm unit, ANY mix renders cm-true:
+# a small square next to a large portrait shows their true relative sizes.
+DIM = {
+    "P": {0: (3, 4), 1: (5, 7), 2: (7, 10)},
+    "L": {0: (4, 3), 1: (7, 5), 2: (10, 7)},
+    "S": {0: (3, 3), 1: (5, 5), 2: (7, 7)},
 }
-# MODIFY: per-layout slot edits, applied AFTER debanner (operate on the reworked slot list, aspect A).
-def _last_to_square(slots, A, cy):   # replace the (reworked) extra slot with a grid-sized square, centred
-    # size the square to the median grid square, place centred at cy (vertical %)
-    sq = [s for s in slots[:-1] if s[4]=='S'] or slots[:-1]
-    w = sorted(s[2] for s in sq)[len(sq)//2]; h = sorted(s[3] for s in sq)[len(sq)//2]
-    return slots[:-1] + [[round((100-w)/2,1), round(cy,1), round(w,1), round(h,1), 'S']]
-def _framed_conn(slots, A):          # 3×3 squares fill y=14..100; small centred SQUARE in the thin top band
-    h = 11.0; w = round(h/A, 1)      # real aspect (w/h)*A = 1.0 → exact square, sized to the ~14% top band
-    return slots[:-1] + [[round((100-w)/2,1), 1.0, w, h, 'S']]
-def _loving_cols(slots, A):          # 11-piece: middle-row side squares → columns 1 & 4 (stop them sticking out)
-    for s in slots:
-        if s[4]=='S' and 34<s[1]<38:
-            if s[0]<10: s[0]=7.5
-            elif s[0]>75: s[0]=74.8
-    return slots
-MODIFY = {}  # superseded by cm_true (below): rebuilding on our cm auto-removes banners + stick-outs
+GAP = 0.55                                          # ~5.5 cm between frames
 
-# ── cm-TRUE geometry (Artur direction A) ───────────────────────────────────
-# We only sell 3 sizes/orientation; on the wall every piece defaults to the middle tier, whose real
-# cm share a 50cm module: square 50×50, portrait 50×70, landscape 70×50. Mixtiles' pixel geometry
-# used THEIR size mix (21/32/50) → relabeling gave wrong proportions. So we KEEP only the arrangement
-# (which piece is roughly where + its orientation) and REBUILD the geometry on OUR module: cluster
-# slots into rows by vertical centre, lay each row left→right at cm-true sizes with a constant gap,
-# centre + stack the rows. Every frame's on-wall size is then proportional to its real cm.
-CM_UNIT = {'P':(5,7), 'L':(7,5), 'S':(5,5)}   # 10cm units, size-1 (middle) tier
-GAP = 0.55                                     # ~5.5 cm between frames
-def cm_true(slots):
-    items = sorted(({'o':s[4], 'cx':s[0]+s[2]/2, 'cy':s[1]+s[3]/2} for s in slots), key=lambda it: it['cy'])
-    rows = []
-    for it in items:
-        if rows and abs(it['cy'] - sum(r['cy'] for r in rows[-1])/len(rows[-1])) < 13:
-            rows[-1].append(it)
+def _parse1(tok):
+    """'P2' -> ('P',2). Bare letter -> tier 1."""
+    return tok[0], (int(tok[1]) if len(tok) > 1 and tok[1].isdigit() else 1)
+
+def _split(s):
+    """'P2S0S0' -> ['P2','S0','S0']."""
+    out, i = [], 0
+    while i < len(s):
+        if i + 1 < len(s) and s[i + 1].isdigit():
+            out.append(s[i:i + 2]); i += 2
         else:
-            rows.append([it])
-    for r in rows: r.sort(key=lambda it: it['cx'])
-    laid, y, maxw = [], 0.0, 0.0
-    for r in rows:
-        rh = max(CM_UNIT[it['o']][1] for it in r)
-        x, rects = 0.0, []
-        for it in r:
-            w,h = CM_UNIT[it['o']]
-            rects.append([x, y+(rh-h)/2, w, h, it['o']]); x += w + GAP
-        maxw = max(maxw, x-GAP); laid.append(rects); y += rh + GAP
-    tw, th = maxw, y-GAP
-    out = []
-    for rects in laid:
-        roww = max(r[0]+r[2] for r in rects); offx = (tw-roww)/2
-        for r in rects:
-            out.append([round((r[0]+offx)/tw*100,1), round(r[1]/th*100,1), round(r[2]/tw*100,1), round(r[3]/th*100,1), r[4]])
-    return out, round(tw/th, 3)
+            out.append(s[i]); i += 1
+    return out
 
-# We only offer P/L/S (real aspects ~0.71 / 1.0 / 1.4). A Mixtiles "banner" slot (wide-thin
-# title band, ~3.0) has no equivalent in our catalogue → rework it into a centred LANDSCAPE
-# (aspect 1.4) in the same band, keeping the layout. (Tall-thin <0.6 → centred PORTRAIT 0.714.)
-LO, HI = 0.6, 1.55
-def debanner(slots, A):
-    out=[]; reworked=0
-    for l,t,w,h,o in slots:
-        ar=(w/h)*A
-        if ar>HI:                       # wide banner → centred landscape 1.4
-            cx=l+w/2; nw=1.4*h/A; out.append([round(cx-nw/2,1),round(t,1),round(nw,1),round(h,1),'L']); reworked+=1
-        elif ar<LO:                     # tall-thin → centred portrait 0.714
-            cy=t+h/2; nh=w*A/0.714; out.append([round(l,1),round(cy-nh/2,1),round(w,1),round(nh,1),'P']); reworked+=1
-        else:
-            out.append([round(l,1),round(t,1),round(w,1),round(h,1),o])
-    return out, reworked
+def _cell(cell):
+    """A cell is one token 'S0' OR a vertical stack ['S0','S0']. Returns (parsed_tokens, width, height)."""
+    toks = [cell] if isinstance(cell, str) else list(cell)
+    parsed = [_parse1(t) for t in toks]
+    w = max(DIM[o][t][0] for o, t in parsed)
+    h = sum(DIM[o][t][1] for o, t in parsed) + GAP * (len(parsed) - 1)
+    return parsed, w, h
 
-# dedup identical arrangements, keep first, collect aliases
-seen = {}
-order = []
-for name, w in d["walls"].items():
-    if name in DROP: continue
-    raw = [[f["box"][0],f["box"][1],f["box"][2],f["box"][3],f["orient"]] for f in w["frames"]]
-    slots, aspect = cm_true(raw)                              # rebuild on our cm module
-    key = tuple(sorted((round(x[0]),round(x[1]),round(x[2]),round(x[3]),x[4]) for x in slots))
-    if key in seen:
-        seen[key]["aliases"].append(name)
-    else:
-        seen[key] = {"name":name, "aliases":[], "aspect":aspect, "slots":slots, "reworked":0}
-        order.append(key)
+def _row(spec, gap):
+    """One horizontal row of cells. spec = 'P2S0' (flat) or a list of cells where a cell may be a
+    vertical stack, e.g. ['P2', ['S0','S0']] = big portrait + a column of two small squares.
+    Returns (rel_pieces, width, band_height)."""
+    cells = _split(spec) if isinstance(spec, str) else list(spec)
+    info = [_cell(c) for c in cells]
+    band_h = max(h for _, _, h in info)
+    x, pieces = 0.0, []
+    for parsed, w, h in info:
+        y = (band_h - h) / 2.0                       # centre the cell block within the row band
+        for o, t in parsed:
+            pw, ph = DIM[o][t]
+            pieces.append([x + (w - pw) / 2.0, y, pw, ph, o, t])   # centre each piece in its cell width
+            y += ph + gap
+        x += w + gap
+    return pieces, (x - gap), band_h
 
-# group by frame count. Drop layouts that came out too tall (aspect < 0.6) — these are the staggered
-# clusters that our cm-true row-rebuild flattens into an ugly narrow stack; keep only clean grid/row ones.
-by_count = collections.defaultdict(list)
-dropped_tall = []
-for s in order:
-    e = seen[s]
-    if e["aspect"] < 0.6:
-        dropped_tall.append((len(e["slots"]), e["name"])); continue
-    by_count[len(e["slots"])].append(e)
+def rows(*specs, gap=GAP, vgap=None):
+    """Stack rows top->bottom, centre each horizontally. Returns (slots%, aspect)."""
+    vgap = gap if vgap is None else vgap
+    laid, y, widths = [], 0.0, []
+    for spec in specs:
+        pcs, rw, bh = _row(spec, gap)
+        laid.append((pcs, y, rw)); widths.append(rw); y += bh + vgap
+    total_h = y - vgap
+    total_w = max(widths)
+    slots = []
+    for pcs, ry, rw in laid:
+        offx = (total_w - rw) / 2.0
+        for x, yo, w, h, o, t in pcs:
+            slots.append([round((x + offx) / total_w * 100, 1),
+                          round((ry + yo) / total_h * 100, 1),
+                          round(w / total_w * 100, 1),
+                          round(h / total_h * 100, 1), o, t])
+    return slots, round(total_w / total_h, 3)
 
-# emit JS
-lines = []
-lines.append("/* Auto-generated from docs/mixtiles-positions.json — real gallery-wall arrangements.")
-lines.append("   Keyed by frame count. Each preset: {name, aspect (w/h), slots:[[l,t,w,h,orient],...]} in % of the wall.")
-lines.append("   orient: P portrait | L landscape | S square. Positions/orientations are exact (from Mixtiles editor DOM);")
-lines.append("   physical sizes are NOT copied — we map slots to our own 9 Gelato sizes via the crop rules (D-050). */")
-lines.append("const WALL_LAYOUTS = {")
-for c in sorted(by_count):
-    lines.append(f"  {c}: [")
-    for e in by_count[c]:
-        notes=[]
-        if e["aliases"]: notes.append("+ "+", ".join(e["aliases"]))
-        if e["reworked"]: notes.append(f"banner→landscape ×{e['reworked']}")
-        alias = ("  // "+" · ".join(notes)) if notes else ""
-        slots = ",".join("["+",".join(str(x) if not isinstance(x,str) else f'\"{x}\"' for x in sl)+"]" for sl in e["slots"])
-        lines.append(f'    {{ name:"{e["name"]}", aspect:{e["aspect"]}, slots:[{slots}] }},{alias}')
-    lines.append("  ],")
-lines.append("};")
-lines.append("if (typeof module!=='undefined') module.exports = WALL_LAYOUTS;")
-open(OUT,"w",encoding="utf-8").write("\n".join(lines)+"\n")
+def grid(cols, rows_n, token="S1", gap=GAP):
+    """Uniform cols x rows grid of one orient+tier token (e.g. 'S1', 'P2')."""
+    return rows(*([token * cols] * rows_n), gap=gap)
 
-total = sum(len(v) for v in by_count.values())
-print(f"distinct layouts written: {total}")
-print("by count:", {c:len(by_count[c]) for c in sorted(by_count)})
-print("\nbanner→landscape reworks:")
-for c in sorted(by_count):
-    for idx,e in enumerate(by_count[c]):
-        if e["reworked"]: print(f"  {c} pieces · layout {idx+1} ({e['name']}): {e['reworked']} slot(s)")
-print("file:", OUT)
+# ---- SECTION 2: THE CATALOG (design new layouts here) -----------------------
+# Each entry: (frame_count, "Name", spec_call). Mixed orientations welcome.
+# Names borrowed from the Mixtiles arrangements they were inspired by, so we
+# keep the good ideas while owning the (correct) geometry.
+CATALOG = [
+    # === FULL MATRIX 3–12 ========================================================
+    # Every count has: a clean grid/row option, a mixed-ORIENTATION option, and
+    # (up to 9) a mixed-SIZE "hero" option. Sizes are baked & LOCKED (D1). All
+    # proportions cm-true. Aspects kept ~0.55–2.2 so nothing letterboxes to a sliver.
+
+    # --- 3 ---
+    (3, "Triptych",           rows("P1P1P1")),                       # three portraits in a row
+    (3, "Captured Affection", rows("S1P1", "L1")),                   # mixed orientation
+    (3, "Hero & Stack",       rows(["P2", ["S0", "S0"]])),           # mixed size: big portrait + two stacked squares
+
+    # --- 4 ---
+    (4, "Timeless Quartet",   grid(2, 2, "S1")),
+    (4, "The Perfect Four",   rows("L1P1", "P1L1")),                 # mixed orientation pinwheel
+    (4, "Hero & Three",       rows("L2", "S0S0S0")),                 # mixed size: big landscape over three small
+
+    # --- 5 ---
+    (5, "The Joyful Five",    rows("S1S1S1", "S1S1")),               # 3 over 2
+    (5, "Five Cross",         rows("S1", "S1S1S1", "S1")),           # plus / diamond
+    (5, "Center Hero",        rows([["S0", "S0"], "P2", ["S0", "S0"]])),  # mixed size: tall hero, stacked pairs
+
+    # --- 6 ---
+    (6, "Six Grid",           grid(3, 2, "S1")),
+    (6, "Beautiful Lines",    grid(3, 2, "P1")),                     # six portraits
+    (6, "Feature Six",        rows("S0P2S0", "S0P2S0")),             # mixed size: two portrait heroes among four small
+
+    # --- 7 ---
+    (7, "The Sweet Seven",    rows("S1S1", "S1S1S1", "S1S1")),       # 2/3/2
+    (7, "Seven Story",        rows("S1S1S1", "P1", "S1S1S1")),       # 3 / portrait / 3
+    (7, "Hero Seven",         rows([["S0", "S0", "S0"], "L2", ["S0", "S0", "S0"]])),  # mixed size: wide hero flanked by two stacks of three
+
+    # --- 8 ---
+    (8, "Eight Grid",         grid(4, 2, "S1")),
+    (8, "Eight Story",        rows("P1S1S1P1", "P1S1S1P1")),         # mixed orientation
+    (8, "Hero Eight",         rows("S0S0S0S0", "L2", "S0S0S0")),     # mixed size: wide hero banded in small squares
+
+    # --- 9 ---
+    (9, "Nine Grid",          grid(3, 3, "S1")),
+    (9, "Heartfelt Nine",     rows("S1S1S1S1", "P1", "S1S1S1S1")),   # 4 / portrait / 4
+    (9, "Hero Nine",          rows("S0S0S0", "S0L2S0", "S0S0S0")),   # mixed size: landscape hub in a grid
+
+    # --- 10 ---
+    (10, "Ten Grid",          grid(5, 2, "S1")),
+    (10, "Ten Moments",       rows("S1S1S1", "S1S1S1", "S1S1S1", "L1")),  # 3x3 + a base landscape
+
+    # --- 11 ---
+    (11, "Loving Life",       rows("S1S1S1S1", "S1L1S1", "S1S1S1S1")),    # landscape hub
+    (11, "Eleven Grid",       rows("S1S1S1S1", "S1S1S1", "S1S1S1S1")),
+
+    # --- 12 ---
+    (12, "Twelve Grid",       grid(4, 3, "S1")),
+    (12, "Twelve Lines",      grid(4, 3, "P1")),                     # twelve portraits
+]
+
+# ---- SECTION 3: EMIT --------------------------------------------------------
+def emit(path):
+    by_count = collections.defaultdict(list)
+    for count, name, (slots, aspect) in CATALOG:
+        assert len(slots) == count, f"{name}: {len(slots)} slots but declared {count}"
+        by_count[count].append({"name": name, "aspect": aspect, "slots": slots})
+    L = []
+    L.append("/* Auto-generated by gen-wall-layouts.py — DESIGNED layouts in our own cm grid.")
+    L.append("   Keyed by frame count. Each preset: {name, aspect (w/h), slots:[[l,t,w,h,orient],...]} in % of the wall.")
+    L.append("   orient: P portrait | L landscape | S square. Proportions are cm-true by construction")
+    L.append("   (module: S 5x5, P 5x7, L 7x5 units) — a square and a portrait always share the 50 cm width.")
+    L.append("   Mixtiles (docs/mixtiles-positions.json) is kept only as an IDEA library; geometry is ours. */")
+    L.append("const WALL_LAYOUTS = {")
+    for c in sorted(by_count):
+        L.append(f"  {c}: [")
+        for e in by_count[c]:
+            slots = ",".join("[" + ",".join(f'"{x}"' if isinstance(x, str) else str(x) for x in s) + "]" for s in e["slots"])
+            L.append(f'    {{ name:"{e["name"]}", aspect:{e["aspect"]}, slots:[{slots}] }},')
+        L.append("  ],")
+    L.append("};")
+    L.append("if (typeof module!=='undefined') module.exports = WALL_LAYOUTS;")
+    open(path, "w", encoding="utf-8").write("\n".join(L) + "\n")
+    print("layouts written:", sum(len(v) for v in by_count.values()))
+    print("by count:", {c: len(by_count[c]) for c in sorted(by_count)})
+
+if __name__ == "__main__":
+    import os
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wall-layouts.js")
+    emit(out)
+    print("file:", out)
