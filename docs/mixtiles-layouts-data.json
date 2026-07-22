@@ -8,26 +8,24 @@
     "domMethod": "editor frame selector = .sc-ykt6xc-12 ; normalize rects to union bbox of all frames = the wall extent."
   },
   "config": {
-    "frames": [
-      { "name": "Frameless", "priceDelta": 0 },
-      { "name": "Black", "priceDelta": 0 },
-      { "name": "White", "priceDelta": 0 },
-      { "name": "Oak", "priceDelta": 48 },
-      { "name": "Wide Black", "priceDelta": 96 },
-      { "name": "Wide White", "priceDelta": 96 },
-      { "name": "Wide Walnut", "priceDelta": 96 },
-      { "name": "Earthy Blend", "priceDelta": 48 },
-      { "name": "Classic Blend", "priceDelta": 48 },
-      { "name": "Harmony Mix", "priceDelta": 30 }
-    ],
-    "borders": [
-      { "name": "None", "matCm": 0 },
-      { "name": "Shallow", "matCm": null },
-      { "name": "Medium", "matCm": null },
-      { "name": "Deep", "matCm": null }
-    ],
+    "frameOptions": ["Frameless", "Black", "White", "Oak", "Wide Black", "Wide White", "Wide Walnut", "Earthy Blend", "Classic Blend", "Harmony Mix"],
+    "frameNote": "Blend/Mix = mixed frame colours across tiles on one wall. Pricing is per-frame (see framePricing), not per-wall.",
+    "borders": {
+      "model": "internal passe-partout: outer frame size stays constant, the photo area shrinks. FIXED absolute cm inset per level (NOT proportional to tile) — applied equally to every tile. ±0.3cm (WebGL canvas blocks pixel readback, careful zoom measure).",
+      "levels": [
+        { "name": "None", "matCm": 0 },
+        { "name": "Shallow", "matCm": 1.3 },
+        { "name": "Medium", "matCm": 2.8 },
+        { "name": "Deep", "matCm": 4.3 }
+      ]
+    },
     "effects": ["Original", "Silver", "Noir", "Vivid", "Dramatic"],
-    "photoMapping": { "note": "TBD by Chrome: how 'Add N Photos' maps to cell count (demo prefill?), and how a portrait photo crops into a square cell (centre? repositionable?)." },
+    "framePricing": {
+      "model": "frame upgrade = per-frame surcharge × frameCount, INDEPENDENT of physical size. Proven: Shining Paths (largest wall, 4 frames) has the cheapest Oak (+$12=4×$3).",
+      "perFrameUsd": { "Frameless": 0, "Black": 0, "White": 0, "Oak": 3, "WideBlack": 6, "WideWhite": 6, "WideWalnut": 6, "EarthyBlend": 3, "ClassicBlend": 3, "HarmonyMix": 1.875 }
+    },
+    "photoMapping": { "note": "Every wall has frameCount tiles; 8 are demo-prefilled, so the button reads 'Add (frameCount − 8)' (≤8 frames → all prefilled → 'Checkout'). The '8' is demo seeding, not structural — for our library the number that matters is frameCount. Empty tiles show an outlined placeholder." },
+    "crop": { "note": "Auto-fit = centre-crop (photo scaled to fill the tile's aspect, overflow cropped, centred). Adjustable: click a filled tile → Edit Tile → Adjust Crop (zoom slider + drag-to-reposition, 'scroll to zoom, drag to move'). Same for any orientation mismatch — the tile fixes the aspect, you pan/zoom the source within it." },
     "behavior": {
       "flow": "pick a rigid named wall, fill with photos",
       "reflow": "none — deselecting a photo empties that cell in place; layout never shifts",
