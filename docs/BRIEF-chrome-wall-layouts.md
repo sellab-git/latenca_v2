@@ -30,7 +30,9 @@ Pion 30×40·50×70·70×100 · Poziom 40×30·70×50·100×70 · Kwadrat 30×30
 2. **Linijka:** zapisz **wymiar całkowity (W×H cm)**.
 3. **Linijka:** zapisz **rozmiar każdej ramki w cm + orientację** (P pion / L poziom / S kwadrat). Jeśli wszystkie identyczne — napisz „×N, 21×21 S".
 4. **Linijka:** zapisz **gap** (odstęp między ramkami w cm) — albo policz z całości.
-5. **Jeden czysty zrzut pustych ramek** (same kontury, na wprost) → wrzuć Arturowi. **Pozycje policzę ja z pikseli** — Ty NIE szacujesz `box%`.
+5. **Pozycje — bez zrzutów (mój Playwright NIE dosięga ich buildera, sprawdzone):**
+   - `uniform-grid` / `row` → nic nie podajesz, pozycje policzę z liczb (overall + rozmiar kafla + count).
+   - **każdy inny typ** (`symmetric-center` / `staggered-cluster` / `mixed-cluster`) → dodaj per ramka **`centerPct: {x, y}`** = środek ramki jako % szerokości/wysokości CAŁEJ ściany (0–100). Masz już piksele środków → podziel przez wymiar ściany. Z tego + cm policzę dokładny `box`. (Zrzut niepotrzebny.)
 6. Zapisz: `name`, `sizeBand` (z której kolekcji), `bestSeller?`, `frameCount`, `compositionType`.
 
 ### Typy kompozycji (`compositionType`) — nazwij jednym z:
@@ -53,8 +55,11 @@ Pion 30×40·50×70·70×100 · Poziom 40×30·70×50·100×70 · Kwadrat 30×30
   "confidence": { "cm": "ruler", "gap": "derived" }
 }
 ```
-- `frames[]`: dla jednorodnych użyj `count`. Dla mieszanych — jeden obiekt na ramkę (bez `count`), w kolejności, jaką widać na zrzucie (żebym zmapował do pozycji z pikseli). Zawsze `orientation` + `cm`.
-- **Nie wypełniaj `box{x,y,w,h}` — ja to wyliczę ze zrzutu.** (Jeśli chcesz, dorzuć swoją orientacyjną kolejność ramek: „rząd po rzędzie, lewo→prawo".)
+- `frames[]`: dla `uniform-grid`/`row` użyj `count` (bez pozycji — policzę z liczb). Dla `symmetric-center`/`staggered-cluster`/`mixed-cluster` — jeden obiekt na ramkę z `orientation` + `cm` + **`centerPct:{x,y}`** (środek jako % ściany). Przykład:
+```json
+{ "orientation": "P", "cm": { "w": 50, "h": 69 }, "centerPct": { "x": 75, "y": 29 } }
+```
+- **Nie wypełniaj `box{x,y,w,h}` — wyliczę go z `centerPct` + `cm` + `overallCm`.** Żadnych zrzutów.
 
 ### Checklist (przechodź systematycznie, zaznaczaj):
 - **Small (~20):** Wild Visuals, Parallel Triplet, Offbeat Set, 6 Enduring Pictures, Bold Statement, Timeless Quartet, Harmony In Four, Embraced By Warmth, Boundless Moments, Dancing Lights, Captured Affection, Frame By Frame, The Joyful Five, The Sweet Seven, Cozy Trio, Drifting Shapes, Soft Melodies, Beautiful Lines, 12 Memories, Symphony Of Frames … (dodaj każdą, którą znajdziesz).

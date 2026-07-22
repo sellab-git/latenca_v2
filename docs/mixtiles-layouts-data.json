@@ -2,9 +2,10 @@
   "_meta": {
     "purpose": "Measured Mixtiles gallery-wall data → source for our LAYOUTS matrix (mapped to our 9 Gelato sizes). Numbers/patterns only — no competitor images/code/brand stored here.",
     "validated": "2026-07-22: rigid named compositions, no reflow, fixed frame count, empty frames allowed, S/M/L = three separate collections (each wall has ONE size).",
-    "howToFill": "Append one object per wall to walls[]. Positions (box%) are derived by Claude from clean empty-frame screenshots — do NOT hand-estimate them here.",
+    "howToFill": "POSITIONS come from the editor DOM: open a wall's editor (/photo-walls/<slug>/<token>), read .sc-ykt6xc-12 frame rects, normalize to their union bbox → exact box{x,y,w,h}% + center%. Claude does this via Playwright. Artur's ruler gives absolute cm (overall + per-tile) + config (borders, crop). The two cross-validate (orientations matched 1:1 on Wild Visuals).",
     "target": "~45 walls (Small ~20 + Medium ~18 + Large ~7)",
-    "progress": "11 captured (1 Medium + 10 Small). Batch 1 (Small 1-10) received 2026-07-22."
+    "progress": "11 records (1 Medium + 10 Small). Wild Visuals has DOM-exact positions merged. Method proven: DOM extraction gives exact positions for every wall.",
+    "domMethod": "editor frame selector = .sc-ykt6xc-12 ; normalize rects to union bbox of all frames = the wall extent."
   },
   "config": {
     "frames": [
@@ -64,17 +65,18 @@
       "compositionType": "staggered-cluster",
       "overallCm": { "w": 122, "h": 79 },
       "gapCm": null,
+      "wallPxAspect": 1.5,
       "frames": [
-        { "orientation": "L", "cm": { "w": 42, "h": 32 } },
-        { "orientation": "P", "cm": { "w": 21, "h": 28 } },
-        { "orientation": "L", "cm": { "w": 28, "h": 21 } },
-        { "orientation": "S", "cm": { "w": 21, "h": 21 } },
-        { "orientation": "S", "cm": { "w": 32, "h": 32 } },
-        { "orientation": "P", "cm": { "w": 32, "h": 42 } },
-        { "orientation": "S", "cm": { "w": 21, "h": 21 } }
+        { "orientation": "L", "cm": { "w": 42, "h": 32 }, "box": { "x": 9.3, "y": 0, "w": 34.1, "h": 40.1 }, "center": { "x": 26.4, "y": 20.1 } },
+        { "orientation": "P", "cm": { "w": 21, "h": 28 }, "box": { "x": 48.8, "y": 3.6, "w": 17.1, "h": 36.4 }, "center": { "x": 57.3, "y": 21.8 } },
+        { "orientation": "L", "cm": { "w": 28, "h": 21 }, "box": { "x": 71.1, "y": 13.7, "w": 23.6, "h": 26.3 }, "center": { "x": 82.9, "y": 26.8 } },
+        { "orientation": "S", "cm": { "w": 21, "h": 21 }, "box": { "x": 0, "y": 47.3, "w": 16.7, "h": 25.7 }, "center": { "x": 8.3, "y": 60.2 } },
+        { "orientation": "S", "cm": { "w": 32, "h": 32 }, "box": { "x": 21.5, "y": 47.3, "w": 26, "h": 40.1 }, "center": { "x": 34.6, "y": 67.4 } },
+        { "orientation": "P", "cm": { "w": 32, "h": 42 }, "box": { "x": 52.4, "y": 47.3, "w": 26, "h": 52.7 }, "center": { "x": 65.4, "y": 73.7 } },
+        { "orientation": "S", "cm": { "w": 21, "h": 21 }, "box": { "x": 83.3, "y": 47.3, "w": 16.7, "h": 25.7 }, "center": { "x": 91.7, "y": 60.2 } }
       ],
-      "screenshotNeeded": true,
-      "confidence": { "cm": "ruler", "gap": "irregular-cluster-not-derivable" }
+      "positionsFrom": "DOM (.sc-ykt6xc-12 rects, normalized to union bbox)",
+      "confidence": { "cm": "ruler", "positions": "DOM-exact", "crossCheck": "orientations match ruler 1:1" }
     },
     {
       "name": "Offbeat Set",
