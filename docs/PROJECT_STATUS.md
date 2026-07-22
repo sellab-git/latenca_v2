@@ -84,6 +84,10 @@ Gotowe:
 ### ⚡ ZMIANA KIERUNKU (2026‑07‑21) — czytaj `docs/USER-INTENTS.md` (żywa mapa)
 Artur zapytał o realny plan „Design my wall" → wyszła głęboka praca nad intencjami (178 scenariuszy → 5 podróży, recenzja ChatGPT, feasibility‑engine). **Reframe: jednostka = jedna praca; „ściana" = ZMIENNA liczba prac (1..N) kupowanych razem** (nie sztywna para); dwie drogi (gotowe układy + składanie), wzorzec Mixtiles; **strona produktu = ściana**; układy z biblioteki presetów; rozmiar należy do układu; panel dwupoziomowy. Modsy jako analogia — **zbanowane**.
 
+### ⏭ WZNOWIENIE (2026‑07‑22 EOD) — OTWARTA decyzja o układach (A vs B)
+Matryca Mixtiles zebrana (45 ścian, `docs/mixtiles-positions.json` + config) i wpięta w `05-wall` v12 jako **cm‑true** (każda praca w proporcji naszych cm — kwadrat 5×5 / pion 5×7 / poziom 7×5, D‑051). **Problem:** auto‑układanie w rzędy **psuje układy MIESZANE/klastry** (samotne prace w rzędzie + poszarpane wysokości przy mieszanych orientacjach w rzędzie). Czyste wychodzą tylko JEDNORODNE (grid/rzędy).
+**Decyzja czeka na Artura:** **A)** zastąpić mieszane/klastry generowanymi czystymi siatkami (kwadrat/pion/poziom per liczba) — czyste+poprawne, pokrycie 3–12, tracimy fikuśne układy Mixtiles (dane matrycy zostają); **B)** ręcznie zaprojektować zestaw ładnych cm‑true mieszanych. Rekomendacja: **A teraz + B później.** Generator: `shared/gen-wall-layouts.py`.
+
 Następne (po reakcji na `05-wall`):
 - [ ] **Decyzja D‑047: rozszerzyć MVP z „pojedyncza grafika" na „N prac"?** (zmienia D‑023/D‑030/D‑033) — czeka na Artura.
 - [x] **Matryca układów z Mixtiles — ZROBIONE (D-051).** Zebrane wszystkie 45 ścian (pozycje z DOM edytora, zwalidowane) + config (border/kadr/mapowanie/cena). 43 różne układy → `shared/wall-layouts.js`, wpięte w `05-wall` v8: slot dyktuje pozycję+kształt, Ready-made wypełnia grafiką dopasowaną do orientacji, build-up dodaje puste sloty. Dane: `docs/mixtiles-positions.json` + `docs/mixtiles-layouts-data.json`.
