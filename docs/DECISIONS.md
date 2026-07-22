@@ -846,3 +846,27 @@ Artur: *"Wszystko co robimy na froncie ma być po angielsku — przygotowane na 
 The wall (`05-wall`) was the only screen that had drifted to Polish; it was fully translated (panel labels, wall dock, placeholder, every advisor line, cart drawer, and the chat parser's keywords — English keywords now, with the collision fix so "another layout" reads as a layout change, not an artwork swap). `01-home` / `03-product` / `04-advisor` were already English.
 
 **i18n-ready** means: UI strings stay as plain text (never baked into images or fused with logic), no hardcoded locale/currency/date — the real Next.js build extracts strings to a message catalogue and uses central `formatCurrency`/`formatDate`. In the static mockups the practical rule is just: English text, kept as literals. Frozen `05-wall` v5.
+
+# D-050
+
+Closed size list — Gelato-compliant, 9 sizes across 3 orientations. These are the ONLY sizes we use.
+
+## Status
+Accepted — 2026-07-22 (sizes given by Artur; must map to the real Gelato catalogue at build)
+
+## Context / Decision
+Artur set the size list directly: *"tyle masz rozmiarów zgodny z Gelato — masz na tym bazować. Jak masz inne informacje usuń i tylko tych rozmiarów używaj."*
+
+| Orientation | Sizes (cm) |
+|---|---|
+| **Portrait** (`p`) | 30×40 · 50×70 · 70×100 |
+| **Landscape** (`l`) | 40×30 · 70×50 · 100×70 |
+| **Square** (`s`) | 30×30 · 50×50 · 70×70 |
+
+- **Each artwork has ONE native orientation** (`o` = p/l/s); its size list is that orientation's three. You cannot reorient a piece (a portrait painting can't be sold landscape).
+- The three portrait sizes are deliberately three *different* ratios (3:4, 5:7, 7:10) — that is what Gelato actually sells, so we keep them; landscape is the mirror; square is 1:1.
+- **Removed:** the old flat portrait-only `SIZES` array, my invented 3:4-family sizes (45×60/60×80…), and the false "All sizes are portrait (3:4)" size-guide claim.
+- Image fetch ratio follows orientation (600×800 / 800×600 / 720×720); size selector, slot label, config summary and size-guide all read the per-orientation list.
+- Price is by size tier (S/M/L index), same across orientations — a prototype simplification; **real per-SKU prices come from Gelato at build.**
+
+**Known gap (not yet done):** the wall's slot *shapes* still come from the layout preset (uniform portrait), so landscape/square pieces are cover-cropped into portrait slots — the size DATA is right, the frame SHAPE doesn't yet reflect orientation. Making slot frames match true orientation is the next visual step. Frozen `05-wall` v6.
