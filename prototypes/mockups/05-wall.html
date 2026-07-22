@@ -930,6 +930,9 @@
   // crop rule: portrait source → portrait|square; landscape → landscape|square; square → square only.
   const SHAPES_FOR={p:['p','s'], l:['l','s'], s:['s']};
   const allowedShapes=o=>SHAPES_FOR[o]||['p'];
+  // D5 — which SOURCE orientations a slot of a given shape accepts: a square slot crops anything,
+  // a portrait/landscape slot needs a source of that orientation.
+  const SLOT_ACCEPTS={p:['p'], l:['l'], s:['p','l','s']};
   const sizesFor=()=>SIZES[slotO(wall.focus)]||SIZES.p;   // size options follow the FOCUSED SLOT's orientation (layout dictates shape)
   // aspect ratio (w/h) of the piece's currently chosen size — drives the frame shape on the wall
   function sizeAR(p){const d=sizesFor(p)[p.size].cm.split('×').map(x=>parseInt(x,10));return d[0]/d[1];}
@@ -1064,13 +1067,32 @@
     document.getElementById('cntMinus').disabled=n<=1;
     document.getElementById('cntPlus').disabled=n>=MAXPIECES;
   }
+  // ── D5 — keep every filled slot consistent with its layout: an artwork whose orientation
+  //    doesn't fit the slot is swapped for a fitting one; each piece's size is re-seeded from
+  //    the slot's tier. Call after ANY layout or count change so orientation never "mixes wrong".
+  function reconcileToLayout(){
+    const slots=curSlots();
+    for(let i=0;i<slots.length;i++){
+      const p=wall.pieces[i]; if(!p)continue;              // empty slots stay empty
+      const so=oKey(slots[i][4]);                          // slot shape
+      const accepts=SLOT_ACCEPTS[so]||['p'];
+      if(!accepts.includes(p.o)){                          // wrong orientation → swap to fitting art, keep material/frame/mat
+        const idx=artForOrient(so,i), a=ARTPOOL[idx];
+        p.art=idx; p.name=a.t; p.artist=a.a; p.works=a.n; p.o=a.o;
+      }
+      if(slots[i][5]!=null)p.size=slots[i][5];             // baked size tier → keeps label/price honest
+      p.size=Math.min(p.size,sizesFor(p).length-1);
+    }
+  }
   function cycleLayout(d){
     const ls=layouts(); wall.layout=(wall.layout+d+ls.length)%ls.length;
-    renderWall(); syncWallDock();
+    reconcileToLayout();
+    renderWall(); syncFocus(); syncWallDock();
   }
   function addPiece(silent){                 // a NEW slot is always an empty placeholder (we presume nothing)
     if(wall.pieces.length>=MAXPIECES)return false;
     wall.pieces.push(null); wall.focus=wall.pieces.length-1; wall.layout=0;
+    reconcileToLayout();
     renderWall(); syncFocus(); syncWallDock();
     if(!silent)promptFill(false);
     return true;
@@ -1080,6 +1102,7 @@
     const removed=wall.pieces.splice(wall.focus,1)[0];
     if(removed)wall.reserve.push(removed);    // park a real piece; an empty slot just disappears
     wall.focus=Math.min(wall.focus,wall.pieces.length-1); wall.layout=0;
+    reconcileToLayout();
     renderWall(); syncFocus(); syncWallDock();
     if(!silent)say('ai',removed
       ? `Parked “${removed.name}” in reserve — bring it back at the next empty slot. ${wall.pieces.length} ${plural(wall.pieces.length)} left.`
@@ -1188,8 +1211,9 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawers();});
   const cartBadge=document.querySelector('.cart .badge');
   function openCart(){
-    const tot=wallTotal(),n=wall.pieces.length;
-    document.getElementById('cartThumb').src=url(ARTPOOL[wall.pieces[0].art].id,200,260);
+    const filled=wall.pieces.filter(Boolean); if(!filled.length)return;   // nothing to add
+    const n=filled.length, tot=wallTotal();
+    document.getElementById('cartThumb').src=url(ARTPOOL[filled[0].art].id,200,260);
     document.querySelector('#cartDrawer .ct').textContent=`Your wall · ${n} ${plural(n)}`;
     document.getElementById('cartConfig').textContent=`${n} ${plural(n)} · layout ${wall.layout+1}/${layouts().length}`;
     document.getElementById('cartItemPrice').textContent='$'+tot;
@@ -1246,8 +1270,13 @@
   const wallQuick=()=>['Add a piece','Another layout','Warmer','Darker'];
 
   function swapArt(dir){
-    // move the focused piece to a different image from the pool (stand-in for real matching)
-    const p=fp(); p.art=(p.art+(dir>0?1:ARTPOOL.length-1))%ARTPOOL.length;
+    // move the focused piece to a different image — but only among artworks whose orientation
+    // fits the focused SLOT (D5), so a portrait slot never gets a landscape source.
+    const p=fp(); if(!p)return null;
+    const so=slotO(wall.focus), accepts=SLOT_ACCEPTS[so]||['p'];
+    const cand=ARTPOOL.map((a,i)=>i).filter(i=>accepts.includes(ARTPOOL[i].o));
+    let pos=cand.indexOf(p.art); if(pos<0)pos=0;
+    p.art=cand[(pos+(dir>0?1:cand.length-1))%cand.length];
     const a=ARTPOOL[p.art]; p.name=a.t;p.artist=a.a;p.works=a.n;p.o=a.o;
     renderWall(); syncFocus();
     return a;
