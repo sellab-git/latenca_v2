@@ -8,7 +8,25 @@ This doc has two jobs:
 
 ---
 
-## A. OPEN DECISIONS — for ChatGPT review / Artur
+## A. DECISIONS — RESOLVED 2026-07-23 (ChatGPT review)
+
+**Architectural principle (overrides everything below):** shipping, availability, catalog filtering and recommendation ranking are **shared services/modules used across Home · Product · Wall · Cart** — never local to `05-wall`.
+
+- **D1 — Shipping:** live **Gelato** quote for the customer's country/postal code (no flat rate; would be arbitrary for global POD). Prototype: country picker → `Shipping calculated for [country]` → shown amount → total = items + shipping. MVP: `getShippingQuote(cart, destination)` → Gelato is source of truth → amount passed to Stripe as shipping. States: loading / quote / unavailable. No "free shipping over $X" until per-market economics are known.
+- **D2 — Tax:** **Stripe Checkout + Stripe Tax** (`automatic_tax`), computed from the customer's address at checkout. Prices are **tax-exclusive**; PDP shows `Taxes calculated at checkout`. Remove `incl. VAT` and `ships to Poland`.
+- **D3 — Cart:** **itemise** the wall (each piece: artwork · size · material · frame · price) then Subtotal / Shipping / Tax-at-checkout / Total — still one arrangement, one order, but a visible line spec. **Remove the empty "Pairs well with"** cross-sell for now (revive later from the shared catalog engine).
+- **D4 — Trust:** one light line **under the CTA**: `Secure checkout · Made to order · Support if anything arrives damaged`. No extra accordion, no payment-logo wall, **no certificate/ratings unless real**. Future Trustpilot = brand-level (header/Home), never per-artwork.
+- **D5 — Limit:** **max 12** (control + advisor copy + counter + layout presets + cart validation must all agree). Copy fixed to 12.
+- **D6 — Catalog:** **one shared Catalog Engine** (data · tags · filters · sort · card components · a11y rules); Home/Product/search/recs embed it, differing only in default filter / count / layout / heading. Do NOT invent a second taxonomy for the wall. ⚠️ **Finding (Claude, verified):** the Home catalog filters are **a MOCK** — `syncAll()` only updates pills/chips/panel, the count is faked (`n=4120`/heuristic in `01-home.html`), and the grid is **not** re-filtered. So there is **no real engine to extract yet**; the shared engine must be **built** (real tagged dataset + filter/sort logic) as an MVP task. Until then the wall's detail filters stay non-functional rather than duplicating a mock.
+- **D7 — Latenca Picks:** deterministic ranking from the shared catalog data (`category + palette + orientation + mood − current artwork`), **not** an LLM/embeddings. Needs the tagged dataset (blocked with D6).
+- **D8 — Availability (new):** resolved at **variant × destination** through Gelato, not at artwork level. Unavailable config → hide/disable the variant + offer an alternative; never remove the artwork. Shared service for configurator/cart/recs.
+- **D9 — Zero results (new):** never a dead end. Prevent where possible (show counts, disable would-be-zero options); on filter-zero → explain + `Remove last filter`/`Clear all` + closest matches (flagged as broader); on search-zero → suggestions + related + advisor CTA; on no-Gelato-variant → nearest available size/material; on weak advisor match → be honest + offer one high-impact change.
+
+**Prototype-now vs MVP-backend:** buildable in the static prototype = D2 copy, D4 trust line, D3 itemised cart, D5 consistency, and mocked D1 country/shipping + D9 recovery UI. Requires the Next.js MVP (real services) = live Gelato quotes (D1), Stripe Tax (D2), the shared Catalog Engine + tagged dataset (D6/D7), Gelato availability (D8).
+
+---
+
+<details><summary>Original open-decision context (pre-resolution)</summary>
 
 These are product/commerce choices, not code. I will NOT guess them. Each has context + my recommendation.
 
@@ -46,6 +64,8 @@ The "Latenca picks" were always a stub ("palette-matched later"). Real palette/m
 - **Question / recommendation:** defer until D6's taxonomy exists; then match on category + palette.
 
 ---
+
+</details>
 
 ## B. What I am fixing autonomously (no decision needed)
 
