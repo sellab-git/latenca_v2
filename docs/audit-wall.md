@@ -62,7 +62,9 @@ Tracked here as I go (✅ done / ⏳ in progress):
 
 Verification: Playwright hit-tests confirmed the modal (role/aria-modal/aria-label, focus-in=`#spBack`, Esc closes, focus returns to the slot), `aria-live=polite`, no JS errors (only a favicon 404), and no regression to price/config/open-close (panel reparents to `#spotlight` and back to `.pdp` cleanly).
 
-Bigger cleanups deferred to the pre-Next.js pass: strip ~40% dead CSS/JS inherited from the product page, promote magic numbers (`432px` panel width, `PAD`, zoom limits) to tokens, extract English strings for i18n.
+- [x] **Dead-code removal** — stripped ~111 lines of CSS/JS inherited from the single-product page (image `.stage*`/room classes, `.thumbs`, the `.buy`/`.pmeta`/`.priceblock` panel, `.fmt`, `.digital`, `.whyband` tokens (kept `.why` — live in chat), `.gtabs`, `.crumb`, `.summ`, `.follow`, the crossfade, and the whole `.lightbox` block; JS `sizeAR()`, `SHAPES_FOR`/`allowedShapes`, lightbox handlers). Each verified unreferenced (grep across the file + shell.js + app.css, incl. template strings) by a background review; applied one block at a time and Playwright-tested the full flow (fill, add/remove, layout, open piece, catalog, config sizes/materials/frames, drawers, cart, Esc) — **no JS errors, no visual change, live elements still styled**.
+
+Still deferred to the pre-Next.js pass: promote magic numbers (`432px` panel width, `PAD`, zoom limits) to tokens, extract English strings for i18n. (Unused CSS will also be auto-purged by the Next.js build.)
 
 Mobile (canvas model is desktop-only; missing `<nav class="tabbar">`; detail unhandled <821px) is a separate effort — not touched now.
 
