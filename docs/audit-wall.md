@@ -117,3 +117,29 @@ Canvas model gated to `min-width:821px`; no mobile tab bar (`#appTabbar` absent)
 
 ### What already works well
 Layer model (chrome > product > wall), wall↔detail panel parity, token system, orientation enforcement (D5 crop rule), config drawers (size/material/frame) + cart drawer, pieces are real `<button>`s, images have `alt`, nav arrows labelled, `prefers-reduced-motion` present, price sums correctly.
+
+---
+
+## D. Mockup design-complete — boundary & handoff to MVP (2026-07-23)
+
+**Principle (agreed):** the mockup only carries what is **seen and decided** — visual design, layout, copy, and the **states** a screen can be in. **Mechanisms** (real catalog engine, Gelato quotes, Stripe Tax, availability logic, working filters/search) are **not** built on the mockup — they get rewritten in Next.js, so a mockup version would be throwaway plumbing that answers no design question. Two reinforcing facts: **Stripe Checkout is hosted** (the shipping/tax/payment UI is Stripe's, not ours), and a **catalog engine over fake data validates nothing**.
+
+**Design-complete on the two screens.** The wall + detail now cover: the 3-layer canvas, wall↔detail panel parity, orientation-locked layouts (1–12 pieces), the advisor flow, per-piece config (size/material/frame/mat), the detail view (artwork + picks + catalog module copied from Home), the a11y modal, honest pre-checkout copy (D2), the trust line (D4), and the **itemised cart (D3)**. Nothing mechanism-shaped remains that would teach us more by mocking it.
+
+**Intentionally NOT built on the mockup (→ MVP):**
+- D1 live Gelato shipping quote + country/postal input — mechanism; and the checkout UI is Stripe's.
+- D2 Stripe Tax calculation — Stripe.
+- D6/D7 shared Catalog Engine + tagged dataset + deterministic ranking — must be built over real data (Home's filters are a verified mock).
+- D8 Gelato availability (variant × destination).
+- The detail-view catalog filters stay non-functional on the mockup rather than duplicating a mock.
+
+**States spec — build these in the MVP (copy locked here so we don't forget):**
+- **Empty wall:** already designed (dashed "Add a piece" slot, disabled CTA, advisor prompt).
+- **Loading (quote/catalog):** skeleton shimmer (utility exists); shipping row shows `Calculating…` while a Gelato quote is in flight.
+- **Zero results — filters:** `No artworks match all these filters.` + `Remove last filter` / `Clear all` + closest matches flagged as *broader results*. Prevent where possible: show per-option counts, disable would-be-zero options (`Space (0) — disabled`).
+- **Zero results — search:** `We couldn't find an exact match for "…".` + spelling/suggestions + related categories + advisor CTA `Let Latenca suggest a direction`. Never auto-run AI or rewrite the query.
+- **Unavailable variant (Gelato):** `This size isn't available for delivery to your location.` + nearest available size / alternative material / other format. Never remove the artwork.
+- **Shipping unavailable:** `We can't ship to this location yet.` + contact/notify option.
+- **Weak advisor match:** honest — `I don't have a strong match for these constraints yet.` + one high-impact change (budget / size / pair-instead-of-single / loosen one preference).
+
+**MVP build order (the spine, per project work-order system → MVP → distribution):** shared Catalog Engine + tagged dataset (unblocks filters, picks, zero-results) → cart/checkout wired to **Gelato quote** + **Stripe Checkout/Tax** → availability service. Advisor ranking = deterministic (`category + palette + orientation + mood − current`), not an LLM.
