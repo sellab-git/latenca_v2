@@ -1,0 +1,95 @@
+# Audit — "Design my wall" (05-wall.html) + product/detail view
+
+Date: 2026-07-23. Scope: the two states of `prototypes/mockups/05-wall.html` — THE WALL (pan/zoom canvas + floating advisor/buy panel) and the PRODUCT/DETAIL view (scrollable overlay with artwork + picks + catalog). Sources: code read + live browser probe (Playwright) + an independent adversarial static review.
+
+This doc has two jobs:
+1. **Open decisions** that need Artur/ChatGPT input before I build them (below, top).
+2. **Full findings + status** — what I am fixing autonomously vs what is blocked on a decision.
+
+---
+
+## A. OPEN DECISIONS — for ChatGPT review / Artur
+
+These are product/commerce choices, not code. I will NOT guess them. Each has context + my recommendation.
+
+### D1. Shipping model & where the cost is shown  *(blocks the price/trust fixes)*
+Today: "Free shipping over $60" is hardcoded in 3 places; the cheapest wall is $39; below the threshold the shipping cost is shown **nowhere**; the cart total = piece sum with **no shipping line**. Real fulfilment is Gelato (print-on-demand), whose shipping is quote-based per destination.
+- **Question:** flat rate? free-over-$X (what X)? live Gelato quote? And do we show a shipping line in the panel + cart, plus a "spend $X more for free shipping" nudge?
+- **My recommendation:** a simple flat shipping shown as its own line + a free-over-threshold nudge for the prototype; wire real Gelato quotes only in the Next.js build. Pick a threshold that sits above a 1-piece wall (e.g. free over $75) so the nudge actually fires.
+
+### D2. Tax / market model  *(blocks the "incl. VAT" cleanup)*
+Today: prices in **USD**, label says "incl. **VAT**" (EU concept), delivery hardcoded "ships to **Poland**", dates `en-US`. Three markets in one panel. Latenca is already decided **English-first / USD / global**.
+- **Question:** confirm global USD, tax-not-shown (US-style) vs tax-inclusive. Remove "VAT" + "Poland" entirely?
+- **My recommendation (will apply unless overridden):** global USD, drop "incl. VAT" and "ships to Poland", show tax as "calculated at checkout" or omit; keep one locale formatter. This matches the settled English-first decision, so I will proceed with the removal and leave the *replacement wording* for D1/this decision.
+
+### D3. Cart itemisation & cross-sell
+Today: a multi-piece wall collapses in the cart to "Your wall · N pieces" with one thumbnail + one total; pieces can differ in size/frame/material but none of that shows. The "Pairs well with" cross-sell section is **always empty** (never populated).
+- **Question:** itemise each piece (thumb + size/material/frame + price per piece)? And what fills "Pairs well with" — same-artist works, same-collection, or drop it?
+- **My recommendation:** itemise (buyers of "N different pieces" must verify what they pay for); fill cross-sell with same-artist / same-collection picks, or remove the heading until we have it.
+
+### D4. Trust signals near the buy CTA
+Today: rating/reviews, certificate of authenticity, secure-checkout, payment logos, returns all live **inside the collapsed "Options" sheet** — invisible at the moment of decision. Note: there is no real review system yet, so "rating/reviews" would be placeholder data.
+- **Question:** which trust cues go next to "Add wall to cart", and do we have real data for them (reviews? COA? returns policy)? 
+- **My recommendation:** a compact always-visible trust strip with the cues we can back truthfully (secure checkout, returns, COA if real); NO fake review counts.
+
+### D5. Piece count ceiling — 6 or 12?
+Today: the `+` control and layouts support **12**; the advisor copy says **"Six pieces is the most I arrange on one wall."** They contradict. Decision D4 in project notes = keep 12.
+- **My recommendation (will apply):** make the copy say 12 (match the control). Flag only in case 6 was the real intent.
+
+### D6. Catalog filtering — needs a category taxonomy  *(blocks "real filters")*
+The detail-view catalog shows pills *Matching / Abstract / Botanical / Landscapes / Space*, an orientation toggle, and Sort. Right now they do nothing. Orientation + Sort I can wire from existing data. But **the artworks have no category tags** (only title/artist/orientation), so the theme pills can't filter anything real.
+- **Question:** what is the category taxonomy, and should each artwork carry a category tag?
+- **My recommendation:** define ~5 canonical categories, tag the art pool, then the pills become real. Until then I will (a) make the pills keyboard-accessible buttons and (b) wire orientation + sort, and clearly mark theme pills as not-yet-active rather than silently dead.
+
+### D7. AI "picks" matching (Etap C)
+The "Latenca picks" were always a stub ("palette-matched later"). Real palette/mood matching needs a matching signal per artwork (dominant colours / mood tags).
+- **Question / recommendation:** defer until D6's taxonomy exists; then match on category + palette.
+
+---
+
+## B. What I am fixing autonomously (no decision needed)
+
+Tracked here as I go (✅ done / ⏳ in progress):
+
+- [ ] **Detail view = real modal** — `role="dialog"` + `aria-modal`, move focus in on open, trap focus, return focus to the piece on close, **Esc closes** it. (P0 #3)
+- [ ] **Advisor chat announced to screen readers** — `aria-live="polite"` on `#msgs`, typing indicator `aria-hidden`. (P0 #5)
+- [ ] **"Six pieces" copy → real ceiling (12).** (P1 #6 / D5)
+- [ ] **Remove placeholder strings** that could leak to a buyer ("(In the real product…)", "stub — palette-matched later"). (P1 #9)
+- [ ] **`sizesFor()` uses its argument** (latent wrong-orientation bug). (P2 #13)
+- [ ] **Images: `loading="lazy"` + intrinsic dimensions** (no layout shift / feedback on slow net). (P2 #14)
+- [ ] **Filter pills → real `<button>`s** + wire orientation/sort; theme pills marked not-yet-active. (partial D6)
+- [ ] **Remove "incl. VAT" + "ships to Poland"** per settled English/USD (replacement wording waits on D1/D2). (P0 #1/#2, partial)
+
+Bigger cleanups deferred to the pre-Next.js pass: strip ~40% dead CSS/JS inherited from the product page, promote magic numbers (`432px` panel width, `PAD`, zoom limits) to tokens, extract English strings for i18n.
+
+Mobile (canvas model is desktop-only; missing `<nav class="tabbar">`; detail unhandled <821px) is a separate effort — not touched now.
+
+---
+
+## C. Full findings (reference)
+
+### P0 — buyer-visible inconsistencies
+1. Price/tax/delivery = three markets at once (USD + "VAT" + "ships to Poland" + en-US dates); "incl. VAT" is even overwritten to "this piece" once a piece is focused. → D1/D2.
+2. Shipping cost shown nowhere; cart total has no shipping line. → D1.
+3. Detail view is not a real modal: Esc doesn't close, focus not moved in, no `role="dialog"` (verified live). → fixing.
+4. Catalog filters in the detail view are dead (pills are `<span>`, clicks do nothing; verified live). → partial fix + D6.
+5. Advisor chat invisible to screen readers (no `aria-live`). → fixing.
+
+### P1 — logic & content
+6. "Six pieces is the most" but the real limit is 12. → fixing (D5).
+7. Cart doesn't itemise a multi-piece wall; "Pairs well with" is permanently empty. → D3.
+8. No trust signals next to the buy CTA (all buried in collapsed Options). → D4.
+9. Placeholder/stub strings can reach a real buyer. → fixing.
+
+### P2 — pre-port hygiene
+10. ~40% dead CSS/JS inherited from the single-product page (stage/room/lightbox/old buy panel). → pre-port pass.
+11. Magic numbers (panel width `432px` ×5, `PAD`, zoom limits) should be tokens. → pre-port pass.
+12. Hardcoded English strings + `$` + `en-US` block i18n. → pre-port pass.
+13. `sizesFor()` ignores its argument (latent bug). → fixing.
+14. Images lack `loading="lazy"`/dimensions/skeleton. → fixing.
+
+### Mobile (separate effort)
+Canvas model gated to `min-width:821px`; no mobile tab bar (`#appTabbar` absent) → phone has no primary nav; detail/spotlight positioning unhandled below 821px.
+
+### What already works well
+Layer model (chrome > product > wall), wall↔detail panel parity, token system, orientation enforcement (D5 crop rule), config drawers (size/material/frame) + cart drawer, pieces are real `<button>`s, images have `alt`, nav arrows labelled, `prefers-reduced-motion` present, price sums correctly.
