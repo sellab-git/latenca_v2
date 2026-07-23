@@ -571,7 +571,7 @@
   .slot.empty{background:transparent;box-shadow:none;border:2px dashed var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;outline-color:transparent}
   .slot.empty:hover{box-shadow:none;border-color:var(--accent);color:var(--accent-ink)}
   .slot.empty.focus{border-color:var(--accent)}
-  .ph{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:var(--w-semibold);pointer-events:none;text-align:center;padding:6px}   /* SHARED empty-slot placeholder — reused on the wall AND in the pick overlay (one component, not two) */
+  .ph{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:var(--w-semibold);pointer-events:none;text-align:center;padding:6px}   /* SHARED empty-slot placeholder — reused on the wall AND in the pick overlay (see docs/components.md) */
   .ph svg{width:22px;height:22px;stroke:currentColor}
 
   /* "Piece X of N" — small uppercase line at the top of the panel */
@@ -613,7 +613,7 @@
   .sp-art{max-width:min(92%,580px);box-shadow:var(--art-shadow-lg);display:flex;border-radius:2px;overflow:hidden}
   .sp-art img{display:block;max-width:100%;max-height:64vh;object-fit:contain}
   /* D10 — empty slot in the overlay: a "pick a piece" placeholder instead of an artwork (dashed, like the empty slot on the wall) */
-  .sp-art.empty{box-shadow:none;border:2px dashed var(--line);border-radius:var(--r-ui);width:min(92%,480px);height:min(56vh,460px);display:flex;align-items:center;justify-content:center;color:var(--muted)}   /* the empty slot, ENLARGED — same dashed frame + same .ph placeholder as on the wall */
+  .sp-art.empty{box-shadow:none;border:2px dashed var(--line);border-radius:var(--r-ui);width:min(92%,480px);height:min(56vh,460px);display:flex;align-items:center;justify-content:center;color:var(--muted)}   /* the empty slot, ENLARGED — same dashed frame + same .ph placeholder as the wall (see docs/components.md) */
   /* controls — icon buttons; back stacked ABOVE prev on the left (#1), next on the right */
   .sp-arrow{width:40px;height:40px;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-ui);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-bar)}
   .sp-arrow:hover{border-color:var(--accent);color:var(--accent-ink)}
