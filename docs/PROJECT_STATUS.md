@@ -3,7 +3,7 @@
 > Jedyne źródło prawdy o **bieżącym stanie** projektu — „gdzie jesteśmy teraz". Nadpisywane swobodnie.
 > Czytaj to jako pierwsze każdą sesję.
 
-Ostatnia aktualizacja: 2026-07-21
+Ostatnia aktualizacja: 2026-07-23
 
 ---
 
@@ -84,23 +84,27 @@ Gotowe:
 ### ⚡ ZMIANA KIERUNKU (2026‑07‑21) — czytaj `docs/USER-INTENTS.md` (żywa mapa)
 Artur zapytał o realny plan „Design my wall" → wyszła głęboka praca nad intencjami (178 scenariuszy → 5 podróży, recenzja ChatGPT, feasibility‑engine). **Reframe: jednostka = jedna praca; „ściana" = ZMIENNA liczba prac (1..N) kupowanych razem** (nie sztywna para); dwie drogi (gotowe układy + składanie), wzorzec Mixtiles; **strona produktu = ściana**; układy z biblioteki presetów; rozmiar należy do układu; panel dwupoziomowy. Modsy jako analogia — **zbanowane**.
 
-### ⏭ WZNOWIENIE (2026‑07‑22, późna sesja) — `05-wall` = **v22**, wszystko wypushowane
-**Układy:** decyzja A/B zdjęta — Artur chce też mieszane, więc powstał **kit do projektowania układów** (`shared/gen-wall-layouts.py`: tokeny `P/L/S`×rozmiar`0/1/2` = 9 rozmiarów Gelato jako moduły 10 cm; `rows()`/`grid()` + **stack** `["P2",["S0","S0"]]` na kompozycje „bohater"). Matryca 3–12 z **mieszanymi rozmiarami**, cm‑true z definicji. Mixtiles = tylko biblioteka pomysłów (`docs/mixtiles-positions.json` nietknięte).
+### ⏭ WZNOWIENIE (2026‑07‑23) — `05-wall` = **v35**, wszystko wypushowane; **MOCKUP DESIGN-COMPLETE**
 
-**Zbudowany builder ściany + WIDOK SZCZEGÓŁÓW (główna robota sesji):**
-- **Płótno 3‑warstwowe:** `#wallView` `position:fixed` pełny ekran (z1) MIĘDZY tłem‑ścianą a NAKŁADKAMI (menu/topbar/panel, z2, nieprzezroczyste); grafiki wjeżdżają POD nakładki. Akcje: **scroll = zoom** (+ przyciski −/100/+), **przeciągnij PUSTE płótno = pan**, **klik w pracę = szczegóły**.
-- **D5 orientacja** pilnowana wszędzie (`reconcileToLayout()` + `swapArt`): pion→pion/kwadrat, poziom→poziom/kwadrat, kwadrat→kwadrat.
-- **WIDOK SZCZEGÓŁÓW = pełny „model B" (Ideogram):** jedna przewijalna strona — góra: duża **surowa grafika** (bez ramki) + pasek **„Recently viewed"** (historia) po lewej, **panel po prawej** (reparentowany do przepływu, **odjeżdża przy scrollu**); pod foldem **katalog na PEŁNĄ SZEROKOŚĆ**. Tło `var(--bg)` wg motywu. Kolumny wyrównane (góra/dół). Powrót „× Back to wall" przywraca panel do nakładki.
-- **Katalog = moduł 01-home 1:1** (Artur 3× „nie wymyślaj swojego UX"): dokopiowany brakujący CSS filtrów (`.pill/.filters/.seg/.allf/.drop/.count`); render = filterzone (pigułki + count + All filters + orientacja + Sort) + masonry `.tile` (fav/share/more/info) + Load more.
+Cała sesja to **audyt obu ekranów (ściana + produkt) → decyzje → wdrożenie części prototypowej**. Pełny zapis: **`docs/audit-wall.md`** (czytaj to jako pierwsze przy tym ekranie).
 
-**STUBY do dokończenia:** filtry (pigułki/orientacja/sort/„All filters") są WIZUALNE, nie zawężają; brak wysuwanego panelu „All filters" (drawer — Artur: i tak pewnie usuniemy); brak dopasowania picków po palecie/nastroju (katalog filtruje tylko po orientacji). Snapshoty: `prototypes/mockups/versions/05-wall-vNN.html` + `labels.json` (do v22).
+**Ustalone i zablokowane — decyzje D1–D11** (w `docs/audit-wall.md` sekcja A; ChatGPT recenzował D1–D9):
+- **D1** wysyłka = live Gelato quote (nie flat) · **D2** podatek = Stripe Tax (usunięte „VAT"/„Poland") · **D3** koszyk itemizowany + bez cross-sell · **D4** lekki pasek zaufania pod CTA · **D5** limit 12 · **D6** JEDEN wspólny Catalog Engine (⚠️ katalog Home to MOCK — silnik trzeba ZBUDOWAĆ) · **D7** picki = deterministyczny ranking (nie LLM) · **D8** availability per Gelato variant×destination · **D9** zero-results zawsze z wyjściem · **D10** ujednolicony flow slotu (klik w cokolwiek = ta sama warstwa; pusty slot → tryb wyboru → wypełnia → płynnie w szczegóły) · **D11** kontekstowy rejestr chipów czatu (ściana/praca/wybór; Warmer/Darker tylko na pracy; bez „Back to wall").
+- **Zasada architektoniczna:** shipping/availability/catalog/ranking = **wspólne usługi** Home/Product/Wall/Cart, nie lokalne.
 
-Następne (po reakcji na `05-wall`):
-- [ ] **Decyzja D‑047: rozszerzyć MVP z „pojedyncza grafika" na „N prac"?** (zmienia D‑023/D‑030/D‑033) — czeka na Artura.
-- [x] **Matryca układów z Mixtiles — ZROBIONE (D-051).** Zebrane wszystkie 45 ścian (pozycje z DOM edytora, zwalidowane) + config (border/kadr/mapowanie/cena). 43 różne układy → `shared/wall-layouts.js`, wpięte w `05-wall` v8: slot dyktuje pozycję+kształt, Ready-made wypełnia grafiką dopasowaną do orientacji, build-up dodaje puste sloty. Dane: `docs/mixtiles-positions.json` + `docs/mixtiles-layouts-data.json`.
-- [ ] Iteracja ściany: klik w pusty slot = dodaj tu; materiał/rama na żywo na podglądzie; wpięcie „gotowych ścian" (droga A).
-- [ ] **Koszyk + checkout** — po ustaleniu modelu ściany (był „następnym ekranem", teraz PO ścianie). `reference/prototype-html-15/Latenca-Cart.html`.
-- [ ] Kolekcje i Artyści — poza ścieżką główną, tylko jeśli MVP ich potrzebuje.
+**Wdrożone w mockupie (bezpieczne, zweryfikowane Playwrightem):** warstwowy model naprawiony (chrome>product>wall, `docs/layer-model.md`); panel ściana↔detal identyczny + tło pełnoekranowe; sprzątnięte ~111 linii martwego kodu; D2 copy; D4 trust; D3 koszyk itemizowany; D10 flow slotu; D11 chipy.
+
+**⛔ RULE #1 — reuse components, never reinvent.** Wymyśliłem `.sp-pickhero` zamiast wspólnego `.ph` → naprawione. Egzekwowane teraz **plikami md**: **`docs/components.md`** (inwentarz komponentów) + **`CLAUDE.md`** (RULE #1, auto-ładowany). Przed każdym elementem UI: `docs/components.md` + `grep`.
+
+**Granica mockup↔kod (D w `audit-wall.md`):** mockup niesie design/layout/copy/**stany**; mechanizmy (Gelato quote, Stripe Tax, Catalog Engine + tagi, availability, działające filtry) = **MVP** (przepisujemy i tak; checkout UI to Stripe; silnik na fejk-danych nic nie waliduje). **Mockup dwóch ekranów = zamknięty projektowo.**
+
+**Stuby mockupu (świadome, → MVP):** filtry katalogu wizualne (blokada D6 = taksonomia); dopasowanie picków (D7); drawer „All filters".
+
+**NASTĘPNE = budowa MVP (kręgosłup), już nie statyczny HTML:**
+- [ ] **Shared Catalog Engine + otagowany zbiór** (odblokowuje filtry, picki D7, zero-results D9).
+- [ ] **Koszyk + checkout: Gelato quote (D1) + Stripe Checkout/Tax (D2)**; availability Gelato (D8).
+- [ ] Spec stanów (empty/loading/zero/unavailable) — copy zablokowane w `audit-wall.md` sekcja D.
+- [ ] Otwarta decyzja **D‑047** (MVP „pojedyncza grafika" vs „N prac") — czeka na Artura.
 
 Odłożone / do posprzątania:
 - [ ] **Nakładka wymiarów na produkcie** („50×70 cm" ze strzałkami) — Artur: „temat na bardzo później". Reszta ulepszeń w `UX-CRITIQUE-landing-product.md`
