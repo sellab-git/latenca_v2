@@ -51,14 +51,16 @@ The "Latenca picks" were always a stub ("palette-matched later"). Real palette/m
 
 Tracked here as I go (✅ done / ⏳ in progress):
 
-- [ ] **Detail view = real modal** — `role="dialog"` + `aria-modal`, move focus in on open, trap focus, return focus to the piece on close, **Esc closes** it. (P0 #3)
-- [ ] **Advisor chat announced to screen readers** — `aria-live="polite"` on `#msgs`, typing indicator `aria-hidden`. (P0 #5)
-- [ ] **"Six pieces" copy → real ceiling (12).** (P1 #6 / D5)
-- [ ] **Remove placeholder strings** that could leak to a buyer ("(In the real product…)", "stub — palette-matched later"). (P1 #9)
-- [ ] **`sizesFor()` uses its argument** (latent wrong-orientation bug). (P2 #13)
-- [ ] **Images: `loading="lazy"` + intrinsic dimensions** (no layout shift / feedback on slow net). (P2 #14)
-- [ ] **Filter pills → real `<button>`s** + wire orientation/sort; theme pills marked not-yet-active. (partial D6)
-- [ ] **Remove "incl. VAT" + "ships to Poland"** per settled English/USD (replacement wording waits on D1/D2). (P0 #1/#2, partial)
+- [x] **Detail view = real modal** — `role="dialog"` + `aria-modal="true"` + dynamic `aria-label`, focus moved in on open (`#spBack`), **Esc closes**, focus returns to the piece on close. Verified live. *(Full Tab focus-trap still a follow-up.)* (P0 #3)
+- [x] **Advisor chat announced to screen readers** — `aria-live="polite"` (`role="log"`) on `#msgs`, typing indicator `aria-hidden`. Verified. (P0 #5)
+- [x] **"Six pieces" copy → real ceiling** — now uses `MAXPIECES` (12). (P1 #6 / D5)
+- [x] **Removed placeholder string** "(In the real product…)". (P1 #9)
+- [x] **`sizesFor()` uses its argument** (latent wrong-orientation bug fixed). (P2 #13)
+- [x] **Catalog + pick images `loading="lazy"`** (hero/wall stay eager — above the fold). (P2 #14)
+- [ ] **Filter pills** — deferred to Etap C, blocked on **D6** (no category taxonomy yet). (D6)
+- [ ] **Remove "incl. VAT" + "ships to Poland"** — waits on D1/D2 replacement wording. (P0 #1/#2)
+
+Verification: Playwright hit-tests confirmed the modal (role/aria-modal/aria-label, focus-in=`#spBack`, Esc closes, focus returns to the slot), `aria-live=polite`, no JS errors (only a favicon 404), and no regression to price/config/open-close (panel reparents to `#spotlight` and back to `.pdp` cleanly).
 
 Bigger cleanups deferred to the pre-Next.js pass: strip ~40% dead CSS/JS inherited from the product page, promote magic numbers (`432px` panel width, `PAD`, zoom limits) to tokens, extract English strings for i18n.
 
